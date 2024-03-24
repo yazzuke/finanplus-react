@@ -6,16 +6,18 @@ import { EyeSlashFilledIcon } from "../Login/EyeSlashFilledIcon";
 import { useAuth } from "../../context/AuthContext.jsx"; // Importa el hook useAuth
 
 function RegisterPeople() {
-  const { register } = useAuth();
+  const { register,registerUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
+  
   const [name, setName] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-
-
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const handleSubmitEmail = () => setEmailSubmitted(true);
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
 
   const handleRegisterEmailChange = (e) => {
     setEmail(e.target.value);
@@ -28,18 +30,19 @@ function RegisterPeople() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await register(email, password);    
+      const userCredential = await register(email, password);    
       console.log("Usuario registrado correctamente");
       console.log(email, password);
-      RegisterUser();
+      if (userCredential && userCredential.user) {
+        registerUser(userCredential.user.uid, userCredential.user.email, name, password); // Usa registerUser del contexto
+      } else {
+        console.error('userCredential is undefined or does not have a user property');
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const RegisterUser = async () => {
-    console.log("Registrando usuario uwu");
-  };
 
 
   return (
@@ -59,7 +62,7 @@ function RegisterPeople() {
             className="flex w-6/12 flex-wrap md:flex-nowrap gap-4 mx-6 "
             style={{ position: "relative", top: "-50px", left: "420px" }}
           >
-            <Input type="Nombre" label="Nombre" />
+            <Input type="Nombre" label="Nombre"  value={name} onChange={handleNameChange} />
           </div>
           <div
             className="flex w-6/12 flex-wrap md:flex-nowrap gap-4 mx-6 "
