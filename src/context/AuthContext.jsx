@@ -49,15 +49,16 @@ export function AuthProvider({ children }) {
     return () => Register();
   }, []);
 
-  // funcion para registrar un usuario manual
-  const register = async (email, password) => {
-    const response = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    console.log("Usuario registrado", response.user);
-    }
+// funcion para registrar un usuario manual
+const register = async (email, password) => {
+  const response = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  console.log("Usuario registrado", response.user);
+  return response; // Devuelve el objeto userCredential
+};
 
 
 
@@ -80,10 +81,25 @@ export function AuthProvider({ children }) {
     return response;
   };
 
-  // obtener usuario y lo envia a la base de datos
-  const registerUser = async (displayName, email) => {
-    console.log("Usuario registrado", displayName, email);
-  };
+// obtener usuario y lo envia a la base de datos
+const registerUser = async (firebaseUid, firebaseEmail, name) => {
+  console.log("Usuario registrado", name, firebaseEmail); // Cambia displayName y email por name y firebaseEmail
+  // Aquí envías el UID y el correo de Firebase al back-end
+  const response = await fetch("http://localhost:8080/usuarios", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: firebaseUid,
+      nombre: name, // Asegúrate de que este campo se está llenando correctamente
+      email: firebaseEmail,
+    
+    }),
+  });
+  const data = await response.json();
+  console.log(data);
+};
 
   // funcion para cerrar sesion
   const Logout = async () => {
@@ -100,6 +116,7 @@ export function AuthProvider({ children }) {
         Logout,
         resetPassword,
         user,
+        registerUser,
       }}
     >
       {children}
