@@ -68,22 +68,30 @@ const register = async (email, password) => {
     console.log("Usuario autenticado", response.user);
   };
 
-  // funcion para iniciar sesion con google
-  const LoginGoogle = async () => {
-    const responseGoogle = new GoogleAuthProvider();
-    const response = await signInWithPopup(auth, responseGoogle);
-    console.log(
-      "Usuario autenticado con google",
-      response.user.displayName,
-      response.user.email
-    );
-    // registerUser(response.user.displayName,response.user.email);
-    return response;
-  };
+// funcion para iniciar sesion con google
+
+const LoginGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    if (result.user) {
+      console.log(
+        "Usuario autenticado con google",
+        result.user.displayName,
+        result.user.email
+      );
+      await registerUser(result.user.uid, result.user.email, result.user.displayName, null);
+    } else {
+      console.error('signInWithPopup se resolvió sin un usuario');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // obtener usuario y lo envia a la base de datos
-const registerUser = async (firebaseUid, firebaseEmail, name) => {
-  console.log("Usuario registrado", name, firebaseEmail); // Cambia displayName y email por name y firebaseEmail
+const registerUser = async (firebaseUid, firebaseEmail, name, password) => {
+  console.log("Usuario registrado", name, firebaseEmail);
   // Aquí envías el UID y el correo de Firebase al back-end
   const response = await fetch("http://localhost:8080/usuarios", {
     method: "POST",
@@ -92,13 +100,17 @@ const registerUser = async (firebaseUid, firebaseEmail, name) => {
     },
     body: JSON.stringify({
       id: firebaseUid,
-      nombre: name, // Asegúrate de que este campo se está llenando correctamente
+      nombre: name,
       email: firebaseEmail,
-    
+      password: password, // Solo incluye password si no es null
     }),
   });
   const data = await response.json();
-  console.log(data);
+  if (data) {
+    console.log(data);
+  } else {
+    console.error('registerUser se resolvió sin datos');
+  }
 };
 
   // funcion para cerrar sesion

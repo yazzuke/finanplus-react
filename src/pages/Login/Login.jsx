@@ -20,6 +20,7 @@ function Login() {
   // datos del login
   const [LoginEmail, setLoginEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { registerUser } = useAuth();
 
   useEffect(() => {
     if (auth.user) {
@@ -52,6 +53,11 @@ function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log("Usuario logueado con Google", result.user);
+      if (result.user) {
+        await registerUser(result.user.uid, result.user.email, result.user.displayName, null);
+      } else {
+        console.error('signInWithPopup se resolvió sin un usuario');
+      }
     } catch (error) {
       console.error("Error al iniciar sesion con Google", error);
     }
