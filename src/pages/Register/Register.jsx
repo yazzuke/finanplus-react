@@ -4,6 +4,8 @@ import { Button } from "@nextui-org/react";
 import { EyeFilledIcon } from "../Login//EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../Login/EyeSlashFilledIcon";
 import { useAuth } from "../../context/AuthContext.jsx"; // Importa el hook useAuth
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function RegisterPeople() {
   const { register,registerUser } = useAuth();
@@ -27,6 +29,9 @@ function RegisterPeople() {
     setPassword(e.target.value);
   };
 
+  const notifyErrorRegistro = () => toast("El correo del usuario ya se encuentra registrado");
+  const notifyRegistroComplete = () => toast("Usuario registrado correctamente");
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -35,11 +40,17 @@ function RegisterPeople() {
       console.log(email, password);
       if (userCredential && userCredential.user) {
         registerUser(userCredential.user.uid, userCredential.user.email, name, password); // Usa registerUser del contexto
+        notifyRegistroComplete();
+        setTimeout(() => {
+          window.location.href = "/login";
+        }
+        , 3000);
       } else {
         console.error('userCredential is undefined or does not have a user property');
       }
     } catch (error) {
-      console.error(error);
+      notifyErrorRegistro();
+      console.error("Error al registrar el usuario");
     }
   };
 
@@ -48,6 +59,7 @@ function RegisterPeople() {
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="w-[990px] h-[400px] dark items-center bg-stone-950 px-20 py-6 shadow-xl ring-1 ring-gray-900/5 rounded-3xl sm:px-24">
+      <ToastContainer />
         <form onSubmit={handleRegister}>
           <div
             className="text-center "
@@ -71,8 +83,10 @@ function RegisterPeople() {
             <Input
               type="Email"
               label="Email"
+              isRequired
               value={email}
               onChange={handleRegisterEmailChange}
+              isInvalid={!email.includes("@") && email.length > 0}
             />
           </div>
           <div //inicio de la contraseña
@@ -82,6 +96,9 @@ function RegisterPeople() {
             <Input
               label="Contraseña"
               value={password}
+              minLength={6}
+              isInvalid={password.length < 6}
+              isRequired
               onChange={handleRegisterPasswordChange}
               endContent={
                 <button
@@ -105,6 +122,11 @@ function RegisterPeople() {
           >
             <Input
               label="Confirma tu contraseña"
+              isRequired
+              value={rePassword}
+              minLength={6}
+              isInvalid={password !== rePassword}
+              onChange={(e) => setRePassword(e.target.value)}
               endContent={
                 <button
                   className="focus:outline-none"

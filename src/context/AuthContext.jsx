@@ -2,6 +2,7 @@ import { auth } from "../firebase/Firebase.config";
 import { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
 
+
 // importamos la funcion de firebase auth
 import {
   createUserWithEmailAndPassword,
@@ -9,10 +10,14 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+   setPersistence, 
+   browserSessionPersistence,
   sendPasswordResetEmail,
   onAuthStateChanged,
   sendEmailVerification,
 } from "firebase/auth";
+
+
 
 // Reestablecer password
 const resetPassword = async (email) => {
@@ -33,21 +38,28 @@ export const useAuth = () => {
 };
 
 // componente que provee el contexto de autenticacion
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    const Register = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log("Usuario no autenticado");
-      } else {
-        setUser(user);
-      }
-    });
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        const Register = onAuthStateChanged(auth, (user) => {
+          if (!user) {
+            console.log("Usuario no autenticado");
+          } else {
+            setUser(user);
+          }
+        });
 
-    return () => Register();
+        return () => Register();
+      })
+      .catch((error) => {
+        console.error("Error al configurar la persistencia de la sesión", error);
+      });
   }, []);
+
+
 
 // funcion para registrar un usuario manual
 const register = async (email, password) => {
@@ -65,7 +77,7 @@ const register = async (email, password) => {
   // funcion para iniciar sesion
   const Login = async (email, password) => {
     const response = await signInWithEmailAndPassword(auth, email, password);
-    console.log("Usuario autenticado", response.user);
+   // console.log("Usuario autenticado", response.user);
   };
 
 // funcion para iniciar sesion con google
@@ -80,7 +92,7 @@ const LoginGoogle = async () => {
         result.user.displayName,
         result.user.email
       );
-      await registerUser(result.user.uid, result.user.email, result.user.displayName, null);
+      await registerUser(result.user.uid, result.user.email, result.user.displayName, result.user.photoURL);
     } else {
       console.error('signInWithPopup se resolvió sin un usuario');
     }
@@ -90,7 +102,7 @@ const LoginGoogle = async () => {
 };
 
 // obtener usuario y lo envia a la base de datos
-const registerUser = async (firebaseUid, firebaseEmail, name, password) => {
+const registerUser = async (firebaseUid, firebaseEmail, name, password,photoURL) => {
   console.log("Usuario registrado", name, firebaseEmail);
   // Aquí envías el UID y el correo de Firebase al back-end
   const response = await fetch("http://localhost:8080/usuarios", {
@@ -103,6 +115,8 @@ const registerUser = async (firebaseUid, firebaseEmail, name, password) => {
       nombre: name,
       email: firebaseEmail,
       password: password, // Solo incluye password si no es null
+      photo_url: photoURL,
+
     }),
   });
   const data = await response.json();
@@ -134,4 +148,7 @@ const registerUser = async (firebaseUid, firebaseEmail, name, password) => {
       {children}
     </AuthContext.Provider>
   );
+
+
+
 }
