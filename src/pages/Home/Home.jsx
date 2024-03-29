@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../../components/Navbar/Navbar";
+import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
+import TusIngresos from "../../components/TusIngresos/TusIngresos";
 import { getAuth } from "firebase/auth";
 
 const getUserData = async (userId) => {
@@ -27,7 +29,12 @@ function Home () {
   return (
     <div>
       <NavBar user={user} />
-      {/* El resto de tu código */}
+  <div className="mt-4 ml-5"  > {/* Utiliza la clase de margen de Tailwind que prefieras */}
+        <SelectorMeses />
+  </div>
+  <div> 
+        <TusIngresos />
+  </div>
     </div>
   );
 }
