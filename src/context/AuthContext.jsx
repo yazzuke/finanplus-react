@@ -2,6 +2,7 @@ import { auth } from "../firebase/Firebase.config";
 import { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
 
+
 // importamos la funcion de firebase auth
 import {
   createUserWithEmailAndPassword,
@@ -9,10 +10,14 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+   setPersistence, 
+   browserSessionPersistence,
   sendPasswordResetEmail,
   onAuthStateChanged,
   sendEmailVerification,
 } from "firebase/auth";
+
+
 
 // Reestablecer password
 const resetPassword = async (email) => {
@@ -33,21 +38,28 @@ export const useAuth = () => {
 };
 
 // componente que provee el contexto de autenticacion
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    const Register = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log("Usuario no autenticado");
-      } else {
-        setUser(user);
-      }
-    });
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        const Register = onAuthStateChanged(auth, (user) => {
+          if (!user) {
+            console.log("Usuario no autenticado");
+          } else {
+            setUser(user);
+          }
+        });
 
-    return () => Register();
+        return () => Register();
+      })
+      .catch((error) => {
+        console.error("Error al configurar la persistencia de la sesión", error);
+      });
   }, []);
+
+
 
 // funcion para registrar un usuario manual
 const register = async (email, password) => {
@@ -65,25 +77,33 @@ const register = async (email, password) => {
   // funcion para iniciar sesion
   const Login = async (email, password) => {
     const response = await signInWithEmailAndPassword(auth, email, password);
-    console.log("Usuario autenticado", response.user);
+   // console.log("Usuario autenticado", response.user);
   };
 
-  // funcion para iniciar sesion con google
-  const LoginGoogle = async () => {
-    const responseGoogle = new GoogleAuthProvider();
-    const response = await signInWithPopup(auth, responseGoogle);
-    console.log(
-      "Usuario autenticado con google",
-      response.user.displayName,
-      response.user.email
-    );
-    // registerUser(response.user.displayName,response.user.email);
-    return response;
-  };
+// funcion para iniciar sesion con google
+
+const LoginGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    if (result.user) {
+      console.log(
+        "Usuario autenticado con google",
+        result.user.displayName,
+        result.user.email
+      );
+      await registerUser(result.user.uid, result.user.email, result.user.displayName, result.user.photoURL);
+    } else {
+      console.error('signInWithPopup se resolvió sin un usuario');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // obtener usuario y lo envia a la base de datos
-const registerUser = async (firebaseUid, firebaseEmail, name) => {
-  console.log("Usuario registrado", name, firebaseEmail); // Cambia displayName y email por name y firebaseEmail
+const registerUser = async (firebaseUid, firebaseEmail, name, password,photoURL) => {
+  console.log("Usuario registrado", name, firebaseEmail);
   // Aquí envías el UID y el correo de Firebase al back-end
   const response = await fetch("http://localhost:8080/usuarios", {
     method: "POST",
@@ -92,13 +112,19 @@ const registerUser = async (firebaseUid, firebaseEmail, name) => {
     },
     body: JSON.stringify({
       id: firebaseUid,
-      nombre: name, // Asegúrate de que este campo se está llenando correctamente
+      nombre: name,
       email: firebaseEmail,
-    
+      password: password, // Solo incluye password si no es null
+      photo_url: photoURL,
+
     }),
   });
   const data = await response.json();
-  console.log(data);
+  if (data) {
+    console.log(data);
+  } else {
+    console.error('registerUser se resolvió sin datos');
+  }
 };
 
   // funcion para cerrar sesion
@@ -122,4 +148,7 @@ const registerUser = async (firebaseUid, firebaseEmail, name) => {
       {children}
     </AuthContext.Provider>
   );
+
+
+
 }
