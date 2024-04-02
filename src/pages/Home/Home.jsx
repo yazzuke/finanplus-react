@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../../components/Navbar/Navbar";
 import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
 import TusIngresos from "../../components/TusIngresos/TusIngresos";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const getUserData = async (userId) => {
   const response = await fetch(`http://localhost:8080/usuarios/${userId}`);
@@ -12,19 +12,25 @@ const getUserData = async (userId) => {
 
 function Home () {
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
   const auth = getAuth();
-  const userId = auth.currentUser?.uid;
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (userId) {
-        const userData = await getUserData(userId);
-        setUser(userData);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUserId(firebaseUser.uid);
+        getUserData(firebaseUser.uid).then(setUser);
+      } else {
+        setUserId(null);
+        setUser(null);
       }
-    };
+    });
 
-    fetchData();
-  }, [userId]);
+    return () => unsubscribe();
+  }, []);
+
+
+
 
   return (
     <div>
@@ -33,7 +39,7 @@ function Home () {
         <SelectorMeses />
   </div>
   <div> 
-        <TusIngresos />
+        <TusIngresos userId={userId} />
   </div>
     </div>
   );
