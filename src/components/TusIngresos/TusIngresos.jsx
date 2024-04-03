@@ -5,11 +5,30 @@ import EditIcon from "@mui/icons-material/Edit";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-function TusIngresos (userId) {
-  const [ingresos, setIngresos] = useState([
-    { concepto: "Salario", monto: 1200000 },
-    { concepto: "Nequi", monto: 100000 },
-  ]);
+function TusIngresos({ userId }) {
+  const [ingresos, setIngresos] = useState([]);
+
+  const obtenerIngresos = () => {
+    if (userId) {
+      fetch(`http://localhost:8080/usuarios/${userId}/ingresos`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIngresos(data); // Establece los ingresos con los datos obtenidos
+        })
+        .catch(error => {
+          console.error('Error al obtener ingresos:', error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    obtenerIngresos(); // Obtener ingresos cuando el componente se monta
+  }, [userId]);
 
   console.log("userId", userId);
 
@@ -105,7 +124,11 @@ function TusIngresos (userId) {
         )}
 
         <div
-          className="max-h-[325px] overflow-hidden rounded-lg shadow pr-4 "
+          className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3 "
+          style={{
+            left: "59px",
+          }}
+
           ref={containerRef}
         >
           {ingresos.map((ingreso, index) => (
@@ -129,7 +152,7 @@ function TusIngresos (userId) {
                     <EditIcon />
                   </IconButton>
                   <span className="text-xl mr-1">
-                    ${ingreso.monto.toLocaleString()}
+                  ${ingreso.monto ? ingreso.monto.toLocaleString() : '0'}
                   </span>
                 </div>
               </div>
