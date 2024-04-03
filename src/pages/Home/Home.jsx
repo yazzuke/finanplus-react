@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../../components/Navbar/Navbar";
 import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
 import TusIngresos from "../../components/TusIngresos/TusIngresos";
+import TusGastos from "../../components/TusGastos/TusGastos";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const getUserData = async (userId) => {
@@ -41,7 +42,10 @@ function Home () {
   <div> 
         <TusIngresos userId={userId} />
   </div>
+  <div>
+        <TusGastos userId={userId} />
     </div>
+  </div>
   );
 }
 

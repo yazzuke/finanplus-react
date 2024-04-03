@@ -3,6 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import PerfectScrollbar from "perfect-scrollbar";
+
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 function TusIngresos({ userId }) {
@@ -124,7 +125,7 @@ function TusIngresos({ userId }) {
         )}
 
         <div
-          className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3 "
+          className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3  bg-slate-800"
           style={{
             left: "59px",
           }}
