@@ -18,7 +18,6 @@ function TusGastos({ userId }) {
   const [nuevaTarjeta, setNuevaTarjeta] = useState({
     nombreTarjeta: "",
     fechaPago: "",
-    valorTotal: 0,
   });
 
   const [tarjetas, setTarjetas] = useState([]);
@@ -61,7 +60,6 @@ function TusGastos({ userId }) {
       body: JSON.stringify({
         nombreTarjeta: nuevaTarjeta.nombreTarjeta,
         fechaPago: nuevaTarjeta.fechaPago,
-        valorTotal: parseFloat(nuevaTarjeta.valorTotal),
       }),
     })
       .then((response) => {
@@ -74,7 +72,7 @@ function TusGastos({ userId }) {
         console.log("Tarjeta agregada con éxito:", data);
         setTarjetas([...tarjetas, data]);
         setShowForm(false); 
-        setNuevaTarjeta({ nombreTarjeta: "", fechaPago: "", valorTotal: 0 }); 
+        setNuevaTarjeta({ nombreTarjeta: "", fechaPago: "" }); 
       })
       .catch((error) => {
         console.error("Error al enviar la tarjeta:", error);
@@ -143,14 +141,6 @@ useEffect(() => {
                 onChange={handleChange}
                 className="border p-2 rounded mb-2 w-full"
               />
-              <input
-                type="text"
-                placeholder="Valor Total"
-                name="valorTotal"
-                value={nuevaTarjeta.valorTotal}
-                onChange={handleChange}
-                className="border p-2 rounded mb-2 w-full"
-              />
               <div className="flex justify-end mt-4">
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
@@ -196,7 +186,7 @@ useEffect(() => {
         style={{ scrollBehavior: "smooth" }}
       >
         {tarjetas.map((tarjeta, index) => (
-          <div key={index}  className={`flex-none ${index !== 0 ? "ml-8" : ""}`} >
+          <div key={index}  className={`${index !== 0 ? "ml-8" : ""}`} >
             <CardGastosCC key={index} tarjeta={tarjeta} userId={userId} />
           </div>
         ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 import DropdownMenu from "./DropdownMenuCC.jsx";
 import IconButton from "@mui/material/IconButton";
@@ -6,19 +6,49 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
 function CardGastosCC({ userId, className, tarjeta  }) {
-  const [transactions, setTransactions] = useState([
-    // ... tus transacciones existentes
-  ]);
-  const transaction = {
-    name: "Nike Shoes",
-    installments: "5",
-    installmentValue: "100.000",
-    totalValue: "100.000",
-    interest: "31%",
+  const [transactions, setTransactions] = useState([]);
+  const [valorTotal, setValorTotal] = useState(0);
+  const { nombreTarjeta, fechaPago, tarjetaCreditoID  } = tarjeta;
+  
+  const obtenerFechaSinAno = (fecha) => {
+    if (!fecha) return ""; 
+    const [year, month, day] = fecha.split("-");
+    return `${day}-${month}`; 
   };
+  const fechaSinAno = obtenerFechaSinAno(fechaPago);
+    
+    console.log("Tarjeta recibida:", tarjeta);
 
-  const { nombreTarjeta, fechaPago, valorTotal } = tarjeta;
-  console.log("Tarjeta recibida:", tarjeta);
+  useEffect(() => {
+    // Construye la URL de la API para la solicitud GET
+    const apiUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos`;
+
+    // Realiza la solicitud GET al backend
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('La respuesta del servidor no fue OK al obtener los gastos');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Gastos obtenidos:', data);
+        const sumaTotal = data.reduce((total, gastoActual) => {
+          return total + gastoActual.valorTotalGasto;
+        }, 0);
+        setValorTotal(sumaTotal);
+        setTransactions(data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los gastos:', error);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los gastos:', error);
+        // Aquí podrías manejar el error mostrando un mensaje al usuario, por ejemplo
+      });
+  }, [userId, tarjetaCreditoID]); // Dependencias del efecto: se vuelve a ejecutar si cambian
+
+
 
   const [isFormVisible, setFormVisible] = useState(false);
   const [newTransaction, setNewTransaction] = useState({
@@ -37,18 +67,50 @@ function CardGastosCC({ userId, className, tarjeta  }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTransactions([
-      ...transactions,
-      { ...newTransaction, id: transactions.length + 1 },
-    ]);
-    setFormVisible(false);
-    setNewTransaction({
-      name: "",
-      installments: "",
-      installmentValue: "",
-      totalValue: "",
-      interest: "",
-      paid: "",
+    
+    // Construye la URL de la API para la solicitud POST
+    const apiUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjeta.tarjetaCreditoID}/gastos`;
+  
+
+    const gastoData = {
+      nombreGasto: newTransaction.name,
+      cuotaGasto: parseInt(newTransaction.installments, 10), 
+      valorCuotaGasto: parseFloat(newTransaction.installmentValue), 
+      valorTotalGasto: parseFloat(newTransaction.totalValue), 
+      interes: parseFloat(newTransaction.interest)
+    };
+  
+    // Realiza la solicitud POST al backend
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(gastoData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('La respuesta del servidor no fue OK');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Gasto agregado:', data);
+      // Agrega el nuevo gasto a la lista de transacciones y reinicia el formulario
+      setTransactions([...transactions, data]);
+      setFormVisible(false);
+      setNewTransaction({
+        name: "",
+        installments: "",
+        installmentValue: "",
+        totalValue: "",
+        interest: "",
+        paid: "",
+      });
+    })
+    .catch(error => {
+      console.error('Error al agregar el gasto:', error);
+      // Aquí podrías manejar el error mostrando un mensaje al usuario, por ejemplo
     });
   };
 
@@ -64,15 +126,16 @@ function CardGastosCC({ userId, className, tarjeta  }) {
           <div >
         <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">{nombreTarjeta}</span>
         </div>
-         <span className="text-sm font-bold">Fecha de pago:{fechaPago}</span>
+         <span className="text-sm font-bold">Fecha de pago:{fechaSinAno}</span>
         </div>
 
 
         <div className="flex items-center">
 
-          <span className="text-sm font-bold mr-32  mt-7">
-            Valor Total:  {valorTotal}
-          </span>
+              <span className="text-sm font-bold mr-32 mt-7">
+              Valor Total: {valorTotal.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+      </span>
+
 
           <div className="flex items-center mt-7">
             <DropdownMenu userId={userId} />
@@ -188,30 +251,29 @@ function CardGastosCC({ userId, className, tarjeta  }) {
           </span>
         
         </div>
-
         <Divider className="mt-[-0.5rem]" />
-        {transactions.map((trans, index) => (
-          <React.Fragment key={index}>
-            <div className="grid grid-cols-5 gap-4 items-center">
-              <div className="flex items-center justify-center col-span-1 mr-8">
-                <span className="text-base">{trans.name}</span>
-              </div>
-              <div className="flex items-center justify-center col-span-1 ">
-                <span className="text-base">{trans.installments}</span>
-              </div>
-              <div className="flex items-center justify-center col-span-1 ml-6 ">
-                <span className="text-base">{trans.installmentValue}</span>
-              </div>
-              <div className="flex items-center justify-center col-span-1 ml-9 ">
-                <span className="text-base">{trans.totalValue}</span>
-              </div>
-              <div className="flex items-center justify-center col-span-1 ml-12 ">
-                <span className="text-base">{trans.interest}</span>
-              </div>
-            </div>
-            {index < transactions.length - 1 && <Divider className="my-1" />}
-          </React.Fragment>
-        ))}
+{transactions.map((trans, index) => (
+  <React.Fragment key={index}>
+    <div className="grid grid-cols-5 gap-4 items-center">
+      <div className="flex items-center justify-center col-span-1 mr-8">
+        <span className="text-base">{trans.nombreGasto}</span> 
+      </div>
+      <div className="flex items-center justify-center col-span-1 ">
+        <span className="text-base">{trans.cuotaGasto}</span> 
+      </div>
+      <div className="flex items-center justify-center col-span-1 ml-6 ">
+        <span className="text-base">{trans.valorCuotaGasto}</span> 
+      </div>
+      <div className="flex items-center justify-center col-span-1 ml-9 ">
+        <span className="text-base">{trans.valorTotalGasto}</span>
+      </div>
+      <div className="flex items-center justify-center col-span-1 ml-12 ">
+        <span className="text-base">{trans.interes}</span> {/* Mantenido como interes */}
+      </div>
+    </div>
+    {index < transactions.length - 1 && <Divider className="my-1" />}
+  </React.Fragment>
+))}
         {transactions.length === 0 && (
           <div className="text-center col-span-6">No hay transacciones aún</div>
         )}
