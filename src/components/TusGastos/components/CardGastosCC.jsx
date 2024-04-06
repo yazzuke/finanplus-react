@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
-function CardGastosCC({ userId, className  }) {
+function CardGastosCC({ userId, className, tarjeta  }) {
   const [transactions, setTransactions] = useState([
     // ... tus transacciones existentes
   ]);
@@ -16,6 +16,9 @@ function CardGastosCC({ userId, className  }) {
     totalValue: "100.000",
     interest: "31%",
   };
+
+  const { nombreTarjeta, fechaPago, valorTotal } = tarjeta;
+  console.log("Tarjeta recibida:", tarjeta);
 
   const [isFormVisible, setFormVisible] = useState(false);
   const [newTransaction, setNewTransaction] = useState({
@@ -59,16 +62,16 @@ function CardGastosCC({ userId, className  }) {
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
           <div >
-        <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">Tarjeta de Crédito Master </span>
+        <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">{nombreTarjeta}</span>
         </div>
-         <span className="text-sm font-bold">Fecha de pago: 2/7</span>
+         <span className="text-sm font-bold">Fecha de pago:{fechaPago}</span>
         </div>
 
 
         <div className="flex items-center">
 
           <span className="text-sm font-bold mr-32  mt-7">
-            Valor Total: 10.000.000
+            Valor Total:  {valorTotal}
           </span>
 
           <div className="flex items-center mt-7">
@@ -134,16 +137,7 @@ function CardGastosCC({ userId, className  }) {
                     onChange={handleInputChange}
                     className="border p-2 rounded mb-2 w-full"
                   />
-                  <input
-                    type="text"
-                    placeholder="Pagado"
-                    name="paid"
-                    value={newTransaction.paid}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded mb-2 w-full"
-                  />
-                  {/* Añade aquí los demás campos siguiendo el mismo patrón... */}
-
+            
                   {/* Botón para enviar el formulario */}
                   <button
                     className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
