@@ -7,7 +7,7 @@ import CardGastosCC from "./components/CardGastosCC";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { Card } from "@mui/material";
-import CardGastosFijos from "./components/CardGastosFijos";
+import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
 
 function TusGastos({ userId }) {
   const [gastos, setGastos] = useState([]);
@@ -20,6 +20,7 @@ function TusGastos({ userId }) {
     fechaPago: "",
   });
 
+  
   const [tarjetas, setTarjetas] = useState([]);
 
   const handleAgregarGasto = () => {
@@ -187,7 +188,9 @@ useEffect(() => {
       >
         {tarjetas.map((tarjeta, index) => (
           <div key={index}  className={`${index !== 0 ? "ml-8" : ""}`} >
-            <CardGastosCC key={index} tarjeta={tarjeta} userId={userId} />
+                      <CardGastosFijos key={index} tarjeta={tarjeta} userId={userId} />
+                  
+  
           </div>
         ))}
       </div>

@@ -126,13 +126,13 @@ function CardGastosCC({ userId, className, tarjeta  }) {
           <div >
         <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">{nombreTarjeta}</span>
         </div>
-         <span className="text-sm font-bold">Fecha de pago:{fechaSinAno}</span>
+         <span className="text-sm font-bold">Fecha de pago: {fechaSinAno}</span>
         </div>
 
 
         <div className="flex items-center">
 
-              <span className="text-sm font-bold mr-32 mt-7">
+              <span className="text-sm font-bold mr-24 mt-7">
               Valor Total: {valorTotal.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
       </span>
 
@@ -192,6 +192,7 @@ function CardGastosCC({ userId, className, tarjeta  }) {
                     onChange={handleInputChange}
                     className="border p-2 rounded mb-2 w-full"
                   />
+                  
                   <input
                     type="text"
                     placeholder="Interés"

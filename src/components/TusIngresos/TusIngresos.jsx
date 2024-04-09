@@ -31,7 +31,7 @@
       obtenerIngresos(); // Obtener ingresos cuando el componente se monta
     }, [userId]);
 
-    console.log("userId", userId);
+    
 
     const [showForm, setShowForm] = useState(false);
     const [nuevoIngreso, setNuevoIngreso] = useState({ concepto: "", monto: "" });
