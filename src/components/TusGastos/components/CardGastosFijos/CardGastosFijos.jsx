@@ -51,7 +51,7 @@ function CardGastosFijos({ userId }) {
   return (
    
     <Card className="dark max-w-[720px] h-[320px] mt-2 ">
-       <DropdownIngreso userId={userId} />
+      
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -155,7 +155,7 @@ function CardGastosFijos({ userId }) {
               <DropdownTipo />
               </div>
               <div className="flex items-center justify-right col-span-">
-              <DropdownTipo />
+              <DropdownIngreso userId={userId} />
               </div>
             </div>
             {index < transactions.length - 1 && <Divider className="my-1" />}

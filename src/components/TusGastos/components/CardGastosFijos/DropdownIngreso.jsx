@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 
 export default function DropdownIngresos({ userId }) {
-  const [selectedIngreso, setSelectedIngreso] = useState('Opción');
+  const [selectedIngreso, setSelectedIngreso] = useState(null);
   const [ingresos, setIngresos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    
-
     if (userId) {
-     
+      setIsLoading(true);
       fetch(`http://localhost:8080/usuarios/${userId}/ingresos`)
         .then(response => {
           if (!response.ok) {
@@ -18,54 +17,51 @@ export default function DropdownIngresos({ userId }) {
           return response.json();
         })
         .then(data => {
-          console.log('Datos recibidos de la API:', data);
-          setIngresos(data); // Establece los ingresos con los datos obtenidos
+          setIngresos(data);
+          console.log(data);
+          setIsLoading(false);
         })
         .catch(error => {
           console.error('Error al obtener ingresos:', error);
+          setIsLoading(false);
         });
     }
   }, [userId]);
 
   const handleSelectionChange = (key) => {
-    console.log('Ingreso seleccionado:', key);
     setSelectedIngreso(key);
   };
 
-  // Esta línea buscará el ingreso seleccionado cada vez que `ingresos` o `selectedIngreso` cambie.
-  const selectedValue = selectedIngreso !== 'Opción'
-  ? ingresos.find(ing => ing.IngresoID === Number(selectedIngreso))?.Concepto
-  : selectedIngreso;
-  console.log('Valor seleccionado actualmente:', selectedValue);
-
-
-
-
-  return (
+return (
     <Dropdown>
       <DropdownTrigger>
         <Button variant="faded" className="capitalize w-[150px] h-[22px]">
-          {selectedValue}
+          {isLoading
+            ? "Cargando..."
+            : selectedIngreso
+            ? ingresos.find((i) => i.ingresoID === selectedIngreso)?.concepto
+            : "Concepto"}
         </Button>
       </DropdownTrigger>
       <DropdownMenu
-        variant="flat"
-        aria-label="Seleccione un tipo de ingreso"
-        disallowEmptySelection
-        selectionMode="single"
+        aria-label="Seleccione un ingreso"
         selectedKeys={selectedIngreso}
         onSelectionChange={handleSelectionChange}
+        isLoading={isLoading}
+        emptyContent={" No hay ingresos disponibles"}
       >
-      {ingresos.filter(ing => ing.IngresoID != null).map((ingreso) => (
-  <DropdownItem key="{ingreso.IngresoID.toString()}" value={ingreso.IngresoID.toString()}>
-    {ingreso.Concepto}
-  </DropdownItem>
-))}
-
+        {ingresos.map(({ concepto, IngresoID }, index) => {
+          return (
+            <DropdownItem
+              key={index}
+              textValue={concepto}
+              selected={IngresoID === selectedIngreso}
+            >
+              {concepto}
+            </DropdownItem>
+          );
+        })}
       </DropdownMenu>
     </Dropdown>
   );
 }
-
-
-
