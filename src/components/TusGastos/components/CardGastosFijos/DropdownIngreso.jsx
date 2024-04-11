@@ -20,7 +20,7 @@ export default function DropdownIngresos({ userId }) {
         })
         .then(data => {
           setIngresos(data);
-          console.log(data);
+         // console.log(data);
           setIsLoading(false);
         })
         .catch(error => {

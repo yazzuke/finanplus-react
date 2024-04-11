@@ -74,7 +74,7 @@
     }, []);
 
     return (
-      <div className="flex justify-end mt-[-3rem] mr-2">
+      <div className="flex justify-end mt-[-5rem] mr-2">
         <div className="w-[250px]">
           <div className="flex justify-between items-center mb-4">
             <IconButton

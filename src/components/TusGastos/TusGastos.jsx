@@ -5,11 +5,10 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import { Card } from "@mui/material";
 import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
 import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
 
-function TusGastos({ userId }) {
+function TusGastos({ userId, setTotalGastos }) {
   const [gastos, setGastos] = useState([]);
   const [nuevoGasto, setNuevoGasto] = useState({ categoria: "", monto: "" });
   const [cards, setCards] = useState([]);
@@ -138,7 +137,7 @@ function TusGastos({ userId }) {
   }, [userId]); // Asegúrate de que la función se llame nuevamente si el userId cambia
 
   return (
-    <div className="mt-[110px] ml-4 bg">
+    <div className="mt-[110px] ml-1 bg">
       <div className="flex items-center">
         <span className="text-3xl font-bold">Tus Gastos</span>
         <IconButton
@@ -251,7 +250,7 @@ function TusGastos({ userId }) {
       >
         {tarjetas.map((tarjeta, index) => (
           <div key={`tarjeta-${index}`} className={index > 0 ? "ml-8" : ""}>
-            <CardGastosCC tarjeta={tarjeta} userId={userId} />
+            <CardGastosCC tarjeta={tarjeta} userId={userId} actualizarTotalGastos={setTotalGastos} />
           </div>
         ))}
 
@@ -261,7 +260,7 @@ function TusGastos({ userId }) {
             key={`gastoFijo-${index}`}
             className={(index > 0 || tarjetas.length > 0) ? "ml-8" : ""}>
 
-            <CardGastosFijos gastoFijo={gastoFijo} userId={userId} />
+            <CardGastosFijos gastoFijo={gastoFijo} userId={userId} actualizarTotalGastos={setTotalGastos} />
           </div>
         ))}
       </div>
