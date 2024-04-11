@@ -6,6 +6,8 @@ export default function DropdownIngresos({ userId }) {
   const [ingresos, setIngresos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  
+
   useEffect(() => {
     if (userId) {
       setIsLoading(true);
@@ -43,25 +45,29 @@ return (
             : "Concepto"}
         </Button>
       </DropdownTrigger>
+      
       <DropdownMenu
         aria-label="Seleccione un ingreso"
         selectedKeys={selectedIngreso}
         onSelectionChange={handleSelectionChange}
         isLoading={isLoading}
+        
         emptyContent={" No hay ingresos disponibles"}
       >
-        {ingresos.map(({ concepto, IngresoID }, index) => {
+        {ingresos.map(({ concepto, ingresoID }, index) => {
+          
           return (
             <DropdownItem
               key={index}
               textValue={concepto}
-              selected={IngresoID === selectedIngreso}
+              selected={ingresoID === selectedIngreso}
             >
               {concepto}
             </DropdownItem>
           );
         })}
       </DropdownMenu>
+     
     </Dropdown>
   );
 }

@@ -15,9 +15,8 @@ function FormGastosFijos({ newTransaction, handleInputChange, handleSubmit }) {
         />
         <input
           type="date"
-          placeholder="Fecha"
           name="fecha"
-          value={newTransaction.installments}
+          value={newTransaction.fecha}
           onChange={handleInputChange}
           className="border p-2 rounded mb-2 w-full"
         />
@@ -25,24 +24,25 @@ function FormGastosFijos({ newTransaction, handleInputChange, handleSubmit }) {
           type="number"
           placeholder="Valor del Gasto"
           name="valorGasto"
-          value={newTransaction.installmentValue}
+          value={newTransaction.valorGasto}
           onChange={handleInputChange}
           className="border p-2 rounded mb-2 w-full"
         />
+        {/* Selector para el tipo de gasto */}
         <select
           name="tipo"
           value={newTransaction.tipo}
           onChange={handleInputChange}
           className="border p-2 rounded mb-2 w-full"
         >
-          <option value="">Seleccionar Tipo</option>
-          <option value="Necesidad">Necesidad</option>
-          <option value="Deseos">Deseos</option>
-          <option value="Metas">Metas</option>
+          <option value="NECESIDAD">Necesidad</option>
+          <option value="DESEOS">Deseos</option>
+          <option value="METAS">Metas</option>
         </select>
 
         {/* Botón para enviar el formulario */}
         <button
+          type="button"
           className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
           onClick={handleSubmit}
         >

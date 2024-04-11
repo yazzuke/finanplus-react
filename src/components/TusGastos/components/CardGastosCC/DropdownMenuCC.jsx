@@ -15,7 +15,7 @@ function DropdownMenuCC({ userId }) {
           return response.json();
         })
         .then((data) => {
-          console.log('Ingresos received:', data);
+         // console.log('Ingresos received:', data);
           if (Array.isArray(data)) {
             setIngresos(data);
           } else {
