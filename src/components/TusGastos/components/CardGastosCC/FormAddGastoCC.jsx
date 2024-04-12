@@ -37,14 +37,17 @@ function FormAddGastoCC({ newTransaction, handleInputChange, handleSubmit }) {
           onChange={handleInputChange}
           className="border p-2 rounded mb-2 w-full"
         />
-        <input
-          type="text"
-          placeholder="Interés"
-          name="interest"
-          value={newTransaction.interest}
+           <select
+          name="tipo"
+          value={newTransaction.tipo}
           onChange={handleInputChange}
           className="border p-2 rounded mb-2 w-full"
-        />
+        >
+          <option value="">Seleccionar Tipo</option>
+          <option value="Necesidad">Necesidad</option>
+          <option value="Deseos">Deseos</option>
+          <option value="Metas">Metas</option>
+        </select>
         
         {/* Botón para enviar el formulario */}
         <button
