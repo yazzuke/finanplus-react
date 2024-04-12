@@ -8,12 +8,12 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
 import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
 
-function TusGastos({ userId, setTotalGastos }) {
-  const [gastos, setGastos] = useState([]);
-  const [nuevoGasto, setNuevoGasto] = useState({ categoria: "", monto: "" });
+function TusGastos({ userId }) {
+  
   const [cards, setCards] = useState([]);
   const carouselRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
+  const [totalGastos, setTotalGastos] = useState(0);
   const [nuevaTarjeta, setNuevaTarjeta] = useState({
     nombreTarjeta: "",
     fechaPago: "",
@@ -23,7 +23,14 @@ function TusGastos({ userId, setTotalGastos }) {
   const [tarjetas, setTarjetas] = useState([]);
   const [gastosFijos, setGastosFijos] = useState([]);
   const [tipoTarjeta, setTipoTarjeta] = useState("");
+ 
+  const [totalGastosFijos, setTotalGastosFijos] = useState(0);
 
+  
+const actualizarTotalGastos = (nuevoGasto) => {
+  setTotalGastos((prevTotalGastos) => prevTotalGastos + nuevoGasto);
+};
+  // esto es una función que se ejecuta cuando se hace click en el botón de agregar gasto
   const handleAgregarGasto = () => {
     const cardStyle = cards.length === 0 ? "" : "ml-14";
     setShowForm(true);
@@ -34,6 +41,10 @@ function TusGastos({ userId, setTotalGastos }) {
     );
     setCards([...cards, newCard]);
   };
+
+  
+
+  
 
   const scroll = (scrollOffset) => {
     carouselRef.current.scrollLeft += scrollOffset;
@@ -262,6 +273,7 @@ function TusGastos({ userId, setTotalGastos }) {
 
             <CardGastosFijos gastoFijo={gastoFijo} userId={userId} actualizarTotalGastos={setTotalGastos} />
           </div>
+          
         ))}
       </div>
     </div>

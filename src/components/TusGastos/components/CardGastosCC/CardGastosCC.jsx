@@ -5,52 +5,12 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import FormNuevoGastoCC from "./FormAddGastoCC.jsx";
+import { fetchGastos, addGasto } from "./services/ApiService.jsx";
 
-function CardGastosCC({ userId, className, tarjeta }) {
+function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
   const [transactions, setTransactions] = useState([]);
-  const [valorTotal, setValorTotal] = useState(0);
-  const { nombreTarjeta, fechaPago, tarjetaCreditoID } = tarjeta;
-
-  const obtenerFechaSinAno = (fecha) => {
-    if (!fecha) return "";
-    const [year, month, day] = fecha.split("-");
-    return `${day}-${month}`;
-  };
-  const fechaSinAno = obtenerFechaSinAno(fechaPago);
-
-
-
-  useEffect(() => {
-    const fetchGastos = async () => {
-      const apiUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos`;
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(
-            "La respuesta del servidor no fue OK al obtener los gastos"
-          );
-        }
-        const responseBody = await response.text();
-        if (responseBody) {
-          const data = JSON.parse(responseBody);
-          const sumaTotal = data.reduce(
-            (total, gastoActual) => total + gastoActual.valorTotalGasto,
-            0
-          );
-          setValorTotal(sumaTotal);
-          setTransactions(data);
-        } else {
-          console.log("La respuesta del servidor está vacía");
-        }
-      } catch (error) {
-        console.error("Error al obtener los gastos:", error);
-      }
-    };
-
-    fetchGastos();
-  }, [userId, tarjetaCreditoID]);
-
   const [isFormVisible, setFormVisible] = useState(false);
+  const { nombreTarjeta, fechaPago, tarjetaCreditoID,valorTotal   } = tarjeta;
   const [newTransaction, setNewTransaction] = useState({
     name: "",
     installments: "",
@@ -60,43 +20,44 @@ function CardGastosCC({ userId, className, tarjeta }) {
     paid: "",
   });
 
+  console.log("Tarjeta:", tarjeta); 
+
+  const obtenerFechaSinAno = (fecha) => {
+    if (!fecha) return "";
+    const [year, month, day] = fecha.split("-");
+    return `${day}-${month}`;
+  };
+  const fechaSinAno = obtenerFechaSinAno(fechaPago);
+
+  const toggleFormVisibility = () => {
+    setFormVisible(!isFormVisible);
+  };
+
+  useEffect(() => {
+    fetchGastos(userId, tarjeta.tarjetaCreditoID)
+      .then((data) => {
+        setTransactions(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los gastos:", error);
+      });
+  }, [userId, tarjeta.tarjetaCreditoID]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTransaction({ ...newTransaction, [name]: value });
   };
 
+  // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Construye la URL de la API para la solicitud POST
-    const apiUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjeta.tarjetaCreditoID}/gastos`;
-
-    const gastoData = {
+    addGasto(userId, tarjeta.tarjetaCreditoID, {
       nombreGasto: newTransaction.name,
       cuotaGasto: parseInt(newTransaction.installments, 10),
       valorCuotaGasto: parseFloat(newTransaction.installmentValue),
       valorTotalGasto: parseFloat(newTransaction.totalValue),
       interes: parseFloat(newTransaction.interest),
-    };
-
-    // Realiza la solicitud POST al backend
-    fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(gastoData),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("La respuesta del servidor no fue OK");
-        }
-        return response.json();
-      })
       .then((data) => {
-        console.log("Gasto agregado:", data);
-        
-        // Agrega el nuevo gasto a la lista de transacciones y reinicia el formulario
         setTransactions([...transactions, data]);
         setFormVisible(false);
         setNewTransaction({
@@ -109,14 +70,8 @@ function CardGastosCC({ userId, className, tarjeta }) {
         });
       })
       .catch((error) => {
-    
         console.error("Error al agregar el gasto:", error);
-        // Aquí podrías manejar el error mostrando un mensaje al usuario, por ejemplo
       });
-  };
-
-  const toggleFormVisibility = () => {
-    setFormVisible(!isFormVisible);
   };
 
   return (
@@ -202,7 +157,6 @@ function CardGastosCC({ userId, className, tarjeta }) {
           >
             Interés
           </span>
-          
         </div>
         <Divider className="mt-[-0.5rem]" />
         {transactions.map((trans, index) => (
@@ -220,14 +174,12 @@ function CardGastosCC({ userId, className, tarjeta }) {
               <div className="flex items-center justify-center col-span-1 ml-9 ">
                 <span className="text-base">{trans.valorTotalGasto}</span>
               </div>
-              <div className="flex items-center justify-center col-span-1 ml-12 "
-              >
+              <div className="flex items-center justify-center col-span-1 ml-12 ">
                 <span className="text-base">{trans.interes}</span>{" "}
                 {/* Mantenido como interes */}
               </div>
             </div>
             {index < transactions.length - 1 && <Divider className="my-1" />}
-            
           </React.Fragment>
         ))}
         {transactions.length === 0 && (

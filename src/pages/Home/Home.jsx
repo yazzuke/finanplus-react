@@ -16,7 +16,7 @@ function Home () {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
-  const [totalGastos, setTotalGastos] = useState(0);
+  const [sumaTotalGastos, setTotalGastos] = useState(0);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -46,7 +46,7 @@ function Home () {
         <div className="mt-4 ml-3 ">
           <SelectorMeses />
           <div className="flex flex-col"> {/* Contenedor para tus ingresos y sumatorias */}
-          <TotalesSumatorias userId={userId} totalGastos={totalGastos} />
+          <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} />
             <TusIngresos userId={userId} />
           </div>
           <TusGastos userId={userId}  setTotalGastos={setTotalGastos} />
