@@ -3,16 +3,18 @@ import NavBar from "../../components/Navbar/Navbar";
 import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
 import TusIngresos from "../../components/TusIngresos/TusIngresos";
 import TusGastos from "../../components/TusGastos/TusGastos";
+import BolaDeNieve from "../../components/BolaDeNieve/BolaDeNieve";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import  TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumatorias"; 
+import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumatorias";
+import Graficos from "../../components/Graficos/Graficos";
 
-const getUserData = async (userId) => {
+const getUserData = async ({ userId }) => {
   const response = await fetch(`http://localhost:8080/usuarios/${userId}`);
   const data = await response.json();
   return data;
 };
 
-function Home () {
+function Home() {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
@@ -29,28 +31,31 @@ function Home () {
       }
     });
 
-      // Función para actualizar los ingresos desde TusIngresos
-    //  const actualizarIngresos = (nuevosIngresos) => {
-       // setIngresos(nuevosIngresos);
-    //  };
-
-
     return () => unsubscribe();
   }, []);
 
-
   return (
-    <div className="flex flex-col min-h-screen"> {/* Asegura un mínimo de altura de la pantalla */}
+    <div className="flex flex-col ">
       <NavBar user={user} />
-      <div className="flex-grow"> {/* Asegura que este div tome el espacio restante */}
-        <div className="mt-4 ml-3 ">
+      <div className="flex-grow overflow-auto">
+        <div className="flex justify-between mt-4 ml-3">
           <SelectorMeses />
-          <div className="flex flex-col"> {/* Contenedor para tus ingresos y sumatorias */}
           <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} />
-            <TusIngresos userId={userId} />
+        
+        </div>
+        <div className="absolute min-h-[300px] ml-[700px]">
+          <Graficos userId={userId} />
+          
+        </div>
+        <div className="min-h-[300px]">
+          <TusIngresos userId={userId} />
+        </div>
+        <div></div>
+        <div className="min-h-[300px] ml-2">
+          <div className="lg:absolute left-[300px] mt-[-25px] ">
+            <BolaDeNieve userId={userId} />
           </div>
-          <TusGastos userId={userId}  setTotalGastos={setTotalGastos} />
-      
+          <TusGastos userId={userId} setTotalGastos={setTotalGastos} />
         </div>
       </div>
     </div>

@@ -260,7 +260,7 @@ const actualizarTotalGastos = (nuevoGasto) => {
         style={{ scrollBehavior: "smooth" }}
       >
         {tarjetas.map((tarjeta, index) => (
-          <div key={`tarjeta-${index}`} className={index > 0 ? "ml-8" : ""}>
+          <div key={`tarjeta-${index}`} className={index > 0 ? "ml-7" : ""}>
             <CardGastosCC tarjeta={tarjeta} userId={userId} actualizarTotalGastos={setTotalGastos} />
           </div>
         ))}
@@ -269,7 +269,7 @@ const actualizarTotalGastos = (nuevoGasto) => {
         {gastosFijos.map((gastoFijo, index) => (
           <div
             key={`gastoFijo-${index}`}
-            className={(index > 0 || tarjetas.length > 0) ? "ml-8" : ""}>
+            className={(index > 0 || tarjetas.length > 0) ? "ml-7" : ""}>
 
             <CardGastosFijos gastoFijo={gastoFijo} userId={userId} actualizarTotalGastos={setTotalGastos} />
           </div>

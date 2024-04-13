@@ -32,7 +32,7 @@ function TotalesSumatorias({ userId }) {
   }, [userId]);
 
   return (
-    <div className="flex items-center ml-[500px]">
+    <div className="flex items-center mr-[340px]">
       <span className="text-2xl font-bold mr-4">Total de Tus Ingresos</span>
       <div className="w-[160px] flex justify-between items-center bg-[#302d2d] rounded-full p-1 shadow-md mt-1">
         <span className="text-white"></span>
@@ -43,6 +43,11 @@ function TotalesSumatorias({ userId }) {
         <span className="text-white"></span>
         <span className="text-white items-center">${totalGastos.toLocaleString()}</span>
       </div>
+      <span className="text-2xl font-bold mr-4 ml-4 ">Ingresos - Gastos </span>
+      <div className="w-[160px] flex justify-between items-center bg-[#302d2d] rounded-full p-1 shadow-md mt-1">
+        <span className="text-white"></span>
+        <span className="text-white items-center">${(totalIngresos - totalGastos).toLocaleString()}</span>
+      </div>  
     </div>
   );
 }

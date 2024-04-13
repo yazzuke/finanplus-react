@@ -22,7 +22,7 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
   
   });
 
-  console.log("Tarjeta:", tarjeta); 
+  //console.log("Tarjeta:", tarjeta); 
 
   const obtenerFechaSinAno = (fecha) => {
     if (!fecha) return "";
@@ -76,23 +76,41 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
         console.error("Error al agregar el gasto:", error);
       });
   };
- 
+  
+  // Función para ajustar el tamaño de la fuente del texto
+  function adjustFontSize(text) {
+    const baseSize = 16;
+    const scalingFactor = 0.5; 
+    const maxLengthBeforeScale = 10; 
+  
+    if (text.length > maxLengthBeforeScale) {
+      const scaleFactor = Math.max(baseSize - (text.length - maxLengthBeforeScale) * scalingFactor, 10); // No reducir la fuente a menos de 10px
+      return `${scaleFactor}px`;
+    }
+  
+    return `${baseSize}px`;
+  }
+  
+
+
   return (
-    <Card className="${className} dark w-[720px] h-[320px] mt-2 ">
+    <Card className="${className} dark w-[720px] h-[320px] mt-2  ">
  <CardHeader className="flex justify-between items-center">
   <div>
     <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">
       {nombreTarjeta}
     </span>
     <div className="flex">
-      <span className="text-sm font-bold mr-8">
+      <span className="text-sm font-bold mr-7">
         Fecha de pago: {fechaSinAno}
       </span>
       <span className="text-sm font-bold mr-4">
         Valor Total:{" "}
         {valorTotal.toLocaleString("es-ES", { maximumFractionDigits: 0 })}
       </span>
-      <DropdownIngresos  userId={userId} tarjeta={tarjeta}  />
+      <div className="flex items-center justify-center col-span-1 ml-16">
+        <DropdownIngresos  userId={userId} />
+      </div>
     </div>
     
   </div>
@@ -160,17 +178,17 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
         {transactions.map((trans, index) => (
           <React.Fragment key={index}>
             <div className="grid grid-cols-5 gap-4 items-center">
-              <div className="flex items-center justify-center col-span-1 mr-8">
-                <span className="text-base">{trans.nombreGasto}</span>
+              <div className="flex items-center justify-center col-span-1 mr-3 whitespace-nowrap overflow-hidden overflow-ellipsis ">
+                <span className="text-base"   style={{ fontSize: adjustFontSize(trans.nombreGasto) }}>{trans.nombreGasto}</span>
               </div>
               <div className="flex items-center justify-center col-span-1 ">
                 <span className="text-base">{trans.cuotaGasto}</span>
               </div>
               <div className="flex items-center justify-center col-span-1 ml-6 ">
-                <span className="text-base">{trans.valorCuotaGasto}</span>
+              <span className="text-base">{trans.valorCuotaGasto.toLocaleString("es-ES")}</span>
               </div>
               <div className="flex items-center justify-center col-span-1 ml-9 ">
-                <span className="text-base">{trans.valorTotalGasto}</span>
+              <span className="text-base">{trans.valorTotalGasto.toLocaleString("es-ES")}</span>
               </div>
               <div className="flex items-center justify-center col-span-1 ml-12 ">
               <DropdownTipo  />

@@ -74,7 +74,7 @@
     }, []);
 
     return (
-      <div className="flex justify-end mt-[-5rem] mr-2">
+      <div className="flex justify-end mt-[-2.4rem] mr-2">
         <div className="w-[250px]">
           <div className="flex justify-between items-center mb-4">
             <IconButton
@@ -125,7 +125,7 @@
           )}
 
           <div
-            className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3  bg-slate-800"
+            className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3  "
             style={{
               left: "59px",
             }}
