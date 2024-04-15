@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngresos from "../DropdownIngreso.jsx";
-import DropdownTipo from "../DropdownTipo.jsx";
+import DropdownTipo from "../../../Ahorros/DropdownTipo.jsx";
 import FormNuevoGastoCC from "./FormAddGastoCC.jsx";
 import { fetchGastos, addGasto } from "./services/ApiService.jsx";
 
@@ -87,7 +87,6 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
       const scaleFactor = Math.max(baseSize - (text.length - maxLengthBeforeScale) * scalingFactor, 10); // No reducir la fuente a menos de 10px
       return `${scaleFactor}px`;
     }
-  
     return `${baseSize}px`;
   }
   
@@ -168,7 +167,7 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
             Valor Total
           </span>
           <span
-            className="text-base font-medium col-span-1 text-right"
+            className="text-base font-medium col-span-1 text-center ml-12"
             style={{ transform: "translateY(-35%)" }}
           >
             Tipo

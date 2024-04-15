@@ -6,29 +6,34 @@ const PieChart = ({ userId }) => {
   const [dataCategorias, setDataCategorias] = useState([]);
 
   useEffect(() => {
-    const fetchGastos = async () => {
+    const fetchGastosYAhorros = async () => {
       // URLs de los endpoints
       const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
       const tarjetasCreditoUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
+      const ahorrosUrl = `http://localhost:8080/usuarios/${userId}/ahorros`;
 
       try {
-        // Obtiene los datos de ambos endpoints
-        const [gastosFijosResponse, tarjetasCreditoResponse] = await Promise.all([
+        // Obtiene los datos de los tres endpoints
+        const [gastosFijosResponse, tarjetasCreditoResponse, ahorrosResponse] = await Promise.all([
           fetch(gastosFijosUrl),
           fetch(tarjetasCreditoUrl),
+          fetch(ahorrosUrl),
         ]);
 
         const gastosFijosData = await gastosFijosResponse.json();
         const tarjetasCreditoData = await tarjetasCreditoResponse.json();
+        const ahorrosData = await ahorrosResponse.json();
 
-        // Combina los arrays de gastos en un solo array
-        const todosLosGastos = [
+        // Combina los arrays de gastos y ahorros en un solo array
+        const todosLosGastosYAhorros = [
           ...gastosFijosData.flatMap(gasto => gasto.gastos),
           ...tarjetasCreditoData.flatMap(tarjeta => tarjeta.gastos),
+          ...ahorrosData, // Asumiendo que el array de ahorros tiene la misma estructura
         ];
 
-        // Cuenta la cantidad de gastos por categoría
-        const contadorCategorias = todosLosGastos.reduce((acc, { tipo }) => {
+        // Cuenta la cantidad de gastos y ahorros por categoría
+        const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
+          const tipo = item.tipo || item.categoria; // Usar item.categoria si ahorros tiene una estructura diferente
           acc[tipo] = (acc[tipo] || 0) + 1; // Incrementa el contador por cada tipo
           return acc;
         }, {});
@@ -42,14 +47,15 @@ const PieChart = ({ userId }) => {
         setDataCategorias(categoriasData);
         console.log("Categorías:", categoriasData);
       } catch (error) {
-        console.error("Error al obtener los gastos:", error);
+        console.error("Error al obtener los gastos y ahorros:", error);
       }
     };
 
     if (userId) {
-      fetchGastos();
+      fetchGastosYAhorros();
     }
   }, [userId]);
+
 
 
 
@@ -103,7 +109,7 @@ const PieChart = ({ userId }) => {
 
 
 
-  return <div ref={chartRef} style={{ width: '600px', height: '400px' }}></div>;
+  return <div className="" ref={chartRef} style={{ width: '600px', height: '400px' }}></div>;
 };
 
 export default PieChart;

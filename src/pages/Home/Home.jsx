@@ -3,6 +3,7 @@ import NavBar from "../../components/Navbar/Navbar";
 import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
 import TusIngresos from "../../components/TusIngresos/TusIngresos";
 import TusGastos from "../../components/TusGastos/TusGastos";
+import Ahorros from "../../components/Ahorros/Ahorros";
 import BolaDeNieve from "../../components/BolaDeNieve/BolaDeNieve";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumatorias";
@@ -41,18 +42,20 @@ function Home() {
         <div className="flex justify-between mt-4 ml-3">
           <SelectorMeses />
           <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} />
-        
         </div>
+        <div className=" absolute min-h-[300px]">
+          <Ahorros userId={userId} />
+          </div>
         <div className="absolute min-h-[300px] ml-[700px]">
           <Graficos userId={userId} />
           
         </div>
-        <div className="min-h-[300px]">
+        <div className="min-h-[345px]">
           <TusIngresos userId={userId} />
         </div>
         <div></div>
         <div className="min-h-[300px] ml-2">
-          <div className="lg:absolute left-[300px] mt-[-25px] ">
+          <div className=" absolute left-[300px] mt-[-25px] ">
             <BolaDeNieve userId={userId} />
           </div>
           <TusGastos userId={userId} setTotalGastos={setTotalGastos} />

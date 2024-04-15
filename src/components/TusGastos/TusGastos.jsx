@@ -7,6 +7,8 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
 import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
+import CardGastosVariables from "./components/CardGastosVariables/CardGastosVariables.jsx";
+
 
 function TusGastos({ userId }) {
   
@@ -273,8 +275,11 @@ const actualizarTotalGastos = (nuevoGasto) => {
 
             <CardGastosFijos gastoFijo={gastoFijo} userId={userId} actualizarTotalGastos={setTotalGastos} />
           </div>
+
+      
           
         ))}
+           
       </div>
     </div>
   );
