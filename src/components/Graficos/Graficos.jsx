@@ -28,7 +28,7 @@ const PieChart = ({ userId }) => {
         const todosLosGastosYAhorros = [
           ...gastosFijosData.flatMap(gasto => gasto.gastos),
           ...tarjetasCreditoData.flatMap(tarjeta => tarjeta.gastos),
-          ...ahorrosData, // Asumiendo que el array de ahorros tiene la misma estructura
+          ...ahorrosData,
         ];
 
         // Cuenta la cantidad de gastos y ahorros por categoría

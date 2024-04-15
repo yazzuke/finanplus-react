@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DropdownTipo from "./DropdownTipo.jsx";
 import EditIcon from "@mui/icons-material/Edit";
 
-function Ahorros({ userId }) {
+function Ahorros({ userId, currentDate  }) {
   const [ahorros, setAhorros] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
 
@@ -30,9 +30,23 @@ function Ahorros({ userId }) {
     }
   };
 
+  //useEffect(() => {
+   // obtenerAhorros();
+ // }, [userId]);
+
+  // endpoint para mostrar por meses
   useEffect(() => {
-    obtenerAhorros();
-  }, [userId]);
+    if (userId && currentDate) {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1; // getMonth() es 0-indexado
+      fetch(`http://localhost:8080/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`)
+        .then(response => response.json())
+        .then(data => {
+          setAhorros(data); // Actualiza el estado con los nuevos datos
+        })
+        .catch(error => console.error('Error al obtener los ahorros:', error));
+    }
+  }, [userId, currentDate]);
 
   // Referencia al contenedor para usar con PerfectScrollbar
   const containerRef = useRef(null);

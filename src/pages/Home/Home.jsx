@@ -20,6 +20,8 @@ function Home() {
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
   const [sumaTotalGastos, setTotalGastos] = useState(0);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -40,18 +42,18 @@ function Home() {
       <NavBar user={user} />
       <div className="flex-grow overflow-auto">
         <div className="flex justify-between mt-4 ml-3">
-          <SelectorMeses />
+          <SelectorMeses currentDate={currentDate} setCurrentDate={setCurrentDate} />
           <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} />
         </div>
         <div className=" absolute min-h-[300px]">
-          <Ahorros userId={userId} />
+          <Ahorros userId={userId}   currentDate={currentDate} />
           </div>
         <div className="absolute min-h-[300px] ml-[700px]">
           <Graficos userId={userId} />
           
         </div>
         <div className="min-h-[345px]">
-          <TusIngresos userId={userId} />
+          <TusIngresos userId={userId}  currentDate={currentDate} />
         </div>
         <div></div>
         <div className="min-h-[300px] ml-2">
