@@ -60,7 +60,7 @@ function Home() {
           <div className=" absolute left-[300px] mt-[-25px] ">
             <BolaDeNieve userId={userId} />
           </div>
-          <TusGastos userId={userId} setTotalGastos={setTotalGastos} />
+          <TusGastos userId={userId} setTotalGastos={setTotalGastos} currentDate={currentDate}/>
         </div>
       </div>
     </div>

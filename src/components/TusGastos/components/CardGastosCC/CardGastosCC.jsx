@@ -9,7 +9,7 @@ import DropdownTipo from "../../../Ahorros/DropdownTipo.jsx";
 import FormNuevoGastoCC from "./FormAddGastoCC.jsx";
 import { fetchGastos, addGasto } from "./services/ApiService.jsx";
 
-function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
+function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos, currentDate  }) {
   const [transactions, setTransactions] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
   const { nombreTarjeta, fechaPago, tarjetaCreditoID,valorTotal   } = tarjeta;
@@ -29,6 +29,7 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
     const [year, month, day] = fecha.split("-");
     return `${day}-${month}`;
   };
+  
   const fechaSinAno = obtenerFechaSinAno(fechaPago);
 
   const toggleFormVisibility = () => {
@@ -44,6 +45,7 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
         console.error("Error al obtener los gastos:", error);
       });
   }, [userId, tarjeta.tarjetaCreditoID]);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTransaction({ ...newTransaction, [name]: value });
@@ -76,6 +78,32 @@ function CardGastosCC({ userId, className, tarjeta, actualizarTotalGastos  }) {
         console.error("Error al agregar el gasto:", error);
       });
   };
+
+  useEffect(() => {
+    if (!userId || !currentDate) return;
+    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1; // JavaScript cuenta los meses desde 0
+    const tarjetaCreditoID = tarjeta.tarjetaCreditoID;
+  
+    // Limpiar el estado antes de cargar nuevos datos
+    setTransactions([]);
+  
+    fetchGastos(userId, tarjetaCreditoID, year, month)
+      .then((data) => {
+        // Asegurarse de que la respuesta sea un array
+        if (Array.isArray(data)) {
+          setTransactions(data);
+        } else {
+          // Manejo de una respuesta inesperada o un error
+          console.error("La respuesta de la API no es un array: ", data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener los gastos:", error);
+      });
+  }, [userId, tarjeta.tarjetaCreditoID, currentDate]);
+  
   
   // Función para ajustar el tamaño de la fuente del texto
   function adjustFontSize(text) {

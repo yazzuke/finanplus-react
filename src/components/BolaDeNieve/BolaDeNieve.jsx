@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardHeader } from "@nextui-org/react";
 
 function BolaDeNieve({ userId }) {
-  console.log("userId:", userId);
+ // console.log("userId:", userId);
 
   const [gastoMenor, setGastoMenor] = useState(null);
 
@@ -32,9 +32,9 @@ function BolaDeNieve({ userId }) {
             if (todosLosGastos.length > 0) {
             const menor = todosLosGastos.reduce((min, gasto) => gasto.valorTotalGasto < min.valorTotalGasto ? gasto : min);
             todosLosGastos.sort((a, b) => a.valorTotalGasto - b.valorTotalGasto);
-            console.log("Todos los gastos:", todosLosGastos);
+          //  console.log("Todos los gastos:", todosLosGastos);
             setGastoMenor(menor);
-            console.log("Gasto menor:", menor);
+          //  console.log("Gasto menor:", menor);
             }
         } catch (error) {
             console.error("Error al obtener los gastos:", error);

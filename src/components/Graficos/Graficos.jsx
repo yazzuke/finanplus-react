@@ -45,7 +45,7 @@ const PieChart = ({ userId }) => {
         }));
 
         setDataCategorias(categoriasData);
-        console.log("Categorías:", categoriasData);
+       // console.log("Categorías:", categoriasData);
       } catch (error) {
         console.error("Error al obtener los gastos y ahorros:", error);
       }
