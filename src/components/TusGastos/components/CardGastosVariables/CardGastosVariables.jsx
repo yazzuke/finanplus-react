@@ -1,10 +1,10 @@
       import React, { useState, useEffect } from "react";
       import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
-      import DropdownTipo from "../DropdownTipo.jsx";
+ 
       import IconButton from "@mui/material/IconButton";
       import AddIcon from "@mui/icons-material/Add";
       import EditIcon from "@mui/icons-material/Edit";
-      import DropdownIngreso from "../DropdownIngreso.jsx";
+  
       import FormGastosFijos from "./FormGastosFijos.jsx";
 
       function CardGastosVariables({ userId, gastoFijo }) {

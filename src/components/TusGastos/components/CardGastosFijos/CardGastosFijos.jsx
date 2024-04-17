@@ -1,6 +1,6 @@
       import React, { useState, useEffect } from "react";
       import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
-      import DropdownTipo from "../DropdownTipo.jsx";
+      import DropdownTipo from "../../../DropdownTipo.jsx";
       import IconButton from "@mui/material/IconButton";
       import AddIcon from "@mui/icons-material/Add";
       import EditIcon from "@mui/icons-material/Edit";
@@ -189,7 +189,7 @@
                     <span className="text-base">{trans.valorGasto.toLocaleString("es-ES")}</span>
                     </div>
                     <div className="flex items-center justify-center col-span-1 ">
-                      <DropdownTipo selectedValue={trans.tipo} />
+                    <DropdownTipo tipo={trans.tipo} onTypeChange={(newType) => console.log(newType)} />
                     </div>
                     <div className="flex items-center justify-center col-span-1 ">
                       <DropdownTipo selectedValue={trans.tipo} />

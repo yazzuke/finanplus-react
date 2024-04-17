@@ -11,12 +11,14 @@ import {
 import snowballGif from "../../../assets/ModalSnowball.gif";
 import { useState } from "react";
 
-const ModalNieve = ({ isOpen, onClose }) => {
+const ModalNieve = ({ isOpen, onClose, todosLosGastos }) => {
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
   const handleToggleInfo = () => {
     setShowAdditionalInfo(!showAdditionalInfo);
   };
+
+  console.log("todosLosGastos:", todosLosGastos);
 
   return (
     <>

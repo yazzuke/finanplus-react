@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 
 export default function DropdownIngresos({ userId }) {
-  const [selectedIngreso, setSelectedIngreso] = useState(null);
+  const [selectedIngreso, setSelectedIngreso] = useState(new Set());
   const [ingresos, setIngresos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   
 
   useEffect(() => {
@@ -34,35 +33,33 @@ export default function DropdownIngresos({ userId }) {
     setSelectedIngreso(key);
   };
 
+  const selectedConcepto = selectedIngreso.size > 0
+    ? ingresos.find((i) => i.ingresoID === Array.from(selectedIngreso)[0])?.concepto
+    : "Concepto";
+
+
 return (
     <Dropdown>
       <DropdownTrigger>
         <Button variant="faded" className="capitalize w-[150px] h-[22px]">
-          {isLoading
-            ? "Cargando..."
-            : selectedIngreso
-            ? ingresos.find((i) => i.ingresoID === selectedIngreso)?.concepto
-            : "Concepto"}
+        {isLoading ? "Cargando..." : selectedConcepto}
         </Button>
       </DropdownTrigger>
       
       <DropdownMenu
         aria-label="Seleccione un ingreso"
         selectedKeys={selectedIngreso}
-        onSelectionChange={handleSelectionChange}
-        isLoading={isLoading}
-        
+        onSelectionChange={(keys) => handleSelectionChange(Array.from(keys)[0])}
+        isLoading={isLoading} 
         emptyContent={" No hay ingresos disponibles"}
       >
-        {ingresos.map(({ concepto, ingresoID }, index) => {
-          
+        {ingresos.map((ingreso) => {
           return (
             <DropdownItem
-              key={index}
-              textValue={concepto}
-              selected={ingresoID === selectedIngreso}
+              key={ingreso.ingresoID} // Usa ingresoID para la key
+              selected={selectedIngreso.has(ingreso.ingresoID)}
             >
-              {concepto}
+              {ingreso.concepto}
             </DropdownItem>
           );
         })}

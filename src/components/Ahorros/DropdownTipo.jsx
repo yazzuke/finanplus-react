@@ -7,21 +7,29 @@
     Button,
   } from "@nextui-org/react";
 
-  export default function App() {
-    const [selectedKeys, setSelectedKeys] = React.useState(new Set(["Opción"]));
+  function DropdownTipo({ tipo, onTypeChange }) {
+    const [selectedKeys, setSelectedKeys] = useState(new Set([tipo]));
+// Actualiza el estado local cuando cambia la prop tipo.
 
-    const selectedValue = React.useMemo(
-      () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-      [selectedKeys]
-    );
 
+useEffect(() => {
+  setSelectedKeys(new Set([tipo]));
+}, [tipo]);
+
+// Levanta el estado cuando se selecciona un nuevo tipo.
+const handleSelectionChange = (keys) => {
+  setSelectedKeys(keys);
+  if (onTypeChange) {
+    onTypeChange(Array.from(keys)[0]);
+  }
+};
 
     
     return (
       <Dropdown>
         <DropdownTrigger>
           <Button variant="faded" className="capitalize w-[150px] h-[22px]">
-            {selectedValue}
+          {Array.from(selectedKeys).join(", ").replaceAll("_", " ")}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
@@ -39,3 +47,6 @@
       </Dropdown>
     );
   }
+
+
+  export default DropdownTipo;

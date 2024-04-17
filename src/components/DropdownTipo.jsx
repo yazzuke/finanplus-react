@@ -40,9 +40,9 @@ const handleSelectionChange = (keys) => {
         disallowEmptySelection
         selectionMode="single"
         selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
+        onSelectionChange={handleSelectionChange}
       >
-        <DropdownItem key="Necesidad">Necesidad</DropdownItem>
+        <DropdownItem  key="Necesidad">Necesidad</DropdownItem>
         <DropdownItem key="Deseos">Deseos</DropdownItem>
         <DropdownItem key="Metas">Metas</DropdownItem>
       </DropdownMenu>

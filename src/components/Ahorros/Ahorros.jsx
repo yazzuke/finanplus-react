@@ -5,7 +5,7 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import IconButton from "@mui/material/IconButton";
 import FormAhorros from "./FormAhorros.jsx";
 import AddIcon from "@mui/icons-material/Add";
-import DropdownTipo from "./DropdownTipo.jsx";
+
 import EditIcon from "@mui/icons-material/Edit";
 
 function Ahorros({ userId, currentDate  }) {
