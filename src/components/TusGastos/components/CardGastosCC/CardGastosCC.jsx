@@ -167,7 +167,7 @@ function CardGastosCC({
   };
 
   return (
-    <Card className="${className} dark w-[720px] h-[320px] mt-2  ">
+    <Card className="${className} dark w-[680px] h-[320px] mt-2  ">
       <CardHeader className="flex justify-between items-center">
         <div>
           <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">

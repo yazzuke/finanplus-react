@@ -31,6 +31,7 @@ function Home() {
       } else {
         setUserId(null);
         setUser(null);
+        console.log(getUserData);
       }
     });
 

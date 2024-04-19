@@ -1,6 +1,6 @@
 import React from "react";
 
-function FormGastosVariables({ newTransaction, handleInputChange, handleSubmit }) {
+function FormGastosDiario({ newTransaction, handleInputChange, handleSubmit }) {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-4 rounded-lg shadow-lg">
@@ -53,4 +53,4 @@ function FormGastosVariables({ newTransaction, handleInputChange, handleSubmit }
   );
 }
 
-export default FormGastosVariables;
+export default FormGastosDiario;
