@@ -3,36 +3,17 @@ import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import IconButton from "@mui/material/IconButton";
-import FormAhorros from "./FormAhorros.jsx";
 import AddIcon from "@mui/icons-material/Add";
-
+import ModalAgregarAhorro from "./ModalAgregarAhorro.jsx";
 import EditIcon from "@mui/icons-material/Edit";
 
 function Ahorros({ userId, currentDate  }) {
   const [ahorros, setAhorros] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
 
-  const obtenerAhorros = () => {
-    if (userId) {
-      fetch(`http://localhost:8080/usuarios/${userId}/ahorros`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setAhorros(data); // Establece los ahorros con los datos obtenidos
-        })
-        .catch((error) => {
-          console.error("Error al obtener ahorros:", error);
-        });
-    }
+  const toggleFormVisibility = () => {
+    setFormVisible(!isFormVisible);
   };
-
-  //useEffect(() => {
-   // obtenerAhorros();
- // }, [userId]);
 
   // endpoint para mostrar por meses
   useEffect(() => {
@@ -108,9 +89,7 @@ function Ahorros({ userId, currentDate  }) {
     }
   };
 
-  const toggleFormVisibility = () => {
-    setFormVisible(!isFormVisible);
-  };
+ 
 
   return (
     <Card className="dark w-[250px] h-[320px] mt-2  ml-2">
@@ -144,11 +123,14 @@ function Ahorros({ userId, currentDate  }) {
             {/* Formulario para añadir un nuevo gasto */}
 
             {isFormVisible && (
-              <FormAhorros
+              <ModalAgregarAhorro
+                isOpen={isFormVisible}
+                onClose={toggleFormVisibility}
                 newTransaction={nuevoAhorro}
                 handleInputChange={handleInputChange}
                 handleSubmit={agregarAhorro}
               />
+
             )}
           </div>
         </div>

@@ -50,9 +50,11 @@
       }
     }, [userId, currentDate]); 
 
-
+  
     const [showForm, setShowForm] = useState(false);
     const [nuevoIngreso, setNuevoIngreso] = useState({ concepto: "", monto: "" });
+
+
 
     const agregarIngreso = () => {
       if (nuevoIngreso.concepto && nuevoIngreso.monto && userId) {

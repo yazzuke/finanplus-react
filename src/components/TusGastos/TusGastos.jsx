@@ -9,6 +9,7 @@ import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
 import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
 import CardGastoDiario from "./components/CardGastoDiario/CardGastosDiario.jsx";
 import CardGastoVariable from "./components/CardGastoVariable/CardGastosVariable.jsx";
+import ModalNuevoGasto from "./components/Forms/ModalNuevoGasto.jsx";
 
 function TusGastos({ userId, currentDate }) {
   const [cards, setCards] = useState([]);
@@ -171,6 +172,7 @@ function TusGastos({ userId, currentDate }) {
   }, [userId, currentDate]);
 
   return (
+
     <div className="mt-[110px] ml-1 bg">
       <div className="flex items-center">
         <span className="text-3xl font-bold">Tus Gastos</span>
@@ -189,79 +191,14 @@ function TusGastos({ userId, currentDate }) {
           <AddIcon />
         </IconButton>
         {showForm && (
-          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-10">
-            <div className="bg-white p-4 rounded-lg shadow-lg">
-              <select
-                value={tipoTarjeta}
-                onChange={(e) => setTipoTarjeta(e.target.value)}
-                className="border p-2 rounded mb-2 w-full"
-              >
-                <option value="">Selecciona un tipo de tarjeta...</option>
-                <option value="gastosCC">Tarjeta de Crédito</option>
-                <option value="gastosFijos">Gastos Fijos</option>
-                <option value="gastosDiarios">Gasto Diario</option>
-                <option value="gastosVariables">Gasto Variable</option>
-              </select>
-
-              {tipoTarjeta === "gastosCC" && (
-                <>
-                  <input
-                    type="text"
-                    placeholder="Nombre de la Tarjeta"
-                    name="nombreTarjeta"
-                    value={nuevaTarjeta.nombreTarjeta}
-                    onChange={handleChange}
-                    className="border p-2 rounded mb-2 w-full"
-                  />
-                  <input
-                    type="date"
-                    placeholder="Fecha de Pago"
-                    name="fechaPago"
-                    value={nuevaTarjeta.fechaPago}
-                    onChange={handleChange}
-                    className="border p-2 rounded mb-2 w-full"
-                  />
-                </>
-              )}
-
-              {tipoTarjeta === "gastosFijos" && (
-                <>
-                  {/* Aquí puedes agregar los campos específicos para Gastos Fijos */}
-                  {/* Por ejemplo: */}
-                  <input
-                    type="text"
-                    placeholder="Nombre del Gasto Fijo"
-                    name="nombreGastoFijo"
-                    value={nuevaTarjeta.nombreGasto} // Asegúrate de manejar este estado adecuadamente
-                    onChange={handleChange}
-                    className="border p-2 rounded mb-2 w-full"
-                  />
-                  {/* Agrega más campos según sea necesario */}
-                </>
-              )}
-              {tipoTarjeta === "gastosVariables" && ( // Formulario para gastos variables
-                <>
-                  <input
-                    type="text"
-                    placeholder="Nombre del Gasto Variable"
-                    name="nombreGastoVariable"
-                    value={nuevaTarjeta.nombreGastoVariable}
-                    onChange={handleChange}
-                    className="border p-2 rounded mb-2 w-full"
-                  />
-                </>
-              )}
-
-              <div className="flex justify-end mt-4">
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleSubmit}
-                >
-                  Agregar
-                </button>
-              </div>
-            </div>
-          </div>
+          <ModalNuevoGasto
+            isOpen={showForm}
+            onClose={() => setShowForm(false)}
+            newTransaction={nuevaTarjeta}
+            handleInputChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+        
         )}
 
         <IconButton
@@ -348,9 +285,9 @@ function TusGastos({ userId, currentDate }) {
               key={`gastoVariable-${index}`}
               className={
                 index > 0 ||
-                  tarjetas.length > 0 ||
-                  gastosFijos.length > 0 ||
-                  gastosDiarios.length > 0
+                tarjetas.length > 0 ||
+                gastosFijos.length > 0 ||
+                gastosDiarios.length > 0
                   ? "ml-7"
                   : ""
               }

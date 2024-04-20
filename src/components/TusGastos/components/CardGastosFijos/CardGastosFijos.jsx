@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
-import FormGastosFijos from "./FormGastosFijos.jsx";
+import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
 
 function CardGastosFijos({ userId, gastoFijo }) {
   const [transactions, setTransactions] = useState([]);
@@ -25,13 +25,10 @@ function CardGastosFijos({ userId, gastoFijo }) {
 
   //console.log("Gasto fijo:", gastoFijo);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      // Asegúrate de que estás usando gastoFijo.gastoFijoID y no gastoFijoID
       const response = await fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`,
-        {
+        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,6 +56,7 @@ function CardGastosFijos({ userId, gastoFijo }) {
       console.error("Hubo un problema con la solicitud fetch:", error);
     }
   };
+  
 
   useEffect(() => {
     // Verifica si gastoFijo y gastoFijo.gastoFijoID están definidos para evitar errores de solicitud no deseada
@@ -147,7 +145,7 @@ function CardGastosFijos({ userId, gastoFijo }) {
               color="primary"
               aria-label="add"
               className="ml-2"
-              onClick={toggleFormVisibility}
+              onClick={() => setFormVisible(true)} 
             >
               <AddIcon />
             </IconButton>
@@ -155,12 +153,14 @@ function CardGastosFijos({ userId, gastoFijo }) {
             {/* Formulario para añadir un nuevo gasto */}
 
             {isFormVisible && (
-              <FormGastosFijos
-                newTransaction={newTransaction}
-                handleInputChange={handleInputChange}
-                handleSubmit={handleSubmit}
-              />
-            )}
+        <ModalAgregarGastos
+          isOpen={isFormVisible}
+          onClose={() => setFormVisible(false)}
+          newTransaction={newTransaction}
+          handleInputChange={handleInputChange}
+          handleSubmit={handleSubmit}
+        />
+      )}
           </div>
         </div>
       </CardHeader>

@@ -5,7 +5,7 @@
     import AddIcon from "@mui/icons-material/Add";
     import EditIcon from "@mui/icons-material/Edit";
     import DropdownIngreso from "../DropdownIngreso.jsx";
-    import FormGastosVariable from "./FormGastosVariable.jsx";
+    import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx"; 
 
       function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
         const [transactions, setTransactions] = useState([]);
@@ -28,8 +28,7 @@
           setFormVisible(!isFormVisible);
         };
       
-        const handleSubmit = async (e) => {
-          e.preventDefault();
+        const handleSubmit = async () => {
           if (!gastoVariable || !gastoVariable.gastoVariableID) {
             console.error("ID del gasto variable no disponible");
             alert("No se puede añadir el gasto: ID del gasto variable no disponible.");
@@ -154,12 +153,14 @@
                 {/* Formulario para añadir un nuevo gasto */}
 
                 {isFormVisible && (
-                  <FormGastosVariable
-                    newTransaction={newTransaction}
-                    handleInputChange={handleInputChange}
-                    handleSubmit={handleSubmit}
-                  />
-                )}
+                <ModalAgregarGastos
+                isOpen={isFormVisible}
+                onClose={() => setFormVisible(false)}
+                newTransaction={newTransaction}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+              />
+              )}
               </div>
             </div>
           </CardHeader>

@@ -5,7 +5,7 @@
   import AddIcon from "@mui/icons-material/Add";
   import EditIcon from "@mui/icons-material/Edit";
   import DropdownIngreso from "../DropdownIngreso.jsx";
-  import FormGastosDiario from "./FormGastosDiario.jsx";
+  import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
 
   function CardGastoDiario({ userId, gastoDiario, CurrentDate }) {
     const [transactions, setTransactions] = useState([]);
@@ -27,8 +27,7 @@
       setFormVisible(!isFormVisible);
     };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
+    const handleSubmit = async () => {
       if (!gastoDiario || !gastoDiario.gastoDiarioID) {
         console.error("ID del gasto diario no disponible");
         alert("No se puede añadir el gasto: ID del gasto diario no disponible.");
@@ -165,11 +164,13 @@
               {/* Formulario para añadir un nuevo gasto */}
 
               {isFormVisible && (
-                <FormGastosDiario
-                  newTransaction={newTransaction}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                />
+                <ModalAgregarGastos
+                isOpen={isFormVisible}
+                onClose={() => setFormVisible(false)}
+                newTransaction={newTransaction}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+              />
               )}
             </div>
           </div>

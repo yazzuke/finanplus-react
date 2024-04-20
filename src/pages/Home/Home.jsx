@@ -44,7 +44,7 @@ function Home() {
       <div className="flex-grow overflow-auto">
         <div className="flex justify-between mt-4 ml-3">
           <SelectorMeses currentDate={currentDate} setCurrentDate={setCurrentDate} />
-          <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} />
+          <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} currentDate={currentDate} />
         </div>
         <div className=" absolute min-h-[300px]">
           <Ahorros userId={userId}   currentDate={currentDate} />
