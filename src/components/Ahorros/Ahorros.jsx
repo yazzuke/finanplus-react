@@ -176,7 +176,7 @@ function Ahorros({ userId, currentDate }) {
                   isOpen={isEditModalVisible}
                   onClose={closeEditModal}
                   userId={userId}  // Asegúrate de pasar el userId
-                  handleInputChange={handleInputChange} // Asegúrate de tener esta función definida o modifícala según tus necesidades
+             
                 />
               )}
             </IconButton>
