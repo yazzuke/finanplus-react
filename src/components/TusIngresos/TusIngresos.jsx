@@ -3,18 +3,20 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import PerfectScrollbar from "perfect-scrollbar";
+import ModalEditarBorrarIngreso from "./ModalEditarBorrarIngreso";
 import ModalAgregarIngreso from "./ModalAgregarIngreso";
 
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+import { Modal } from "@nextui-org/react";
 
 function TusIngresos({ userId, currentDate }) {
   const [ingresos, setIngresos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [nuevoIngreso, setNuevoIngreso] = useState({ concepto: "", monto: "" });
   const containerRef = useRef(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [ingresoParaEditar, setIngresoParaEditar] = useState(null); // Agrega este estado
 
-
-  
   const obtenerIngresos = () => {
     if (userId) {
       fetch(`http://localhost:8080/usuarios/${userId}/ingresos`)
@@ -55,52 +57,51 @@ function TusIngresos({ userId, currentDate }) {
     }
   }, [userId, currentDate]);
 
-
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNuevoIngreso(prev => ({
+    setNuevoIngreso((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = () => {
     if (!nuevoIngreso.concepto || !nuevoIngreso.monto) {
-      console.error('El concepto y el monto son obligatorios');
+      console.error("El concepto y el monto son obligatorios");
       return;
     }
-    
+
     const url = `http://localhost:8080/usuarios/${userId}/ingresos`;
     const body = {
       concepto: nuevoIngreso.concepto,
       monto: parseFloat(nuevoIngreso.monto),
     };
-  
+
     fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
     })
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
-    .then(data => {
-      setIngresos(prev => [...prev, data]);
-      setNuevoIngreso({ concepto: "", monto: "" }); // Resetea el formulario
-      setShowModal(false); // Cierra el modal
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      .then((response) => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+      })
+      .then((data) => {
+        setIngresos((prev) => [...prev, data]);
+        setNuevoIngreso({ concepto: "", monto: "" }); // Resetea el formulario
+        setShowModal(false); // Cierra el modal
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
-  
-  
 
-
+  const handleEditClick = (ingreso) => {
+    setIngresoParaEditar(ingreso); // Establecer el ingreso seleccionado para editar
+    setShowEditModal(true); // Mostrar el modal de edición
+  };
 
   useEffect(() => {
     if (containerRef.current) {
@@ -139,7 +140,16 @@ function TusIngresos({ userId, currentDate }) {
             handleSubmit={handleSubmit}
           />
         )}
-
+        {showEditModal && (
+          <ModalEditarBorrarIngreso
+            isOpen={showEditModal}
+            onClose={() => {
+              setShowEditModal(false);
+              setIngresoParaEditar(null); 
+            }}
+            ingreso={ingresoParaEditar} 
+          />
+        )}
         <div
           className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3  "
           style={{
@@ -158,6 +168,7 @@ function TusIngresos({ userId, currentDate }) {
                   <IconButton
                     color="primary"
                     aria-label="edit"
+                    onClick={() => handleEditClick(ingreso)}
                     style={{
                       borderRadius: "50%",
                       background: "white",
