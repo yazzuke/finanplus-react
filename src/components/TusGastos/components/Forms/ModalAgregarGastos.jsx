@@ -14,24 +14,28 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 
-
 // este modal sirve para abrir el form y enviar los gastos indivuales a segun el gasto que se halla elegido
-function ModalAgregarGastos({ isOpen, onClose, newTransaction, handleInputChange, handleSubmit }) {
+function ModalAgregarGastos({
+  isOpen,
+  onClose,
+  newTransaction,
+  handleInputChange,
+  handleSubmit,
+}) {
   const tipos = [
     { value: "", label: "Seleccionar Tipo" },
     { value: "Necesidad", label: "Necesidad" },
-    { value: "Deseos", label: "Deseos" }  ,
-    { value: "Metas", label: "Metas" }  ,
+    { value: "Deseos", label: "Deseos" },
+    { value: "Metas", label: "Metas" },
   ];
-  
 
   return (
     <>
-   
-   <Modal open={isOpen} onClose={onClose} width="600px"
+      <Modal
         backdrop="opaque"
         isOpen={isOpen}
-     
+        onClose={onClose}
+        open={isOpen}
         radius="lg"
         classNames={{
           body: "py-6",
@@ -45,11 +49,12 @@ function ModalAgregarGastos({ isOpen, onClose, newTransaction, handleInputChange
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Ingresa un gasto</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Ingresa un gasto
+              </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
-
                   type="text"
                   label="Nombre del Gasto"
                   name="nombreGasto"
@@ -58,7 +63,6 @@ function ModalAgregarGastos({ isOpen, onClose, newTransaction, handleInputChange
                   onChange={handleInputChange}
                 />
                 <Input
-
                   type="date"
                   name="fecha"
                   label="Fecha del Gasto"
@@ -76,7 +80,7 @@ function ModalAgregarGastos({ isOpen, onClose, newTransaction, handleInputChange
                   onChange={handleInputChange}
                 />
                 <Select
-                   autoFocus
+                  autoFocus
                   label="Seleccionar Tipo"
                   placeholder="Seleccionar Tipo"
                   variant="bordered"
@@ -92,7 +96,15 @@ function ModalAgregarGastos({ isOpen, onClose, newTransaction, handleInputChange
                 </Select>
               </ModalBody>
               <ModalFooter>
-              <Button auto onPress={() => { handleSubmit(); onClose(); }}>Agregar Gasto</Button>
+                <Button
+                  auto
+                  onPress={() => {
+                    handleSubmit();
+                    onClose();
+                  }}
+                >
+                  Agregar Gasto
+                </Button>
               </ModalFooter>
             </>
           )}

@@ -102,7 +102,6 @@ const ModalNieve = ({ isOpen, onClose, todosLosGastos }) => {
                       Contenido adicional relacionado con el método bola de
                       nieve.
                     </span>
-                 
                   </div>
                 )}
               </ModalBody>

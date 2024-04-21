@@ -12,7 +12,7 @@ function Ahorros({ userId, currentDate }) {
   const [ahorros, setAhorros] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
-  const [selectedAhorro, setSelectedAhorro] = useState({});
+
 
    // Verifica que `openEditModal` realmente esté cambiando el estado.
    const openEditModal = () => {
@@ -105,47 +105,7 @@ function Ahorros({ userId, currentDate }) {
     }
   };
 
-  const actualizarAhorro = (ahorro) => {
-    fetch(`http://localhost:8080/usuarios/${userId}/ahorros/${ahorro.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        concepto: ahorro.concepto,
-        meta: parseFloat(ahorro.meta),
-        actual: parseFloat(ahorro.actual),
-        tipo: ahorro.tipo,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setAhorros((prev) =>
-          prev.map((item) => (item.id === data.id ? data : item))
-        );
-        // Cerrar modal y limpiar seleccionado después de actualizar
-        setFormVisible(false);
-        setSelectedAhorro({});
-      })
-      .catch((error) => {
-        console.error("Error al actualizar el ahorro:", error);
-        alert("Hubo un error al actualizar el ahorro");
-      });
-  };
 
-  const eliminarAhorro = (id) => {
-    fetch(`http://localhost:8080/usuarios/${userId}/ahorros/${id}`, {
-      method: "DELETE",
-    })
-      .then(() => {
-        setAhorros((prev) => prev.filter((item) => item.id !== id));
-        // Cerrar modal después de eliminar
-        setFormVisible(false);
-        setSelectedAhorro({});
-      })
-      .catch((error) => {
-        console.error("Error al eliminar el ahorro:", error);
-        alert("Hubo un error al eliminar el ahorro");
-      });
-  };
 
   return (
     <Card className="dark w-[250px] h-[320px] mt-2  ml-2">
@@ -176,6 +136,7 @@ function Ahorros({ userId, currentDate }) {
                   isOpen={isEditModalVisible}
                   onClose={closeEditModal}
                   userId={userId}  // Asegúrate de pasar el userId
+                  currentDate={currentDate}  // Asegúrate de pasar la fecha actual
              
                 />
               )}
