@@ -3,25 +3,35 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import CardGastosCC from "./components/CardGastosCC";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import { Card } from "@mui/material";
-import CardGastosFijos from "./components/CardGastosFijos";
+import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
+import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
+import CardGastoDiario from "./components/CardGastoDiario/CardGastosDiario.jsx";
+import CardGastoVariable from "./components/CardGastoVariable/CardGastosVariable.jsx";
+import ModalNuevoGasto from "./components/Forms/ModalNuevoGasto.jsx";
 
-function TusGastos({ userId }) {
-  const [gastos, setGastos] = useState([]);
-  const [nuevoGasto, setNuevoGasto] = useState({ categoria: "", monto: "" });
+function TusGastos({ userId, currentDate }) {
   const [cards, setCards] = useState([]);
   const carouselRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
+  const [totalGastos, setTotalGastos] = useState(0);
   const [nuevaTarjeta, setNuevaTarjeta] = useState({
     nombreTarjeta: "",
     fechaPago: "",
+    nombreGastoFijo: "",
   });
 
   const [tarjetas, setTarjetas] = useState([]);
+  const [gastosFijos, setGastosFijos] = useState([]);
+  const [tipoTarjeta, setTipoTarjeta] = useState("");
+  const [gastosDiarios, setGastosDiarios] = useState([]);
+  const [gastosVariables, setGastosVariables] = useState([]);
 
+  const actualizarTotalGastos = (nuevoGasto) => {
+    setTotalGastos((prevTotalGastos) => prevTotalGastos + nuevoGasto);
+  };
+  // esto es una función que se ejecuta cuando se hace click en el botón de agregar gasto
   const handleAgregarGasto = () => {
     const cardStyle = cards.length === 0 ? "" : "ml-14";
     setShowForm(true);
@@ -45,22 +55,53 @@ function TusGastos({ userId }) {
     }));
   };
 
-
-  // handleSubmit es la función que se ejecuta cuando se envía el formulario
   const handleSubmit = () => {
-    console.log("Tarjeta enviada:", nuevaTarjeta);
-    const url = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
+    let url;
+    let data;
+
+    switch (tipoTarjeta) {
+      case "gastosCC":
+        url = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
+        data = {
+          nombreTarjeta: nuevaTarjeta.nombreTarjeta,
+          fechaPago: nuevaTarjeta.fechaPago,
+        };
+        break;
+      case "gastosFijos":
+        url = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
+        data = {
+          nombreGasto: nuevaTarjeta.nombreGastoFijo,
+        };
+        break;
+      case "gastosDiarios":
+        url = `http://localhost:8080/usuarios/${userId}/gastosdiario`;
+        data = {
+          nombreGasto: "Gasto diario predeterminado",
+          valorGasto: 0,
+          fecha: new Date().toISOString().slice(0, 10),
+          tipo: "Necesidad",
+        };
+        break;
+      case "gastosVariables": // Añadir manejo de gastos variables
+        url = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
+        data = {
+          nombreGasto: "Gasto variable predeterminado",
+          valorGasto: 0,
+          fecha: new Date().toISOString().slice(0, 10),
+          tipo: "Necesidad",
+        };
+        break;
+      default:
+        console.error("Tipo de tarjeta no reconocido");
+        return;
+    }
 
     fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-     
       },
-      body: JSON.stringify({
-        nombreTarjeta: nuevaTarjeta.nombreTarjeta,
-        fechaPago: nuevaTarjeta.fechaPago,
-      }),
+      body: JSON.stringify(data),
     })
       .then((response) => {
         if (!response.ok) {
@@ -69,42 +110,69 @@ function TusGastos({ userId }) {
         return response.json();
       })
       .then((data) => {
-        console.log("Tarjeta agregada con éxito:", data);
-        setTarjetas([...tarjetas, data]);
-        setShowForm(false); 
-        setNuevaTarjeta({ nombreTarjeta: "", fechaPago: "" }); 
+        console.log("Gasto agregado con éxito:", data);
+        setShowForm(false);
+        setNuevaTarjeta({
+          nombreTarjeta: "",
+          fechaPago: "",
+          nombreGastoFijo: "",
+        });
       })
       .catch((error) => {
-        console.error("Error al enviar la tarjeta:", error);
+        console.error("Error al crear el gasto:", error);
       });
   };
 
-  const obtenerTarjetas = () => {
-    const url = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
-  
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la respuesta del servidor');
+  useEffect(() => {
+    // Carga de datos según la fecha actual
+    const fetchDataForCurrentDate = async () => {
+      if (!userId || !currentDate) return;
+
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+
+      const tarjetasUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`;
+      const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`;
+      const gastosDiariosUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`;
+      const gastosVariablesUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`; // URL para gastos variables
+
+      const fetchData = async (url) => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok)
+            throw new Error("Respuesta no satisfactoria del servidor");
+          return await response.json();
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
+          return [];
         }
-        return response.json();
-      })
-      .then(data => {
-        setTarjetas(data); // Actualiza el estado con las tarjetas obtenidas
-      })
-      .catch(error => {
-        console.error('Error al obtener tarjetas:', error);
-      });
-  };
-  
-useEffect(() => {
-  obtenerTarjetas();
-}, [userId]); // Asegúrate de que la función se llame nuevamente si el userId cambia
+      };
 
+      Promise.all([
+        fetchData(tarjetasUrl),
+        fetchData(gastosFijosUrl),
+        fetchData(gastosDiariosUrl),
+        fetchData(gastosVariablesUrl), // Añadir gastos variables a la carga de datos
+      ]).then(
+        ([
+          tarjetasData,
+          gastosFijosData,
+          gastosDiariosData,
+          gastosVariablesData,
+        ]) => {
+          setTarjetas(tarjetasData);
+          setGastosFijos(gastosFijosData);
+          setGastosDiarios(gastosDiariosData);
+          setGastosVariables(gastosVariablesData); // Establecer estado de gastos variables
+        }
+      );
+    };
 
+    fetchDataForCurrentDate();
+  }, [userId, currentDate]);
 
   return (
-    <div className="mt-[110px] ml-4">
+    <div className="mt-[110px] ml-1 bg">
       <div className="flex items-center">
         <span className="text-3xl font-bold">Tus Gastos</span>
         <IconButton
@@ -121,26 +189,70 @@ useEffect(() => {
         >
           <AddIcon />
         </IconButton>
-
         {showForm && (
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-10">
             <div className="bg-white p-4 rounded-lg shadow-lg">
-              <input
-                type="text"
-                placeholder="Nombre de la Tarjeta"
-                name="nombreTarjeta"
-                value={nuevaTarjeta.nombreTarjeta}
-                onChange={handleChange}
+              <select
+                value={tipoTarjeta}
+                onChange={(e) => setTipoTarjeta(e.target.value)}
                 className="border p-2 rounded mb-2 w-full"
-              />
-              <input
-                type="date"
-                placeholder="Fecha de Pago"
-                name="fechaPago"
-                value={nuevaTarjeta.fechaPago}
-                onChange={handleChange}
-                className="border p-2 rounded mb-2 w-full"
-              />
+              >
+                <option value="">Selecciona un tipo de tarjeta...</option>
+                <option value="gastosCC">Tarjeta de Crédito</option>
+                <option value="gastosFijos">Gastos Fijos</option>
+                <option value="gastosDiarios">Gasto Diario</option>
+                <option value="gastosVariables">Gasto Variable</option>
+              </select>
+
+              {tipoTarjeta === "gastosCC" && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Nombre de la Tarjeta"
+                    name="nombreTarjeta"
+                    value={nuevaTarjeta.nombreTarjeta}
+                    onChange={handleChange}
+                    className="border p-2 rounded mb-2 w-full"
+                  />
+                  <input
+                    type="date"
+                    placeholder="Fecha de Pago"
+                    name="fechaPago"
+                    value={nuevaTarjeta.fechaPago}
+                    onChange={handleChange}
+                    className="border p-2 rounded mb-2 w-full"
+                  />
+                </>
+              )}
+
+              {tipoTarjeta === "gastosFijos" && (
+                <>
+                  {/* Aquí puedes agregar los campos específicos para Gastos Fijos */}
+                  {/* Por ejemplo: */}
+                  <input
+                    type="text"
+                    placeholder="Nombre del Gasto Fijo"
+                    name="nombreGastoFijo"
+                    value={nuevaTarjeta.nombreGasto} // Asegúrate de manejar este estado adecuadamente
+                    onChange={handleChange}
+                    className="border p-2 rounded mb-2 w-full"
+                  />
+                  {/* Agrega más campos según sea necesario */}
+                </>
+              )}
+              {tipoTarjeta === "gastosVariables" && ( // Formulario para gastos variables
+                <>
+                  <input
+                    type="text"
+                    placeholder="Nombre del Gasto Variable"
+                    name="nombreGastoVariable"
+                    value={nuevaTarjeta.nombreGastoVariable}
+                    onChange={handleChange}
+                    className="border p-2 rounded mb-2 w-full"
+                  />
+                </>
+              )}
+
               <div className="flex justify-end mt-4">
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
@@ -186,10 +298,73 @@ useEffect(() => {
         style={{ scrollBehavior: "smooth" }}
       >
         {tarjetas.map((tarjeta, index) => (
-          <div key={index}  className={`${index !== 0 ? "ml-8" : ""}`} >
-            <CardGastosCC key={index} tarjeta={tarjeta} userId={userId} />
+          <div key={`tarjeta-${index}`} className={index > 0 ? "ml-7" : ""}>
+            <CardGastosCC
+              tarjeta={tarjeta}
+              userId={userId}
+              actualizarTotalGastos={setTotalGastos}
+              currentDate={currentDate}
+            />
           </div>
         ))}
+
+        {gastosFijos.map((gastoFijo, index) => (
+          <div
+            key={`gastoFijo-${index}`}
+            className={index > 0 || tarjetas.length > 0 ? "ml-7" : ""}
+          >
+            <CardGastosFijos
+              gastoFijo={gastoFijo}
+              userId={userId}
+              actualizarTotalGastos={setTotalGastos}
+              currentDate={currentDate}
+            />
+          </div>
+        ))}
+
+        {gastosDiarios.map((gastoDiario, index) => (
+          <div
+            key={`gastoDiario-${index}`}
+            className={
+              index > 0 || tarjetas.length > 0 || gastosFijos.length > 0
+                ? "ml-7"
+                : ""
+            }
+          >
+            <CardGastoDiario
+              gastoDiario={gastoDiario}
+              userId={userId}
+              actualizarTotalGastos={setTotalGastos}
+              currentDate={currentDate}
+            />
+          </div>
+        ))}
+
+        {gastosVariables.map(
+          (
+            gastoVariable,
+            index // Añadir visualización de gastos variables
+          ) => (
+            <div
+              key={`gastoVariable-${index}`}
+              className={
+                index > 0 ||
+                tarjetas.length > 0 ||
+                gastosFijos.length > 0 ||
+                gastosDiarios.length > 0
+                  ? "ml-7"
+                  : ""
+              }
+            >
+              <CardGastoVariable
+                gastoVariable={gastoVariable}
+                userId={userId}
+                actualizarTotalGastos={setTotalGastos}
+                currentDate={currentDate}
+              />
+            </div>
+          )
+        )}
       </div>
     </div>
   );

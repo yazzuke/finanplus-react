@@ -7,11 +7,13 @@ import { AuthProvider } from './context/AuthContext';
 import ContextProvider from './context/FinalContex';
 import { ToastContainer } from 'react-toastify';
 
+
 function App() {
 
-        
+
   
 
+  
   return   <AuthProvider>
    <ContextProvider>
     <ToastContainer />
