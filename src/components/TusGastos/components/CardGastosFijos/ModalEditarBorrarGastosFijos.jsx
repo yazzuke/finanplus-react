@@ -11,21 +11,20 @@
     SelectItem,
   } from "@nextui-org/react";
 
-  function ModalEditarBorrarGastos({
+  function ModalEditarBorrarGastosFijos({
     isOpen,
     onClose,
     userId,
     currentDate,
-    gastoDiarioId,
+    gastoFijoId
   }) {
     const [gastos, setGastos] = useState([]);
     const [gastoSeleccionado, setGastoSeleccionado] = useState();
 
-    console.log(userId, currentDate, gastoDiarioId);
 
     useEffect(() => {
-      if (isOpen && userId && gastoDiarioId) {
-        const fetchUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos`;
+      if (isOpen && userId && gastoFijoId) {
+        const fetchUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijoId}/gastos`;
         fetch(fetchUrl)
           .then((response) => response.json())
           .then((data) => {
@@ -35,7 +34,7 @@
             console.error("Error al obtener los ahorros:", error)
           );
       }
-    }, [userId, gastoDiarioId, isOpen]);
+    }, [userId, gastoFijoId, isOpen]);
 
     console.log(gastos, gastoSeleccionado);
 
@@ -44,6 +43,7 @@
         setGastoSeleccionado;
       }
     }, [gastos, gastoSeleccionado]);
+
 
     const handleSelectChange = (gastoID) => {
       const gasto = gastos.find((gasto) => gasto.gastoID === Number(gastoID));
@@ -60,7 +60,7 @@
 
     const handleDeleteGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijoId}/gastos/${gastoSeleccionado.gastoID}`;
         fetch(url, {
           method: "DELETE",
         })
@@ -81,9 +81,10 @@
       }
     };
 
+    
     const handleEditGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijoId}/gastos/${gastoSeleccionado.gastoID}`;
         const updatedGasto = {
           nombreGasto: gastoSeleccionado.nombreGasto,
           valorGasto: gastoSeleccionado.valorGasto,
@@ -117,6 +118,9 @@
       }
     };
 
+
+   
+
     return (
       <>
         <Modal
@@ -137,7 +141,7 @@
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Editar o Borra Tu Ingreso
+                  Edita o Borra Tus Gastos Fijos
                 </ModalHeader>
                 <ModalBody>
                   <Select
@@ -171,6 +175,7 @@
                     variant="bordered"
                     value={gastoSeleccionado?.nombreGasto || ""}
                     onChange={handleInputChange}
+               
                   />
                   <Input
                     type="date"
@@ -179,6 +184,7 @@
                     variant="bordered"
                     value={gastoSeleccionado ? gastoSeleccionado.fecha : ""}
                     onChange={handleInputChange}
+                
                   />
                   <Input
                     autoFocus
@@ -188,6 +194,7 @@
                     name="valorGasto"
                     value={gastoSeleccionado ? gastoSeleccionado.valorGasto : ""}
                     onChange={handleInputChange}
+             
                   />
                 </ModalBody>
                 <ModalFooter>
@@ -207,4 +214,4 @@
       </>
     );
   }
-  export default ModalEditarBorrarGastos;
+  export default ModalEditarBorrarGastosFijos;

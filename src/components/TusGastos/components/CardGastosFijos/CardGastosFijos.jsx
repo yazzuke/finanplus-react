@@ -6,9 +6,12 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
+import ModalEditarBorrarGastosFijos from "./ModalEditarBorrarGastosFijos.jsx";
 
-function CardGastosFijos({ userId, gastoFijo }) {
+function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const [transactions, setTransactions] = useState([]);
+
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [isFormVisible, setFormVisible] = useState(false);
 
   const [newTransaction, setNewTransaction] = useState({
@@ -22,13 +25,17 @@ function CardGastosFijos({ userId, gastoFijo }) {
     const { name, value } = e.target;
     setNewTransaction({ ...newTransaction, [name]: value });
   };
+  const toggleFormVisibility = () => {
+    setFormVisible(!isFormVisible);
+  };
 
   //console.log("Gasto fijo:", gastoFijo);
 
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`, {
+        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +63,6 @@ function CardGastosFijos({ userId, gastoFijo }) {
       console.error("Hubo un problema con la solicitud fetch:", error);
     }
   };
-  
 
   useEffect(() => {
     // Verifica si gastoFijo y gastoFijo.gastoFijoID están definidos para evitar errores de solicitud no deseada
@@ -80,10 +86,6 @@ function CardGastosFijos({ userId, gastoFijo }) {
       fetchGastosInvFijo();
     }
   }, [userId, gastoFijo]);
-
-  const toggleFormVisibility = () => {
-    setFormVisible(!isFormVisible);
-  };
 
   const updateTipoGasto = async (gastoID, nuevoTipo) => {
     try {
@@ -114,6 +116,10 @@ function CardGastosFijos({ userId, gastoFijo }) {
     }
   };
 
+  const openEditModal = () => {
+    setEditModalVisible(true);
+  };
+
   return (
     <Card className="dark w-[720px] h-[320px] mt-2">
       <CardHeader className="flex justify-between items-center">
@@ -138,29 +144,44 @@ function CardGastosFijos({ userId, gastoFijo }) {
 
           {/* Contenedor actual para los iconos */}
           <div>
-            <IconButton color="primary" aria-label="edit" className="ml-2">
+            <IconButton
+              color="primary"
+              aria-label="edit"
+              className="ml-2"
+              onClick={openEditModal}
+            >
               <EditIcon />
             </IconButton>
             <IconButton
               color="primary"
               aria-label="add"
               className="ml-2"
-              onClick={() => setFormVisible(true)} 
+              onClick={() => setFormVisible(true)}
             >
               <AddIcon />
             </IconButton>
 
+            {/* Modal para editar o borrar un gasto */}
+            {isEditModalVisible && (
+              <ModalEditarBorrarGastosFijos
+                isOpen={isEditModalVisible}
+                onClose={() => setEditModalVisible(false)}
+                userId={userId}
+                gastoFijoId = {gastoFijo.gastoFijoID}
+                currentDate={CurrentDate}
+                // Aquí puedes añadir otras props que necesite el modal
+              />
+            )}
             {/* Formulario para añadir un nuevo gasto */}
-
             {isFormVisible && (
-        <ModalAgregarGastos
-          isOpen={isFormVisible}
-          onClose={() => setFormVisible(false)}
-          newTransaction={newTransaction}
-          handleInputChange={handleInputChange}
-          handleSubmit={handleSubmit}
-        />
-      )}
+              <ModalAgregarGastos
+                isOpen={isFormVisible}
+                onClose={() => setFormVisible(false)}
+                newTransaction={newTransaction}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+              />
+            )}
           </div>
         </div>
       </CardHeader>
@@ -223,7 +244,7 @@ function CardGastosFijos({ userId, gastoFijo }) {
               <div className="flex items-center justify-center col-span-1 ">
                 <DropdownTipo
                   tipo={trans.tipo}
-                  gastoID={trans.gastoID} // Asegúrate de que trans tenga una propiedad gastoID con el ID correcto.
+                  gastoID={trans.gastoID}
                   onTypeChange={(gastoID, newType) =>
                     updateTipoGasto(gastoID, newType)
                   }
