@@ -153,7 +153,7 @@
 
               {/* Formulario para añadir un nuevo gasto */}
 
-              {isFormVisible && (
+                {isFormVisible && (
                 <ModalAgregarAhorro
                   isOpen={isFormVisible}
                   onClose={toggleFormVisibility}

@@ -18,7 +18,7 @@ const ModalNieve = ({ isOpen, onClose, todosLosGastos }) => {
     setShowAdditionalInfo(!showAdditionalInfo);
   };
 
-  console.log("todosLosGastos:", todosLosGastos);
+  //console.log("todosLosGastos:", todosLosGastos);
 
   return (
     <>

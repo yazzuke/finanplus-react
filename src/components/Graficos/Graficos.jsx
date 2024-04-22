@@ -39,7 +39,7 @@ const PieChart = ({ userId }) => {
           ...gastosVariablesData.flatMap(gasto => gasto.gastos),
        
         ];
-          console.log("Gastos y ahorros:", todosLosGastosYAhorros);
+         // console.log("Gastos y ahorros:", todosLosGastosYAhorros);
         // Cuenta la cantidad de gastos y ahorros por categoría
         const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
           const tipo = item.tipo || item.categoria; // Ajusta según la estructura de los datos
@@ -54,7 +54,7 @@ const PieChart = ({ userId }) => {
         }));
 
         setDataCategorias(categoriasData);
-        console.log("Gastos y ahorros por categoría:", categoriasData);
+       // console.log("Gastos y ahorros por categoría:", categoriasData);
       } catch (error) {
         console.error("Error al obtener los gastos y ahorros:", error);
       }

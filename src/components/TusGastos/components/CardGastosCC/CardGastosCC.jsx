@@ -99,7 +99,7 @@ function CardGastosCC({
         // Asegurarse de que la respuesta sea un array
         if (Array.isArray(data)) {
           setTransactions(data);
-          console.log("Gastos cargados:", data);
+        //  console.log("Gastos cargados:", data);
         } else {
           // Manejo de una respuesta inesperada o un error
           console.error("La respuesta de la API no es un array: ", data);
