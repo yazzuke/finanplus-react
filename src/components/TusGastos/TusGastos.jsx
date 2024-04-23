@@ -28,7 +28,6 @@ function TusGastos({ userId, currentDate }) {
 
   const [tarjetas, setTarjetas] = useState([]);
   const [gastosFijos, setGastosFijos] = useState([]);
-  const [tipoTarjeta, setTipoTarjeta] = useState("");
   const [gastosDiarios, setGastosDiarios] = useState([]);
   const [gastosVariables, setGastosVariables] = useState([]);
 
@@ -51,81 +50,8 @@ function TusGastos({ userId, currentDate }) {
     carouselRef.current.scrollLeft += scrollOffset;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNuevaTarjeta((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
-  const handleSubmit = () => {
-    let url;
-    let data;
 
-    switch (tipoTarjeta) {
-      case "gastosCC":
-        url = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
-        data = {
-          nombreTarjeta: nuevaTarjeta.nombreTarjeta,
-          fechaPago: nuevaTarjeta.fechaPago,
-        };
-        break;
-      case "gastosFijos":
-        url = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
-        data = {
-          nombreGasto: nuevaTarjeta.nombreGastoFijo,
-        };
-        break;
-      case "gastosDiarios":
-        url = `http://localhost:8080/usuarios/${userId}/gastosdiario`;
-        data = {
-          nombreGasto: "Gasto diario predeterminado",
-          valorGasto: 0,
-          fecha: new Date().toISOString().slice(0, 10),
-          tipo: "Necesidad",
-        };
-        break;
-      case "gastosVariables": // Añadir manejo de gastos variables
-        url = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
-        data = {
-          nombreGasto: "Gasto variable predeterminado",
-          valorGasto: 0,
-          fecha: new Date().toISOString().slice(0, 10),
-          tipo: "Necesidad",
-        };
-        break;
-      default:
-        console.error("Tipo de tarjeta no reconocido");
-        return;
-    }
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la respuesta del servidor");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Gasto agregado con éxito:", data);
-        setShowForm(false);
-        setNuevaTarjeta({
-          nombreTarjeta: "",
-          fechaPago: "",
-          nombreGastoFijo: "",
-        });
-      })
-      .catch((error) => {
-        console.error("Error al crear el gasto:", error);
-      });
-  };
 
   useEffect(() => {
     // Carga de datos según la fecha actual
@@ -190,7 +116,7 @@ function TusGastos({ userId, currentDate }) {
       <div className="flex items-center">
         <span className="text-3xl font-bold">Tus Gastos</span>
         <IconButton
-        onClick={handleOpenModal}
+         onClick={handleOpenModal}  
           color="primary"
           aria-label="add"
           style={{
@@ -203,7 +129,7 @@ function TusGastos({ userId, currentDate }) {
         >
           <AddIcon />
         </IconButton>
-        <ModalNuevoGasto
+       <ModalNuevoGasto
         userId={userId}
         currentDate={currentDate}
         isOpen={isOpen}

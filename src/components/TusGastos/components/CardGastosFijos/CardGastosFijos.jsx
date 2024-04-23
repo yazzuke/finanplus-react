@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Divider, Checkbox } from "@nextui-org/react";
 import DropdownTipo from "../../../DropdownTipo.jsx";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -121,7 +121,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   };
 
   return (
-    <Card className="dark w-[720px] h-[320px] mt-2">
+    <Card className=" bg-stone-900 dark w-[680px] h-[320px] mt-2">
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -168,9 +168,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
                 onClose={() => setEditModalVisible(false)}
                 userId={userId}
                 gastoFijoId = {gastoFijo.gastoFijoID}
-                currentDate={CurrentDate}
-                // Aquí puedes añadir otras props que necesite el modal
-              />
+                currentDate={CurrentDate}/>
             )}
             {/* Formulario para añadir un nuevo gasto */}
             {isFormVisible && (
@@ -188,7 +186,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
 
       <Divider className="mt-[-0.5rem]" />
       <CardBody>
-        <div className="grid grid-cols-5 gap-12">
+        <div className="grid grid-cols-6">
           <span
             className="text-base font-medium col-span-1 text-left"
             style={{ transform: "translateY(-35%)" }}
@@ -220,6 +218,12 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
           >
             Ingreso
           </span>
+          <span
+            className="text-base font-medium col-span-1 text-center"
+            style={{ transform: "translateY(-35%)" }}
+          >
+           Pagado
+          </span>
         </div>
 
         <Divider className="mt-[-0.5rem]" />
@@ -250,9 +254,12 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
                   }
                 />
               </div>
+              <div className="flex items-center justify-center col-span-1 ">
+              <DropdownIngreso userId={userId} />
+              </div>  
 
               <div className="flex items-center justify-center col-span-1 ">
-                <DropdownIngreso userId={userId} />
+                  <Checkbox  className="mr-2" />
               </div>
               {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}
             </div>

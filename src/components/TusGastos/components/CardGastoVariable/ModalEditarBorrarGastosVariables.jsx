@@ -11,30 +11,30 @@
     SelectItem,
   } from "@nextui-org/react";
 
-  function ModalEditarBorrarGastosFijos({
+  function ModalEditarBorrarGastosVariables({
     isOpen,
     onClose,
     userId,
     currentDate,
-    gastoFijoId
+    gastoVariableId
   }) {
     const [gastos, setGastos] = useState([]);
     const [gastoSeleccionado, setGastoSeleccionado] = useState();
 
 
     useEffect(() => {
-      if (isOpen && userId && gastoFijoId) {
-        const fetchUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijoId}/gastos`;
+      if (isOpen && userId && gastoVariableId) {
+        const fetchUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos`;
         fetch(fetchUrl)
           .then((response) => response.json())
           .then((data) => {
             setGastos(data); // Actualiza el estado con los nuevos datos
           })
           .catch((error) =>
-            console.error("Error al obtener los ahorros:", error)
+            console.error("Error al obtener los datos:", error)
           );
       }
-    }, [userId, gastoFijoId, isOpen]);
+    }, [userId, gastoVariableId, isOpen]);
 
     console.log(gastos, gastoSeleccionado);
 
@@ -57,10 +57,11 @@
         [name]: value,
       }));
     };
+   
 
     const handleDeleteGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijoId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
         fetch(url, {
           method: "DELETE",
         })
@@ -84,7 +85,7 @@
     
     const handleEditGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijoId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
         const updatedGasto = {
           nombreGasto: gastoSeleccionado.nombreGasto,
           valorGasto: gastoSeleccionado.valorGasto,
@@ -117,9 +118,6 @@
           );
       }
     };
-
-
-   
 
     return (
       <>
@@ -175,6 +173,7 @@
                     variant="bordered"
                     value={gastoSeleccionado?.nombreGasto || ""}
                     onChange={handleInputChange}
+            
                
                   />
                   <Input
@@ -184,6 +183,7 @@
                     variant="bordered"
                     value={gastoSeleccionado ? gastoSeleccionado.fecha : ""}
                     onChange={handleInputChange}
+              
                 
                   />
                   <Input
@@ -193,13 +193,14 @@
                     variant="bordered"
                     name="valorGasto"
                     value={gastoSeleccionado ? gastoSeleccionado.valorGasto : ""}
-                    onChange={handleInputChange}
+                    onChange={handleInputChange}  
+                
              
                   />
                 </ModalBody>
                 <ModalFooter>
                   <div className="flex-1">
-                    <Button className="justify" onClick={handleDeleteGasto} auto>
+                  <Button className="justify-" onClick={handleDeleteGasto} auto>
                       Borrar Gasto
                     </Button>
                   </div>
@@ -214,4 +215,4 @@
       </>
     );
   }
-  export default ModalEditarBorrarGastosFijos;
+  export default ModalEditarBorrarGastosVariables;
