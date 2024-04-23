@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardHeader, CardBody, Divider, Checkbox } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  Checkbox,
+} from "@nextui-org/react";
 import DropdownTipo from "../../../DropdownTipo.jsx";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -29,7 +35,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
     setFormVisible(!isFormVisible);
   };
 
-  //console.log("Gasto fijo:", gastoFijo);
+ // console.log("Gasto fijo:", gastoFijo);
 
   const handleSubmit = async () => {
     try {
@@ -65,9 +71,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   };
 
   useEffect(() => {
-    // Verifica si gastoFijo y gastoFijo.gastoFijoID están definidos para evitar errores de solicitud no deseada
     if (gastoFijo && gastoFijo.gastoFijoID) {
-      // Cambia aquí gastoFijo.id por gastoFijo.gastoFijoID
       const fetchGastosInvFijo = async () => {
         const apiUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`;
         try {
@@ -78,7 +82,8 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
             );
           }
           const data = await response.json();
-          setTransactions(data); // Actualiza el estado con los gastos obtenidos
+       //   console.log("Datos cargados: ", data); // Imprimir los datos cargados
+          setTransactions(data);
         } catch (error) {
           console.error("Error al obtener los gastos inv fijo:", error);
         }
@@ -102,7 +107,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
       if (!response.ok) {
         throw new Error("Respuesta de red no fue ok");
       }
-      window.location.reload();
+      //window.location.reload();
       const updatedTransaction = await response.json();
       setTransactions(
         transactions.map((transaction) =>
@@ -120,8 +125,38 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
     setEditModalVisible(true);
   };
 
+  const handlePagoChange = async (gastoID, newVal) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/pagado`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ pagado: newVal }),
+        }
+      );
+      if (!response.ok) {
+        // Si la respuesta no es OK, lanzar un error con el status para mejor depuración
+        throw new Error(`HTTP status ${response.status}`);
+      }
+      const updatedGasto = await response.json();
+      // Actualizar el estado de transactions
+      setTransactions(
+        transactions.map((trans) =>
+          trans.gastoID === gastoID ? { ...trans, pagado: updatedGasto.pagado } : trans
+        )
+      );
+    } catch (error) {
+      console.error("Error al actualizar el estado de pago:", error);
+    }
+  };
+  
+  
+
   return (
-    <Card className=" bg-stone-900 dark w-[680px] h-[320px] mt-2">
+    <Card className=" bg-stone-900 dark w-[650px] h-[320px] mt-2">
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -167,8 +202,9 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
                 isOpen={isEditModalVisible}
                 onClose={() => setEditModalVisible(false)}
                 userId={userId}
-                gastoFijoId = {gastoFijo.gastoFijoID}
-                currentDate={CurrentDate}/>
+                gastoFijoId={gastoFijo.gastoFijoID}
+                currentDate={CurrentDate}
+              />
             )}
             {/* Formulario para añadir un nuevo gasto */}
             {isFormVisible && (
@@ -222,7 +258,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
             className="text-base font-medium col-span-1 text-center"
             style={{ transform: "translateY(-35%)" }}
           >
-           Pagado
+            Pagado
           </span>
         </div>
 
@@ -255,11 +291,15 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
                 />
               </div>
               <div className="flex items-center justify-center col-span-1 ">
-              <DropdownIngreso userId={userId} />
-              </div>  
+                <DropdownIngreso userId={userId} />
+              </div>
 
               <div className="flex items-center justify-center col-span-1 ">
-                  <Checkbox  className="mr-2" />
+                <Checkbox
+                  className="mr-2"
+                  isSelected={trans.pagado} 
+                  onValueChange={(newVal) => handlePagoChange(trans.gastoID, newVal)}
+                />
               </div>
               {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}
             </div>

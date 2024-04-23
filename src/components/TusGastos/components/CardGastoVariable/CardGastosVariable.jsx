@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  Checkbox,
+} from "@nextui-org/react";
 import DropdownTipo from "../../../DropdownTipo.jsx";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -127,12 +133,40 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
     }
   };
 
+  const handlePagoChange = async (gastoID, newVal) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos/${gastoID}/pagado`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ pagado: newVal }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+      }
+      const updatedGasto = await response.json();
+      setTransactions(
+        transactions.map((trans) =>
+          trans.gastoID === gastoID
+            ? { ...trans, pagado: updatedGasto.pagado }
+            : trans
+        )
+      );
+    } catch (error) {
+      console.error("Error al actualizar el estado de pago:", error);
+    }
+  };
+
   const openEditModal = () => {
     setEditModalVisible(true);
   };
 
   return (
-    <Card className="dark w-[600px] h-[320px] mt-2">
+    <Card className="dark w-[650px] h-[320px] mt-2">
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -143,6 +177,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
           </div>
           <span className="text-sm font-bold mr-24 ">
             {" "}
+            Valor Total:{" "}
             {gastoVariable.valorTotal.toLocaleString("es-ES", {
               maximumFractionDigits: 0,
             })}{" "}
@@ -199,7 +234,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
 
       <Divider className="mt-[-0.5rem]" />
       <CardBody>
-        <div className="grid grid-cols-5 gap-1">
+        <div className="grid grid-cols-6">
           <span
             className="text-base font-medium col-span-1 text-left"
             style={{ transform: "translateY(-35%)" }}
@@ -231,6 +266,12 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
             style={{ transform: "translateY(-35%)" }}
           >
             Ingreso
+          </span>
+          <span
+            className="text-base font-medium col-span-1 text-center"
+            style={{ transform: "translateY(-35%)" }}
+          >
+            Pagado
           </span>
         </div>
 
@@ -265,7 +306,14 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
               <div className="flex items-center justify-center col-span-1 ">
                 <DropdownIngreso userId={userId} />
               </div>
-              {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}
+              <div className="flex items-center justify-center col-span-1 ">
+                <Checkbox
+                  isSelected={trans.pagado}
+                  onValueChange={(newVal) =>
+                    handlePagoChange(trans.gastoID, newVal)
+                  }
+                />
+              </div>
             </div>
             {index < transactions.length - 1 && <Divider className="my-1" />}
           </React.Fragment>
