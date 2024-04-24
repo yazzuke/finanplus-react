@@ -6,16 +6,15 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
-  Checkbox,
+  RadioGroup,
+  Radio,
   Input,
-  Link,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 
-// este modal sirve para abrir el form y enviar los gastos indivuales a segun el gasto que se halla elegido
-function ModalAgregarGastos({
+function ModalNuevoGasto({
+  userId,
   isOpen,
   onClose,
   newTransaction,
@@ -35,7 +34,6 @@ function ModalAgregarGastos({
         backdrop="opaque"
         isOpen={isOpen}
         onClose={onClose}
-        open={isOpen}
         radius="lg"
         classNames={{
           body: "py-6",
@@ -50,38 +48,37 @@ function ModalAgregarGastos({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Ingresa un gasto
+                Agrega una Tarjeta para tus Gastos
               </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
                   type="text"
                   label="Nombre del Gasto"
-                  name="nombreGasto"
-                  variant="bordered"
-                  value={newTransaction.nombreGasto}
+                  name="name"
+                  value={newTransaction.name}
                   onChange={handleInputChange}
+                  variant="bordered"
                 />
                 <Input
-                  type="date"
-                  name="fecha"
-                  label="Fecha del Gasto"
-                  variant="bordered"
-                  value={newTransaction.fecha}
-                  onChange={handleInputChange}
-                />
-                <Input
-                  autoFocus
                   type="number"
-                  label="Valor del Gasto"
+                  name="installments"
+                  value={newTransaction.installments}
+                  onChange={handleInputChange}
+                  label="Cuotas del gasto"
                   variant="bordered"
-                  name="valorGasto"
-                  value={newTransaction.valorGasto}
+                />
+                <Input
+                  type="number"
+                  label="Valor Total"
+                  variant="bordered"
+                  name="totalValue"
+                  value={newTransaction.totalValue}
                   onChange={handleInputChange}
                 />
                 <Select
                   autoFocus
-                  label="Seleccionar Tipo"  
+                  label="Seleccionar Tipo"
                   placeholder="Seleccionar Tipo"
                   variant="bordered"
                   name="tipo"
@@ -96,15 +93,7 @@ function ModalAgregarGastos({
                 </Select>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  auto
-                  onPress={() => {
-                    handleSubmit();
-                    onClose();
-                  }}
-                >
-                  Agregar Gasto
-                </Button>
+                <Button onClick={handleSubmit}>Agregar Gasto</Button>
               </ModalFooter>
             </>
           )}
@@ -113,4 +102,5 @@ function ModalAgregarGastos({
     </>
   );
 }
-export default ModalAgregarGastos;
+
+export default ModalNuevoGasto;

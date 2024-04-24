@@ -5,8 +5,9 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngresos from "../DropdownIngreso.jsx";
+import ModalEditarBorrarGastosCC from "./ModalEditarBorrarGastoscc.jsx";
 import DropdownTipo from "../../../DropdownTipo.jsx";
-import FormNuevoGastoCC from "./FormAddGastoCC.jsx";
+import ModalAgregarGastoCC from "./ModalAgregarGastoCC.jsx";
 import { fetchGastos, addGasto } from "./services/ApiService.jsx";
 
 function CardGastosCC({
@@ -18,6 +19,7 @@ function CardGastosCC({
 }) {
   const [transactions, setTransactions] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
   const { nombreTarjeta, fechaPago, tarjetaCreditoID, valorTotal } = tarjeta;
   const [newTransaction, setNewTransaction] = useState({
     name: "",
@@ -61,7 +63,7 @@ function CardGastosCC({
     e.preventDefault();
     addGasto(userId, tarjeta.tarjetaCreditoID, {
       nombreGasto: newTransaction.name,
-      cuotaGasto: parseInt(newTransaction.installments, 10),
+      cuotaTotal: parseInt(newTransaction.installments, 10),
       valorCuotaGasto: parseFloat(newTransaction.installmentValue),
       valorTotalGasto: parseFloat(newTransaction.totalValue),
       interes: parseFloat(newTransaction.interest),
@@ -73,7 +75,6 @@ function CardGastosCC({
         setNewTransaction({
           name: "",
           installments: "",
-          installmentValue: "",
           totalValue: "",
           interest: "",
           tipo: "",
@@ -99,7 +100,7 @@ function CardGastosCC({
         // Asegurarse de que la respuesta sea un array
         if (Array.isArray(data)) {
           setTransactions(data);
-        //  console.log("Gastos cargados:", data);
+          //  console.log("Gastos cargados:", data);
         } else {
           // Manejo de una respuesta inesperada o un error
           console.error("La respuesta de la API no es un array: ", data);
@@ -166,6 +167,10 @@ function CardGastosCC({
     );
   };
 
+  const openEditModal = () => {
+    setEditModalVisible(true);
+  };
+
   return (
     <Card className="${className} dark w-[680px] h-[320px] mt-2  ">
       <CardHeader className="flex justify-between items-center">
@@ -188,7 +193,12 @@ function CardGastosCC({
         </div>
 
         <div>
-          <IconButton color="primary" aria-label="edit" className="ml-2">
+          <IconButton
+            color="primary"
+            aria-label="edit"
+            className="ml-2"
+            onClick={openEditModal}
+          >
             <EditIcon />
           </IconButton>
           <IconButton
@@ -199,10 +209,28 @@ function CardGastosCC({
           >
             <AddIcon />
           </IconButton>
+
+          {/* Modal para editar o borrar gastos */}
+        
+        
+          {isEditModalVisible && (
+                  <ModalEditarBorrarGastosCC
+                    isOpen={isEditModalVisible}
+                    onClose={() => setEditModalVisible(false)}
+                    userId={userId}
+                    tarjetaCreditoID={tarjetaCreditoID} 
+              
+                  />
+                )}
+
+
+          
           {/* Formulario para añadir un nuevo gasto */}
           {isFormVisible && (
-            <FormNuevoGastoCC
+            <ModalAgregarGastoCC
               newTransaction={newTransaction}
+              isOpen={isFormVisible}
+              onClose={() => setFormVisible(false)}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
             />
@@ -258,11 +286,15 @@ function CardGastosCC({
                 </span>
               </div>
               <div className="flex items-center justify-center col-span-1 ">
-                <span className="text-base">{trans.cuotaGasto}</span>
+                <span className="text-base">
+                  {trans.cuotaActual}/{trans.cuotaTotal}
+                </span>
               </div>
               <div className="flex items-center justify-center col-span-1 ml-6 ">
                 <span className="text-base">
-                  {trans.valorCuotaGasto.toLocaleString("es-ES")}
+                  {trans.valorCuotaGasto
+                    ? trans.valorCuotaGasto.toLocaleString("es-ES")
+                    : "N/A"}
                 </span>
               </div>
               <div className="flex items-center justify-center col-span-1 ml-9 ">

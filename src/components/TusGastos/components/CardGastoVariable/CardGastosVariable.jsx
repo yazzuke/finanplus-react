@@ -308,6 +308,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
               </div>
               <div className="flex items-center justify-center col-span-1 ">
                 <Checkbox
+                  className="mr-2"
                   isSelected={trans.pagado}
                   onValueChange={(newVal) =>
                     handlePagoChange(trans.gastoID, newVal)

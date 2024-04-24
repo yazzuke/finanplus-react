@@ -29,7 +29,7 @@ const PieChart = ({ userId }) => {
         const ahorrosData = await ahorrosResponse.json();
         const gastosDiariosData = await gastosDiariosResponse.json();
         const gastosVariablesData = await gastosVariablesResponse.json();
-
+        console.log(tarjetasCreditoData); 
         // Combina los arrays de gastos y ahorros en un solo array
         const todosLosGastosYAhorros = [
           ...gastosFijosData.flatMap(gasto => gasto.gastos),
@@ -39,6 +39,7 @@ const PieChart = ({ userId }) => {
           ...gastosVariablesData.flatMap(gasto => gasto.gastos),
        
         ];
+    
          // console.log("Gastos y ahorros:", todosLosGastosYAhorros);
         // Cuenta la cantidad de gastos y ahorros por categoría
         const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
