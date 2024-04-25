@@ -1,4 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
+
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  RadioGroup,
+  Radio,
+  Input,
+} from "@nextui-org/react";
+
 import * as echarts from 'echarts';
 
 const PieChart = ({ userId }) => {
@@ -124,7 +137,11 @@ const PieChart = ({ userId }) => {
 
 
 
-  return <div className="" ref={chartRef} style={{ width: '600px', height: '400px' }}></div>;
+  return <div className="flex items-center" ref={chartRef} style={{ width: '600px', height: '400px' }}>
+    
+
+
+  </div>;
 };
 
 export default PieChart;

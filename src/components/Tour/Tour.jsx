@@ -1,32 +1,9 @@
-import React, { useEffect } from 'react';
-import { ShepherdTour, ShepherdTourContext } from 'react-shepherd';
+// Tours.jsx
+import React from 'react';
+import { ShepherdTour } from 'react-shepherd';
+import 'shepherd.js/dist/css/shepherd.css'; // Importar estilos si aún no lo has hecho en otro lugar
 
-function App() {
-  const tour = useContext(ShepherdTourContext);
-  
-  useEffect(() => {
-    tour.start();
-  }, [tour]);
-
-  // ...resto de tu componente
-
-  return (
-    <div>
-      {/* ...tu JSX aquí... */}
-    </div>
-  );
-}
-
-export default function WrappedApp() {
-  return (
-    <ShepherdTour steps={steps} tourOptions={{ defaultStepOptions: options }}>
-      <App />
-    </ShepherdTour>
-  );
-}
-
-// Configuración de los pasos del tour y las opciones por defecto
-const steps = [
+export const tourSteps = [
   {
     id: 'example-step',
     text: 'This step is attached to the bottom of the <code>.example-css-selector</code> element.',
@@ -45,8 +22,15 @@ const steps = [
   // ...otros pasos...
 ];
 
-const options = {
+export const tourOptions = {
   useModalOverlay: true,
   classes: 'shadow-md bg-purple-dark',
   scrollTo: true
 };
+
+// Esta función es para envolver tu componente Home con ShepherdTour
+export const withTour = Component => props => (
+  <ShepherdTour steps={tourSteps} tourOptions={tourOptions}>
+    <Component {...props} />
+  </ShepherdTour>
+);

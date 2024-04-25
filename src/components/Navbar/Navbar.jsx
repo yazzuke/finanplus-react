@@ -7,6 +7,7 @@ import {
   Link,
   Avatar,
   Button,
+   DropdownItem, DropdownTrigger, Dropdown, DropdownMenu
 } from "@nextui-org/react";
 import { useUser } from "../../context/FinalContex";
 import { useNavigate } from "react-router-dom";

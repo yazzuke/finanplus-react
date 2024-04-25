@@ -10,7 +10,7 @@ import {
   Radio,
   Input,
 } from "@nextui-org/react";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+
 import TooltipCC from "../Tooltip/TooltipTarjetaCC.jsx";
 import TooltipGastoFijo from "../Tooltip/TooltipTarjetaGastoFijo.jsx";
 import TooltipGastoVariable from "../Tooltip/TooltipTarjetaGastoVariable.jsx";
@@ -47,7 +47,7 @@ function ModalNuevoGasto({
   const handleSubmit = () => {
     let url;
     let data;
-
+  
     switch (selectedValue) {
       case "gastosCC":
         url = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
@@ -70,7 +70,7 @@ function ModalNuevoGasto({
           fecha: new Date().toISOString().slice(0, 10),
         };
         break;
-      case "gastosVariables": // Añadir manejo de gastos variables
+      case "gastosVariables":
         url = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
         data = {
           nombreGasto: "Gasto variable predeterminado",
@@ -79,10 +79,10 @@ function ModalNuevoGasto({
         };
         break;
       default:
-        console.error("Tipo de tarjeta no reconocido");
+        console.error("Tipo de gasto no reconocido");
         return;
     }
-
+  
     fetch(url, {
       method: "POST",
       headers: {
@@ -96,18 +96,26 @@ function ModalNuevoGasto({
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Gasto agregado con éxito:", data);
+      .then((nuevoGasto) => {
+        console.log("Gasto agregado con éxito:", nuevoGasto);
+        // Llamar a onGastoAdded pasando el nuevo gasto y el tipo
+        props.onGastoAdded(nuevoGasto, selectedValue);
+  
+        // Resetear el formulario
         setFormData({
           nombreTarjeta: "",
           fechaPago: "",
           nombreGastoFijo: "",
         });
+  
+        // Cerrar el modal
+        props.onClose();
       })
       .catch((error) => {
         console.error("Error al crear el gasto:", error);
       });
   };
+  
 
   return (
     <>
@@ -129,7 +137,7 @@ function ModalNuevoGasto({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Agrega una Tarjeta para tus Gastos
+              Agregar un nuevo Tipo de Gasto
               </ModalHeader>
               <ModalBody>
                 
@@ -138,7 +146,7 @@ function ModalNuevoGasto({
                   value={selectedValue}
                   onChange={handleRadioChange}
                   orientation="vertical"
-                >
+                > 
                   <div className="flex items-center">
                     <Radio value="gastosCC">Tarjeta de Crédito</Radio>
                     <TooltipCC />
