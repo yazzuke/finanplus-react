@@ -65,12 +65,14 @@ function ModalAgregarIngreso({
                 />
               </ModalBody>
               <ModalFooter>
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+              <Button 
+              variant="solid"
+              radius="md"
+                  className=" text-white font-bold "
                   onClick={handleSubmit}
                 >
                   Agregar Ingreso
-                </button>
+                  </Button>
               </ModalFooter>
             </>
           )}

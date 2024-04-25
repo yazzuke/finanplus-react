@@ -13,6 +13,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
 import ModalEditarBorrarGastosFijos from "./ModalEditarBorrarGastosFijos.jsx";
+import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
+import TooltipAgregarGasto from '../Tooltip/TooltipAgregarGasto.jsx';
 
 function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const [transactions, setTransactions] = useState([]);
@@ -156,7 +158,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   
 
   return (
-    <Card className=" bg-stone-900 dark w-[650px] h-[320px] mt-2">
+    <Card className=" bg-gray-fijos dark w-[650px] h-[320px] mt-2">
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -179,22 +181,35 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
 
           {/* Contenedor actual para los iconos */}
           <div>
+          <TooltipModificarGasto>
             <IconButton
               color="primary"
               aria-label="edit"
               className="ml-2"
               onClick={openEditModal}
+              style={{
+                background: "white",
+                padding: "0.2rem",
+                right: "12px",
+              }}
             >
               <EditIcon />
             </IconButton>
+            </TooltipModificarGasto>
+            <TooltipAgregarGasto>
             <IconButton
               color="primary"
               aria-label="add"
               className="ml-2"
               onClick={() => setFormVisible(true)}
+              style={{
+                background: "white",
+                padding: "0.2rem",
+              }}
             >
               <AddIcon />
             </IconButton>
+            </TooltipAgregarGasto>  
 
             {/* Modal para editar o borrar un gasto */}
             {isEditModalVisible && (
@@ -270,7 +285,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
               <div className="flex items-center justify-left col-span-1">
                 <span className="text-base">{trans.nombreGasto}</span>
               </div>
-              <div className="flex items-center justify-center col-span-1 mr-1">
+              <div className="flex items-center justify-center col-span-1 ml-4">
                 {new Date(trans.fecha).toLocaleDateString("es-ES", {
                   day: "2-digit",
                   month: "2-digit",

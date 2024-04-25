@@ -7,8 +7,8 @@ const TooltipGastoDiario = () =>{
     <Tooltip 
     content={
         <div className="px-1 py-2">
-          <div className="text-small font-bold">Custom Diario</div>
-          <div className="text-tiny">This is a custom tooltip content</div>
+          <div className="text-small font-bold">Gastos Diarios</div>
+          <div className="text-tiny">Si necesitas apuntar un control de que gastas en tu dia a dia<br></br> Esta card es ideal para eso.</div>
         </div>
       }
       delay={0}

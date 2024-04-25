@@ -157,7 +157,8 @@ function TusIngresos({ userId, currentDate }) {
           }}
           ref={containerRef}
         >
-          {ingresos.map((ingreso, index) => (
+        {ingresos.length > 0 ? (
+          ingresos.map((ingreso, index) => (
             <div
               key={index}
               className="flex justify-end items-center py-[-2rem]"
@@ -184,11 +185,13 @@ function TusIngresos({ userId, currentDate }) {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        ) : (
+          <p className="text-center mt-12 font-bold  text-white text-2xl">No tienes Ingresos Agregados...</p>
+        )}
       </div>
     </div>
-  );
-}
+  </div>
+)}
 
 export default TusIngresos;

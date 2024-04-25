@@ -115,8 +115,7 @@ const registerUser = async (firebaseUid, firebaseEmail, name, password,photoURL)
       nombre: name,
       email: firebaseEmail,
       password: password, // Solo incluye password si no es null
-      photo_url: photoURL,
-
+      photoUrl: photoURL, 
     }),
   });
   const data = await response.json();

@@ -14,24 +14,28 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 
-
-
-function ModalAgregarAhorro ({ isOpen, onClose, newTransaction, handleInputChange, handleSubmit }) {
+function ModalAgregarAhorro({
+  isOpen,
+  onClose,
+  newTransaction,
+  handleInputChange,
+  handleSubmit,
+}) {
   const tipos = [
     { value: "", label: "Seleccionar Tipo" },
     { value: "Necesidad", label: "Necesidad" },
     { value: "Deseos", label: "Deseos" },
-    { value: "Metas", label: "Metas" }  ,
+    { value: "Metas", label: "Metas" },
   ];
-  
 
   return (
     <>
-   
-   <Modal open={isOpen} onClose={onClose} width="600px"
+      <Modal
+        open={isOpen}
+        onClose={onClose}
+        width="600px"
         backdrop="opaque"
         isOpen={isOpen}
-     
         radius="lg"
         classNames={{
           body: "py-6",
@@ -45,7 +49,9 @@ function ModalAgregarAhorro ({ isOpen, onClose, newTransaction, handleInputChang
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Ingresa un Ahorro</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Ingresa un Ahorro
+              </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
@@ -56,7 +62,7 @@ function ModalAgregarAhorro ({ isOpen, onClose, newTransaction, handleInputChang
                   value={newTransaction.concepto}
                   onChange={handleInputChange}
                 />
-                   <Input
+                <Input
                   autoFocus
                   type="number"
                   label="Meta del Ahorro"
@@ -65,7 +71,7 @@ function ModalAgregarAhorro ({ isOpen, onClose, newTransaction, handleInputChang
                   value={newTransaction.meta}
                   onChange={handleInputChange}
                 />
-                   <Input
+                <Input
                   autoFocus
                   type="number"
                   label="Valor Actual del Ahorro"
@@ -75,7 +81,7 @@ function ModalAgregarAhorro ({ isOpen, onClose, newTransaction, handleInputChang
                   onChange={handleInputChange}
                 />
                 <Select
-                   autoFocus
+                  autoFocus
                   label="Seleccionar Tipo"
                   placeholder="Seleccionar Tipo"
                   variant="bordered"
@@ -91,12 +97,14 @@ function ModalAgregarAhorro ({ isOpen, onClose, newTransaction, handleInputChang
                 </Select>
               </ModalBody>
               <ModalFooter>
-              <button
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-          onClick={handleSubmit}
-        >
-          Agregar Ahorro
-        </button>
+                <Button
+                  variant="solid"
+                  radius="md"
+                  className=" text-white font-bold "
+                  onClick={handleSubmit}
+                >
+                  Agregar Ahorro
+                </Button>
               </ModalFooter>
             </>
           )}

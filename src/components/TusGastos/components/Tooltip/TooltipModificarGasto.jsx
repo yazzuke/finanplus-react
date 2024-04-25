@@ -1,14 +1,14 @@
 import React from "react";
 import {Tooltip} from "@nextui-org/react";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const TooltipGastoVarible = () =>{
+
+const TooltipModificarGasto =  ({ children }) =>{
   return (
     <Tooltip 
     content={
         <div className="px-1 py-2">
-          <div className="text-small font-bold">Gastos Variables</div>
-          <div className="text-tiny">Esta Card es ideal para apuntar los gastos inesperadados que pueden llegar en el mes.</div>
+          <div className="text-small font-bold">Agrega o Elimina un Gasto</div>
+          <div className="text-tiny">Haciendo Click puedes Elegir <br></br>un gasto para editarlo o borrarlo</div>
         </div>
       }
       delay={0}
@@ -32,8 +32,8 @@ const TooltipGastoVarible = () =>{
         },
       }}
     >
-      <InfoOutlinedIcon className="ml-2 cursor-pointer" fontSize="small" />
+          {children}
     </Tooltip>
   );
 }
-export default TooltipGastoVarible;
+export default TooltipModificarGasto;

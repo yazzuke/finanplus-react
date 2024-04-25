@@ -7,6 +7,8 @@
     import DropdownIngreso from "../DropdownIngreso.jsx";
     import ModalEditarBorrarGastos from "../Forms/ModalEditarBorrarGastos.jsx";
     import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
+    import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
+    import TooltipAgregarGasto from '../Tooltip/TooltipAgregarGasto.jsx';
 
     function CardGastoDiario({ userId, gastoDiario, CurrentDate }) {
       const [transactions, setTransactions] = useState([]);
@@ -140,7 +142,7 @@
       };
 
       return (
-        <Card className="dark w-[600px] h-[320px] mt-2">
+        <Card className="bg-gray-diarios dark w-[600px] h-[320px] mt-2">
           <CardHeader className="flex justify-between items-center">
             {/* Contenedor para el título y la fecha de pago */}
             <div className="flex flex-col">
@@ -161,23 +163,37 @@
               <div className="flex items-center mt-7"></div>
 
               {/* Contenedor actual para los iconos */}
+                
               <div>
+              <TooltipModificarGasto>
                 <IconButton
                   color="primary"
                   aria-label="edit"
-                  className="ml-2"
+            
                   onClick={openEditModal}
+                  style={{
+                    background: "white",
+                    padding: "0.2rem",
+                    right: "12px",
+                  }}
                 >
                   <EditIcon />
                 </IconButton>
+                </TooltipModificarGasto>
+                <TooltipAgregarGasto>
                 <IconButton
                   color="primary"
                   aria-label="add"
                   className="ml-2"
                   onClick={toggleFormVisibility}
+                  style={{
+                    background: "white",
+                    padding: "0.2rem",
+                  }}
                 >
                   <AddIcon />
                 </IconButton>
+                </TooltipAgregarGasto>  
 
                 {isEditModalVisible && (
                   <ModalEditarBorrarGastos
@@ -207,7 +223,7 @@
 
           <Divider className="mt-[-0.5rem]" />
           <CardBody>
-            <div className="grid grid-cols-5 gap-1">
+            <div className="grid grid-cols-5">
               <span
                 className="text-base font-medium col-span-1 text-left"
                 style={{ transform: "translateY(-35%)" }}
@@ -235,7 +251,7 @@
               </span>
 
               <span
-                className="text-base font-medium col-span-1 text-center"
+                className="text-base font-medium col-span-1 text-center ml-5  "
                 style={{ transform: "translateY(-35%)" }}
               >
                 Ingreso
@@ -245,12 +261,12 @@
             <Divider className="mt-[-0.5rem]" />
             {transactions.map((trans, index) => (
               <React.Fragment key={index}>
-                <div className="grid grid-cols-6 gap-7 mt-1">
+                <div className="grid grid-cols-5 gap-7 mt-1">
                   {/* Actualiza estos campos para que coincidan con la estructura de tus datos de gastos */}
                   <div className="flex items-center justify-left col-span-1">
                     <span className="text-base">{trans.nombreGasto}</span>
                   </div>
-                  <div className="flex items-center justify-center col-span-1 mr-1">
+                  <div className="flex items-center justify-center col-span-1 ml-3">
                     {new Date(trans.fecha).toLocaleDateString("es-ES", {
                       day: "2-digit",
                       month: "2-digit",

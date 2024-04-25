@@ -80,8 +80,14 @@ const PieChart = ({ userId }) => {
             
         },
         legend: {
-          top: '5%',
-          left: 'center'
+          top: '7%',
+          left: 'center',
+          
+          textStyle: {
+            color: 'white',
+            fontSize: 16,
+            fontWeight: 'bold'
+          }
         },
         series: [
           {

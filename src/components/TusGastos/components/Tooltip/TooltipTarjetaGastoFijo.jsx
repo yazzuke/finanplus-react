@@ -7,8 +7,8 @@ const TooltipGastoFijo = () =>{
     <Tooltip 
     content={
         <div className="px-1 py-2">
-          <div className="text-small font-bold">Custom Fijo</div>
-          <div className="text-tiny">This is a custom tooltip content</div>
+          <div className="text-small font-bold">Gastos Fijos</div>
+          <div className="text-tiny">Esta Card es ideal para estos Gastos Fijos que debes pagar cada Mes</div>
         </div>
       }
       delay={0}

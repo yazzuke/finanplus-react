@@ -9,6 +9,8 @@ import ModalEditarBorrarGastosCC from "./ModalEditarBorrarGastoscc.jsx";
 import DropdownTipo from "../../../DropdownTipo.jsx";
 import ModalAgregarGastoCC from "./ModalAgregarGastoCC.jsx";
 import { fetchGastos, addGasto } from "./services/ApiService.jsx";
+import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
+import TooltipAgregarGasto from "../Tooltip/TooltipAgregarGasto.jsx";
 
 function CardGastosCC({
   userId,
@@ -172,7 +174,7 @@ function CardGastosCC({
   };
 
   return (
-    <Card className="${className} dark w-[680px] h-[320px] mt-2  ">
+    <Card className="bg-gray-credito dark w-[660px] h-[320px] mt-2  ">
       <CardHeader className="flex justify-between items-center">
         <div>
           <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">
@@ -193,23 +195,37 @@ function CardGastosCC({
         </div>
 
         <div>
+        <TooltipModificarGasto>
           <IconButton
             color="primary"
             aria-label="edit"
-            className="ml-2"
+            className="mr-8"
             onClick={openEditModal}
+            style={{
+              background: "white",
+              padding: "0.2rem",
+              right: "12px"
+            }}
           >
             <EditIcon />
           </IconButton>
+          </TooltipModificarGasto>
+
+          <TooltipAgregarGasto>
           <IconButton
             color="primary"
             aria-label="add"
             className="ml-2"
             onClick={toggleFormVisibility}
+            style={{
+              background: "white",
+              padding: "0.2rem",
+            }}
           >
             <AddIcon />
           </IconButton>
-
+          </TooltipAgregarGasto>
+          
           {/* Modal para editar o borrar gastos */}
         
         

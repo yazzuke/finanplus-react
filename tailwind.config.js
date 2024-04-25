@@ -9,8 +9,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'gray-fijos': '#1B1B1C',
+        'gray-credito': '#202021',
+        'gray-diarios': '#19191A ',
+        'gray-variables': '#2B2B2D  '
+      },
       fontFamily: {
-        'varela': ['Varela Round', 'sans-serif'], // Agrega 'Varela Round' como una opción de fuente
+        'varela': ['Varela Round', 'sans-serif'], 
       },
     },
   },
