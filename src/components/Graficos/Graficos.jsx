@@ -29,7 +29,7 @@ const PieChart = ({ userId }) => {
         const ahorrosData = await ahorrosResponse.json();
         const gastosDiariosData = await gastosDiariosResponse.json();
         const gastosVariablesData = await gastosVariablesResponse.json();
-
+        console.log(tarjetasCreditoData); 
         // Combina los arrays de gastos y ahorros en un solo array
         const todosLosGastosYAhorros = [
           ...gastosFijosData.flatMap(gasto => gasto.gastos),
@@ -39,7 +39,8 @@ const PieChart = ({ userId }) => {
           ...gastosVariablesData.flatMap(gasto => gasto.gastos),
        
         ];
-          console.log("Gastos y ahorros:", todosLosGastosYAhorros);
+    
+         // console.log("Gastos y ahorros:", todosLosGastosYAhorros);
         // Cuenta la cantidad de gastos y ahorros por categoría
         const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
           const tipo = item.tipo || item.categoria; // Ajusta según la estructura de los datos
@@ -54,7 +55,7 @@ const PieChart = ({ userId }) => {
         }));
 
         setDataCategorias(categoriasData);
-        console.log("Gastos y ahorros por categoría:", categoriasData);
+       // console.log("Gastos y ahorros por categoría:", categoriasData);
       } catch (error) {
         console.error("Error al obtener los gastos y ahorros:", error);
       }
@@ -79,8 +80,14 @@ const PieChart = ({ userId }) => {
             
         },
         legend: {
-          top: '5%',
-          left: 'center'
+          top: '7%',
+          left: 'center',
+          
+          textStyle: {
+            color: 'white',
+            fontSize: 16,
+            fontWeight: 'bold'
+          }
         },
         series: [
           {

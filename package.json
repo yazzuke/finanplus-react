@@ -4,13 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "proxy": "http://localhost:8080",
-
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
-    
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -30,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
+    "shepherd.js": "^11.2.0",
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
@@ -45,5 +44,4 @@
     "tailwindcss": "^3.4.1",
     "vite": "^5.1.6"
   }
-  
 }

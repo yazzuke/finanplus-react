@@ -85,7 +85,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
             prevAhorros.filter(
               (ahorro) => ahorro.ahorroID !== ahorroSeleccionado.ahorroID
             )
-          );
+          );                                      
           // Limpiar el ahorro seleccionado después de eliminar
           setAhorroSeleccionado(undefined);
           onClose(); // Cerrar el modal

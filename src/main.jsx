@@ -5,6 +5,7 @@ import {Input} from "@nextui-org/react";
 import {NextUIProvider} from '@nextui-org/react'
 import App from './App'
 import './index.css'
+import 'shepherd.js/dist/css/shepherd.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

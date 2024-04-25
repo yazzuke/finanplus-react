@@ -81,7 +81,7 @@ function ModalAgregarGastos({
                 />
                 <Select
                   autoFocus
-                  label="Seleccionar Tipo"
+                  label="Seleccionar Tipo"  
                   placeholder="Seleccionar Tipo"
                   variant="bordered"
                   name="tipo"

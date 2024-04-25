@@ -9,6 +9,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumatorias";
 import Graficos from "../../components/Graficos/Graficos";
 
+
 const getUserData = async ({ userId }) => {
   const response = await fetch(`http://localhost:8080/usuarios/${userId}`);
   const data = await response.json();

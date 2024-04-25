@@ -6,15 +6,15 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
-  Checkbox,
+  RadioGroup,
+  Radio,
   Input,
-  Link,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 
-function ModalAgregarAhorro({
+function ModalNuevoGasto({
+  userId,
   isOpen,
   onClose,
   newTransaction,
@@ -31,11 +31,9 @@ function ModalAgregarAhorro({
   return (
     <>
       <Modal
-        open={isOpen}
-        onClose={onClose}
-        width="600px"
         backdrop="opaque"
         isOpen={isOpen}
+        onClose={onClose}
         radius="lg"
         classNames={{
           body: "py-6",
@@ -50,34 +48,32 @@ function ModalAgregarAhorro({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Ingresa un Ahorro
+                Agrega una Tarjeta para tus Gastos
               </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
                   type="text"
-                  label="Nombre del Ahorro"
-                  name="concepto"
-                  variant="bordered"
-                  value={newTransaction.concepto}
+                  label="Nombre del Gasto"
+                  name="name"
+                  value={newTransaction.name}
                   onChange={handleInputChange}
+                  variant="bordered"
                 />
                 <Input
-                  autoFocus
                   type="number"
-                  label="Meta del Ahorro"
-                  variant="bordered"
-                  name="meta"
-                  value={newTransaction.meta}
+                  name="installments"
+                  value={newTransaction.installments}
                   onChange={handleInputChange}
+                  label="Cuotas del gasto"
+                  variant="bordered"
                 />
                 <Input
-                  autoFocus
                   type="number"
-                  label="Valor Actual del Ahorro"
+                  label="Valor Total"
                   variant="bordered"
-                  name="actual"
-                  value={newTransaction.actual}
+                  name="totalValue"
+                  value={newTransaction.totalValue}
                   onChange={handleInputChange}
                 />
                 <Select
@@ -97,14 +93,7 @@ function ModalAgregarAhorro({
                 </Select>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  variant="solid"
-                  radius="md"
-                  className=" text-white font-bold "
-                  onClick={handleSubmit}
-                >
-                  Agregar Ahorro
-                </Button>
+                <Button onClick={handleSubmit}>Agregar Gasto</Button>
               </ModalFooter>
             </>
           )}
@@ -113,4 +102,5 @@ function ModalAgregarAhorro({
     </>
   );
 }
-export default ModalAgregarAhorro;
+
+export default ModalNuevoGasto;

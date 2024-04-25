@@ -30,7 +30,7 @@ const handleSelectionChange = (keys) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="faded" className="capitalize w-[150px] h-[22px]">
+        <Button variant="bordered" className="capitalize w-[150px] h-[22px]">
         {Array.from(selectedKeys).join(", ").replaceAll("_", " ")}
         </Button>
       </DropdownTrigger>
