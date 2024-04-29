@@ -7,6 +7,7 @@ const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios,
   const gastosDiariosMes = gastosDiarios.filter(gasto => gasto.mes === mes);
   const tarjetasCreditoMes = tarjetasCredito.filter(gasto => gasto.mes === mes);
 
+  console.log(tarjetasCredito);
 
 
   return (
@@ -21,7 +22,7 @@ const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios,
                   <li key={index}>
                     <ul>
                       {gasto.gastos.map((g, idx) => (
-                        <li key={idx}>{g.nombreGasto}: ${g.valorGasto}</li>
+                        <li key={idx}>{g.nombreGasto}: ${g.valorGasto.toLocaleString()}</li>
                       ))}
                     </ul>
                   </li>
@@ -35,7 +36,7 @@ const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios,
               
                   <ul>
                     {gasto.gastos.map((g, idx) => (
-                      <li key={idx}>{g.nombreGasto}: ${g.valorGasto}</li>
+                      <li key={idx}>{g.nombreGasto}: ${g.valorGasto.toLocaleString()}</li>
                     ))}
                   </ul>
                 </li>
@@ -48,7 +49,7 @@ const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios,
                 <li key={index}>
                   <ul>
                     {gasto.gastos.map((g, idx) => (
-                      <li key={idx}>{g.nombreGasto}: ${g.valorGasto}</li>
+                      <li key={idx}>{g.nombreGasto}: ${g.valorGasto.toLocaleString()}</li>
                     ))}
                   </ul>
                 </li>
@@ -56,14 +57,12 @@ const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios,
             </ul>
 
             <div className="text-small font-bold">Tarjetas de Crédito</div>
-            <p>Tarjetas de Crédito: ${tarjetasCredito.map(gasto => gasto.valorTotal).reduce((acc, val) => acc + val, 0)}</p>
             <ul>
               {tarjetasCredito.map((gasto, index) => (
                 <li key={index}>
-                  {gasto.nombreGasto}: ${gasto.gastos.reduce((acc, g) => acc + g.valorGasto, 0)}
                   <ul>
                     {gasto.gastos.map((g, idx) => (
-                      <li key={idx}>{g.nombreGasto}: ${g.valorGasto}</li>
+                      <li key={idx}>{g.nombreGasto}: ${g.valorTotalGasto.toLocaleString()}</li>
                     ))}
                   </ul>
                 </li>

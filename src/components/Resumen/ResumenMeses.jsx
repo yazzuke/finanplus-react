@@ -12,7 +12,7 @@ const ResumenMeses = ({ mes, resumen, marginStyle, centerStyle, gastosFijos, gas
           <span className="text-2xl font-bold">Ingresos</span>
           <div className="w-[160px] flex justify-center items-center bg-[#302d2d] rounded-full p-1 shadow-md">
             <span className="text-white">
-              ${resumen ? resumen.totalIngresos : 0}
+              ${resumen ? resumen.totalIngresos.toLocaleString() : 0} 
             </span>
           </div>
         </div>
@@ -26,7 +26,7 @@ const ResumenMeses = ({ mes, resumen, marginStyle, centerStyle, gastosFijos, gas
                 tarjetasCredito={tarjetasCredito}
               >
                 <span className="text-white">
-                  ${resumen ? resumen.totalGastos : 0}
+                  ${resumen ? resumen.totalGastos.toLocaleString() : 0}
                 </span>
               </TooltipResumen>
           </div>

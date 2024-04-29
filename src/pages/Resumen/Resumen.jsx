@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import NavBar from "../../components/Navbar/Navbar";
-import Graficos from "../../components/Resumen/GraficosMeses"
+import Graficos from "../../components/Resumen/GraficosMeses";
+import Sumatorias from "../../components/Resumen/Sumatorias";
 import ResumenMeses from "../../components/Resumen/ResumenMeses";
 
-
 function Resumen() {
-  const [user, setUser] = useState(null);   
+  const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -29,7 +29,6 @@ function Resumen() {
     return () => unsubscribe();
   }, []);
 
-  
   useEffect(() => {
     if (userId && currentDate) {
       const year = currentDate.getFullYear();
@@ -53,7 +52,9 @@ function Resumen() {
       const year = currentDate.getFullYear();
 
       // Obtener gastos fijos por mes y año
-      fetch(`http://localhost:8080/usuarios/${userId}/gastosfijos/fecha?year=${year}`)
+      fetch(
+        `http://localhost:8080/usuarios/${userId}/gastosfijos/fecha?year=${year}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setGastosFijos(data);
@@ -63,7 +64,9 @@ function Resumen() {
         });
 
       // Obtener gastos variables por mes y año
-      fetch(`http://localhost:8080/usuarios/${userId}/gastosvariables/fecha?year=${year}`)
+      fetch(
+        `http://localhost:8080/usuarios/${userId}/gastosvariables/fecha?year=${year}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setGastosVariables(data);
@@ -73,7 +76,9 @@ function Resumen() {
         });
 
       // Obtener gastos diarios por mes y año
-      fetch(`http://localhost:8080/usuarios/${userId}/gastosdiario/fecha?year=${year}`)
+      fetch(
+        `http://localhost:8080/usuarios/${userId}/gastosdiario/fecha?year=${year}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setGastosDiarios(data);
@@ -83,18 +88,18 @@ function Resumen() {
         });
 
       // Obtener tarjetas de crédito por mes y año
-      fetch(`http://localhost:8080/usuarios/${userId}/tarjetascredito/fecha?year=${year}`)
+      fetch(
+        `http://localhost:8080/usuarios/${userId}/tarjetascredito/fecha?year=${year}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setTarjetasCredito(data);
-          
         })
         .catch((error) => {
           console.error("Error al obtener tarjetas de crédito:", error);
         });
     }
   }, [userId, currentDate]);
-
 
   const meses = [
     "Enero",
@@ -120,39 +125,46 @@ function Resumen() {
     return acc;
   }, []);
 
-
   return (
     <div className="flex flex-col items-start">
       <NavBar />
       {gruposDeMeses.map((grupo, index) => (
         <div key={index} className="flex">
           {grupo.map((mes, mesIndex) => {
-            const resumen = resumenMensual.find((item) => item.month === meses.indexOf(mes) + 1);
+            const resumen = resumenMensual.find(
+              (item) => item.month === meses.indexOf(mes) + 1
+            );
             const marginStyle = index === 1 ? "mt-8" : "";
             const lastGroup = index === gruposDeMeses.length - 1;
-            const centerStyle = lastGroup && (mesIndex === grupo.length - 1 || mesIndex === grupo.length - 2) ? "mt-8" : "";
+            const centerStyle =
+              lastGroup &&
+              (mesIndex === grupo.length - 1 || mesIndex === grupo.length - 2)
+                ? "mt-8"
+                : "";
 
             return (
               <ResumenMeses
-              key={`${mes}-${mesIndex}`}
-              mes={mes}
-              resumen={resumen}
-              marginStyle={marginStyle}
-              centerStyle={centerStyle}
-              gastosFijos={gastosFijos}
-              gastosVariables={gastosVariables}
-              gastosDiarios={gastosDiarios}
-              tarjetasCredito={tarjetasCredito}
-
+                key={`${mes}-${mesIndex}`}
+                mes={mes}
+                resumen={resumen}
+                marginStyle={marginStyle}
+                centerStyle={centerStyle}
+                gastosFijos={gastosFijos}
+                gastosVariables={gastosVariables}
+                gastosDiarios={gastosDiarios}
+                tarjetasCredito={tarjetasCredito}
               />
             );
           })}
-              
         </div>
       ))}
       <div className="flex mt-12">
-      <Graficos userId={userId} />
-
+        <Graficos userId={userId} />
+        <div className="flex">
+          <Sumatorias userId={userId} currentDate={currentDate} 
+           resumenMensual={resumenMensual} 
+           />
+        </div>
       </div>
     </div>
   );
