@@ -9,6 +9,7 @@
   import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
   import CardGastoDiario from "./components/CardGastoDiario/CardGastosDiario.jsx";
   import CardGastoVariable from "./components/CardGastoVariable/CardGastosVariable.jsx";
+  import TooltipAgregarGasto from "./components/Tooltip/TooltipNuevoGasto.jsx";
   import ModalNuevoGasto from "./components/Forms/ModalNuevoGasto.jsx";
   
 
@@ -133,6 +134,7 @@
       <div className="mt-[110px] ml-1 bg">
         <div className="flex items-center">
           <span className="text-3xl font-bold">Tus Gastos</span>
+          <TooltipAgregarGasto>
           <IconButton
             onClick={handleOpenModal}
             color="primary"
@@ -147,6 +149,7 @@
           >
             <AddIcon />
           </IconButton>
+          </TooltipAgregarGasto>
           <ModalNuevoGasto
             userId={userId}
             currentDate={currentDate}

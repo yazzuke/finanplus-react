@@ -8,6 +8,8 @@ import ModalEditarBorrarAhorros from "./ModalEditarBorrarAhorros.jsx";
 import ModalAgregarAhorro from "./ModalAgregarAhorro.jsx";
 import EditIcon from "@mui/icons-material/Edit";
 import ProgressAhorro from "./ProgressAhorro.jsx";
+import TooltipAgregarAhorros from "./TooltipAgregarAhorros.jsx";
+import TooltipModificarAhorros from "./TooltipModificarAhorros.jsx";
 
 function Ahorros({ userId, currentDate }) {
   const [ahorros, setAhorros] = useState([]);
@@ -122,6 +124,7 @@ function Ahorros({ userId, currentDate }) {
 
           {/* Contenedor actual para los iconos */}
           <div>
+            <TooltipModificarAhorros>
             <IconButton
               color="primary"
               aria-label="edit"
@@ -129,15 +132,19 @@ function Ahorros({ userId, currentDate }) {
               onClick={openEditModal}
             >
               <EditIcon />
+        
               {isEditModalVisible && (
                 <ModalEditarBorrarAhorros
                   isOpen={isEditModalVisible}
                   onClose={closeEditModal}
-                  userId={userId} // Asegúrate de pasar el userId
-                  currentDate={currentDate} // Asegúrate de pasar la fecha actual
+                  userId={userId}
+                  currentDate={currentDate} 
                 />
               )}
             </IconButton>
+            </TooltipModificarAhorros>
+
+            <TooltipAgregarAhorros>
             <IconButton
               color="primary"
               aria-label="add"
@@ -146,6 +153,7 @@ function Ahorros({ userId, currentDate }) {
             >
               <AddIcon />
             </IconButton>
+            </TooltipAgregarAhorros>
 
             {/* Formulario para añadir un nuevo gasto */}
 

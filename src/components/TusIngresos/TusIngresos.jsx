@@ -5,6 +5,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import PerfectScrollbar from "perfect-scrollbar";
 import ModalEditarBorrarIngreso from "./ModalEditarBorrarIngreso";
 import ModalAgregarIngreso from "./ModalAgregarIngreso";
+import TooltipAgregarIngreso from "./TooltipAgregarIngreso";
+import TooltipModificarIngreso from "./TooltipModificarIngreso";
 
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { Modal } from "@nextui-org/react";
@@ -115,6 +117,7 @@ function TusIngresos({ userId, currentDate }) {
     <div className="flex justify-end mt-[-2.4rem] mr-2">
       <div className="w-[250px]">
         <div className="flex justify-between items-center mb-4">
+          <TooltipAgregarIngreso>
           <IconButton
             onClick={() => setShowModal(true)}
             color="primary"
@@ -129,6 +132,7 @@ function TusIngresos({ userId, currentDate }) {
           >
             <AddIcon />
           </IconButton>
+          </TooltipAgregarIngreso>
           <span className="text-3xl font-bold">Tus Ingresos</span>
         </div>
         {showModal && (
@@ -166,6 +170,7 @@ function TusIngresos({ userId, currentDate }) {
               <div className="flex flex-col items-end">
                 <span className="text-xl font-bold">{ingreso.concepto}</span>
                 <div className="w-[160px] flex justify-between bg-[#302d2d] rounded-full p-1 shadow-md mt-1 ">
+                  <TooltipModificarIngreso>
                   <IconButton
                     color="primary"
                     aria-label="edit"
@@ -179,6 +184,7 @@ function TusIngresos({ userId, currentDate }) {
                   >
                     <EditIcon />
                   </IconButton>
+                  </TooltipModificarIngreso>
                   <span className="text-xl mr-1">
                     ${ingreso.monto ? ingreso.monto.toLocaleString() : "0"}
                   </span>

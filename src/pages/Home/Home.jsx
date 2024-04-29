@@ -64,7 +64,8 @@ function Home() {
           <Ahorros userId={userId} currentDate={currentDate} />
         </div>
         <div id="graficas" className="absolute min-h-[300px] ml-[700px]">
-          <Graficos userId={userId} />
+          <Graficos userId={userId} currentDate={currentDate} />
+          
         </div>
         <div id="ingresos" className="min-h-[345px]">
           <TusIngresos userId={userId} currentDate={currentDate} />

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-
+import * as echarts from 'echarts';
 import {
   Modal,
   ModalContent,
@@ -12,15 +12,29 @@ import {
   Input,
 } from "@nextui-org/react";
 
-import * as echarts from 'echarts';
-
-const PieChart = ({ userId }) => {
-  const chartRef = useRef(null);
+const CombinedCharts = ({ userId, currentDate }) => {
+  const barChartRef = useRef(null);
+  const pieChartRef = useRef(null);
+  const [dataMeses, setDataMeses] = useState([]);
   const [dataCategorias, setDataCategorias] = useState([]);
 
+
   useEffect(() => {
+  const fetchResumenMensual = async () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    const url = `http://localhost:8080/usuarios/${userId}/resumenmensual/totales?year=${year}&month=${month}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setDataMeses(data);
+    } catch (error) {
+      console.error("Error al obtener resumen mensual:", error);
+    }
+  };
+
     const fetchGastosYAhorros = async () => {
-      // URLs de todos los endpoints incluyendo gastos diarios y gastos variables
       const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
       const tarjetasCreditoUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
       const ahorrosUrl = `http://localhost:8080/usuarios/${userId}/ahorros`;
@@ -28,7 +42,6 @@ const PieChart = ({ userId }) => {
       const gastosVariablesUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
 
       try {
-        // Obtiene los datos de los cinco endpoints
         const [gastosFijosResponse, tarjetasCreditoResponse, ahorrosResponse, gastosDiariosResponse, gastosVariablesResponse] = await Promise.all([
           fetch(gastosFijosUrl),
           fetch(tarjetasCreditoUrl),
@@ -42,60 +55,104 @@ const PieChart = ({ userId }) => {
         const ahorrosData = await ahorrosResponse.json();
         const gastosDiariosData = await gastosDiariosResponse.json();
         const gastosVariablesData = await gastosVariablesResponse.json();
-       // console.log(tarjetasCreditoData); 
-        // Combina los arrays de gastos y ahorros en un solo array
+
         const todosLosGastosYAhorros = [
           ...gastosFijosData.flatMap(gasto => gasto.gastos),
           ...tarjetasCreditoData.flatMap(tarjeta => tarjeta.gastos),
           ...ahorrosData,
           ...gastosDiariosData.flatMap(gasto => gasto.gastos),
           ...gastosVariablesData.flatMap(gasto => gasto.gastos),
-       
         ];
-    
-         // console.log("Gastos y ahorros:", todosLosGastosYAhorros);
-        // Cuenta la cantidad de gastos y ahorros por categoría
+
         const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
-          const tipo = item.tipo || item.categoria; // Ajusta según la estructura de los datos
+          const tipo = item.tipo || item.categoria;
           acc[tipo] = (acc[tipo] || 0) + 1;
           return acc;
         }, {});
 
-        // Transforma el contador en un formato adecuado para ECharts
         const categoriasData = Object.keys(contadorCategorias).map(key => ({
           name: key,
           value: contadorCategorias[key]
         }));
 
         setDataCategorias(categoriasData);
-       // console.log("Gastos y ahorros por categoría:", categoriasData);
       } catch (error) {
         console.error("Error al obtener los gastos y ahorros:", error);
       }
     };
 
     if (userId) {
+      fetchResumenMensual();
       fetchGastosYAhorros();
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (barChartRef.current && dataMeses.length > 0) {
+      const myChart = echarts.init(barChartRef.current);
 
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          top: '2%',
+          textStyle: {
+            color: 'white',
+            fontSize: 20,
+            fontWeight: 'bold'
+          },
+          data: ['Ingresos', 'Gastos']
+        },
+        xAxis: {
+          type: 'category',
+          data: dataMeses.map(item => `${item.year}-${item.month}`),
+          axisLabel: {
+            rotate: 0
+          }
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: 'Ingresos',
+            type: 'bar',
+            data: dataMeses.map(item => item.totalIngresos),
+            color: '#B68736'
+          },
+          {
+            name: 'Gastos',
+            type: 'bar',
+            data: dataMeses.map(item => item.totalGastos),
+            color: '#ff6b81' 
+          }
+        ]
+      };
+
+      myChart.setOption(option);
+
+      return () => {
+        myChart.dispose();
+      };
+    }
+  }, [dataMeses]);
 
   useEffect(() => {
-    if (chartRef.current && dataCategorias.length > 0) {
-      const myChart = echarts.init(chartRef.current);
+    if (pieChartRef.current && dataCategorias.length > 0) {
+      const myChart = echarts.init(pieChartRef.current);
 
       const option = {
         tooltip: {
           trigger: 'item',
-          // Usar un formatter para mostrar el porcentaje
           formatter: '{a} <br/>{b} : {c} ({d}%)',
-            
         },
         legend: {
           top: '7%',
           left: 'center',
-          
           textStyle: {
             color: 'white',
             fontSize: 16,
@@ -130,18 +187,17 @@ const PieChart = ({ userId }) => {
       myChart.setOption(option);
 
       return () => {
-        myChart.dispose(); // Asegura la limpieza al desmontar el componente
+        myChart.dispose();
       };
     }
   }, [dataCategorias]);
 
-
-
-  return <div className="flex items-center" ref={chartRef} style={{ width: '600px', height: '400px' }}>
-    
-
-
-  </div>;
+  return (
+    <div>
+      <div className="flex items-center" ref={barChartRef} style={{ width: '640px', height: '400px', left:'200px', top:'15px'}}></div>
+      <div className="" ref={pieChartRef} style={{ width: '600px', height: '400px', right:'400px',position:'absolute', top:'2px' }}></div>
+    </div>
+  );
 };
 
-export default PieChart;
+export default CombinedCharts;

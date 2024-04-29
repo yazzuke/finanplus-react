@@ -13,8 +13,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
 import ModalEditarBorrarGastosFijos from "./ModalEditarBorrarGastosFijos.jsx";
-import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
-import TooltipAgregarGasto from '../Tooltip/TooltipAgregarGasto.jsx';
+import TooltipModificarGasto from "../Tooltip/TooltipModificarGasto.jsx";
+import TooltipAgregarGasto from "../Tooltip/TooltipAgregarGasto.jsx";
 
 function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const [transactions, setTransactions] = useState([]);
@@ -37,7 +37,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
     setFormVisible(!isFormVisible);
   };
 
- // console.log("Gasto fijo:", gastoFijo);
+  // console.log("Gasto fijo:", gastoFijo);
 
   const handleSubmit = async () => {
     try {
@@ -83,8 +83,9 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
               "No se pudo obtener la información de los gastos inv fijo"
             );
           }
+
           const data = await response.json();
-       //   console.log("Datos cargados: ", data); // Imprimir los datos cargados
+          //   console.log("Datos cargados: ", data); // Imprimir los datos cargados
           setTransactions(data);
         } catch (error) {
           console.error("Error al obtener los gastos inv fijo:", error);
@@ -109,7 +110,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
       if (!response.ok) {
         throw new Error("Respuesta de red no fue ok");
       }
-      //window.location.reload();
+      window.location.reload();
       const updatedTransaction = await response.json();
       setTransactions(
         transactions.map((transaction) =>
@@ -147,15 +148,15 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
       // Actualizar el estado de transactions
       setTransactions(
         transactions.map((trans) =>
-          trans.gastoID === gastoID ? { ...trans, pagado: updatedGasto.pagado } : trans
+          trans.gastoID === gastoID
+            ? { ...trans, pagado: updatedGasto.pagado }
+            : trans
         )
       );
     } catch (error) {
       console.error("Error al actualizar el estado de pago:", error);
     }
   };
-  
-  
 
   return (
     <Card className=" bg-gray-fijos dark w-[650px] h-[320px] mt-2">
@@ -181,35 +182,35 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
 
           {/* Contenedor actual para los iconos */}
           <div>
-          <TooltipModificarGasto>
-            <IconButton
-              color="primary"
-              aria-label="edit"
-              className="ml-2"
-              onClick={openEditModal}
-              style={{
-                background: "white",
-                padding: "0.2rem",
-                right: "12px",
-              }}
-            >
-              <EditIcon />
-            </IconButton>
+            <TooltipModificarGasto>
+              <IconButton
+                color="primary"
+                aria-label="edit"
+                className="ml-2"
+                onClick={openEditModal}
+                style={{
+                  background: "white",
+                  padding: "0.2rem",
+                  right: "12px",
+                }}
+              >
+                <EditIcon />
+              </IconButton>
             </TooltipModificarGasto>
             <TooltipAgregarGasto>
-            <IconButton
-              color="primary"
-              aria-label="add"
-              className="ml-2"
-              onClick={() => setFormVisible(true)}
-              style={{
-                background: "white",
-                padding: "0.2rem",
-              }}
-            >
-              <AddIcon />
-            </IconButton>
-            </TooltipAgregarGasto>  
+              <IconButton
+                color="primary"
+                aria-label="add"
+                className="ml-2"
+                onClick={() => setFormVisible(true)}
+                style={{
+                  background: "white",
+                  padding: "0.2rem",
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </TooltipAgregarGasto>
 
             {/* Modal para editar o borrar un gasto */}
             {isEditModalVisible && (
@@ -312,8 +313,10 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
               <div className="flex items-center justify-center col-span-1 ">
                 <Checkbox
                   className="mr-2"
-                  isSelected={trans.pagado} 
-                  onValueChange={(newVal) => handlePagoChange(trans.gastoID, newVal)}
+                  isSelected={trans.pagado}
+                  onValueChange={(newVal) =>
+                    handlePagoChange(trans.gastoID, newVal)
+                  }
                 />
               </div>
               {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}

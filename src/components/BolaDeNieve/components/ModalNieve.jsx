@@ -14,11 +14,12 @@ import { useState } from "react";
 const ModalNieve = ({ isOpen, onClose, todosLosGastos }) => {
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
+
   const handleToggleInfo = () => {
     setShowAdditionalInfo(!showAdditionalInfo);
   };
 
-  //console.log("todosLosGastos:", todosLosGastos);
+  console.log("todosLosGastos:", todosLosGastos);
 
   return (
     <>
@@ -97,12 +98,17 @@ const ModalNieve = ({ isOpen, onClose, todosLosGastos }) => {
                   </>
                 ) : (
                   <div>
-                    {/* Cuerpo al pasar de contenido */}
-                    <span>
-                      Contenido adicional relacionado con el método bola de
-                      nieve.
-                    </span>
-                  </div>
+      <span className="text-lg font-bold">
+        Tus gastos ordenados de menor a mayor valor 
+      </span>
+      <ul>
+        {todosLosGastos.map((gasto, index) => (
+          <li key={index}>
+            {gasto.nombreGasto} - ${gasto.valorTotalGasto}
+          </li>
+        ))}
+      </ul>
+    </div>
                 )}
               </ModalBody>
 

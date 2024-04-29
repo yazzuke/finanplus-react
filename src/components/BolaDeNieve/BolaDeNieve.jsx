@@ -20,26 +20,28 @@
           // Obtiene los datos de ambos endpoints
           const [gastosFijosResponse, tarjetasCreditoResponse] =
             await Promise.all([fetch(gastosFijosUrl), fetch(tarjetasCreditoUrl)]);
-
+      
           const gastosFijosData = await gastosFijosResponse.json();
           const tarjetasCreditoData = await tarjetasCreditoResponse.json();
-
+      
+          // Filtra los gastos fijos que no están pagados
+          const gastosFijosNoPagados = gastosFijosData.flatMap((gasto) => gasto.gastos).filter(gasto => !gasto.pagado);
+      
           // Combina los arrays de gastos en un solo array
           const todosLosGastos = [
-            ...gastosFijosData.flatMap((gasto) => gasto.gastos),
+            ...gastosFijosNoPagados,
             ...tarjetasCreditoData.flatMap((tarjeta) => tarjeta.gastos),
           ];
-
+      
           // Encuentra el gasto con el valor más bajo
           if (todosLosGastos.length > 0) {
             const menor = todosLosGastos.reduce((min, gasto) =>
               gasto.valorTotalGasto < min.valorTotalGasto ? gasto : min
             );
             todosLosGastos.sort((a, b) => a.valorTotalGasto - b.valorTotalGasto);
-            //  console.log("Todos los gastos:", todosLosGastos);
             setGastoMenor(menor);
             setTodosLosGastos(todosLosGastos);
-
+      
             //  console.log("Gasto menor:", menor);
           }
         } catch (error) {
@@ -51,6 +53,9 @@
         fetchGastosMenores();
       }
     }, [userId]);
+
+
+    
     return (
       <Card className="shadow-none dark w-[1000px] h-[55px] ml-32 bg-gray-900">
         <CardHeader className="flex justify-between items-center">
@@ -74,7 +79,7 @@
         <ModalNieve
           isOpen={isOpen}
           onClose={() => onOpenChange(false)}
-          gastos={todosLosGastos}
+          todosLosGastos={todosLosGastos} 
         />
       </Card>
     );
