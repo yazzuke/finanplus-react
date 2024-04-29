@@ -89,6 +89,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
           // Limpiar el ahorro seleccionado después de eliminar
           setAhorroSeleccionado(undefined);
           onClose(); // Cerrar el modal
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error al eliminar el ahorro:", error);
@@ -124,6 +125,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
           // Aquí podrías actualizar tu estado local si es necesario
           console.log("Ahorro actualizado:", updatedAhorro);
           onClose(); // Cerrar el modal después de actualizar
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error al actualizar el ahorro:", error);

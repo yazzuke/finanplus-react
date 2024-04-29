@@ -110,6 +110,7 @@ function ModalNuevoGasto({
   
         // Cerrar el modal
         props.onClose();
+      
       })
       .catch((error) => {
         console.error("Error al crear el gasto:", error);

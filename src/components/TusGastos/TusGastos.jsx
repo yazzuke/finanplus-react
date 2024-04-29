@@ -43,6 +43,8 @@
 
     };
 
+    
+
     const [nuevaTarjeta, setNuevaTarjeta] = useState({
       nombreTarjeta: "",
       fechaPago: "",
@@ -156,6 +158,7 @@
             isOpen={isOpen}
             onClose={handleCloseModal}
             onGastoAdded={handleGastoAdded} 
+            
           />
 
           <IconButton

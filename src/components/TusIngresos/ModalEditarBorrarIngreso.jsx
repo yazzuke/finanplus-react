@@ -43,6 +43,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
     })
     .then(() => {
       onClose(); // Cerrar el modal
+      window.location.reload(); 
       // Aquí deberías recargar o actualizar la lista de ingresos
     })
     .catch((error) => {
@@ -60,6 +61,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
     .then((response) => {
       if (!response.ok) throw new Error('Error al eliminar ingreso');
       onClose(); // Cerrar el modal
+      window.location.reload(); 
       // Aquí deberías recargar o actualizar la lista de ingresos
     })
     .catch((error) => {

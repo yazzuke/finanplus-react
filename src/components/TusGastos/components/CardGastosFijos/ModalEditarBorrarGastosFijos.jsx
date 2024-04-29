@@ -76,6 +76,7 @@
             );
             setGastoSeleccionado(undefined); // Limpiar selección
             onClose(); // Opcionalmente cerrar el modal
+            window.location.reload(); 
           })
           .catch((error) => console.error("Error al eliminar el gasto:", error));
       }
@@ -105,12 +106,13 @@
             return response.json();
           })
           .then((updatedGasto) => {
-            // Aquí puedes actualizar el estado local para reflejar los cambios
+           
             const updatedGastos = gastos.map((gasto) =>
               gasto.gastoID === updatedGasto.gastoID ? updatedGasto : gasto
             );
             setGastos(updatedGastos);
-            onClose(); // Cerrar el modal después de actualizar
+            onClose(); 
+            window.location.reload(); 
           })
           .catch((error) =>
             console.error("Error al actualizar el gasto:", error)

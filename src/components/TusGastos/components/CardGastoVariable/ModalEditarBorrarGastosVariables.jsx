@@ -77,6 +77,7 @@
             );
             setGastoSeleccionado(undefined); // Limpiar selección
             onClose(); // Opcionalmente cerrar el modal
+            window.location.reload(); 
           })
           .catch((error) => console.error("Error al eliminar el gasto:", error));
       }
@@ -112,6 +113,7 @@
             );
             setGastos(updatedGastos);
             onClose(); // Cerrar el modal después de actualizar
+            window.location.reload(); 
           })
           .catch((error) =>
             console.error("Error al actualizar el gasto:", error)
