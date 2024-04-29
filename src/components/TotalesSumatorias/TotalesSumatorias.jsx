@@ -106,7 +106,7 @@ function TotalesSumatorias({ userId, currentDate }) {
 
   
  
-  console.log("Resumen mensual:", resumenMensual);
+//console.log("Resumen mensual:", resumenMensual);
 
   useEffect(() => {
     // Actualización del total de gastos en el backend

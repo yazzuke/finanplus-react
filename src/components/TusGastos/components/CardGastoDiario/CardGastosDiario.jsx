@@ -280,7 +280,7 @@
                   <div className="flex items-center justify-center col-span-1 ">
                     <DropdownTipo
                       tipo={trans.tipo}
-                      gastoID={trans.gastoID} // Asegúrate de que trans tenga una propiedad gastoID con el ID correcto.
+                      gastoID={trans.gastoID} 
                       onTypeChange={(gastoID, newType) =>
                         updateTipoGasto(gastoID, newType)
                       }
@@ -289,7 +289,7 @@
                   <div className="flex items-center justify-center col-span-1 ">
                     <DropdownIngreso userId={userId} />
                   </div>
-                  {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}
+
                 </div>
                 {index < transactions.length - 1 && <Divider className="my-1" />}
               </React.Fragment>

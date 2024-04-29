@@ -8,13 +8,10 @@ import BolaDeNieve from "../../components/BolaDeNieve/BolaDeNieve";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumatorias";
 import Graficos from "../../components/Graficos/Graficos";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 
-const getUserData = async ({ userId }) => {
-  const response = await fetch(`http://localhost:8080/usuarios/${userId}`);
-  const data = await response.json();
-  return data;
-};
 
 function Home() {
   const [user, setUser] = useState(null);
@@ -23,46 +20,64 @@ function Home() {
   const [sumaTotalGastos, setTotalGastos] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         setUserId(firebaseUser.uid);
-        getUserData(firebaseUser.uid).then(setUser);
       } else {
-        setUserId(null);
-        setUser(null);
-        console.log(getUserData);
+        setUserId();
+        setUser();
       }
     });
-
     return () => unsubscribe();
   }, []);
+
+  //const driverObj = driver({
+  //showProgress: true,
+  //steps: [
+  // { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+  //{ element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
+  // { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
+  // { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+  /// { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
+  // ]
+  //});
+
+  //driverObj.drive();
 
   return (
     <div className="flex flex-col ">
       <NavBar user={user} />
       <div className="flex-grow overflow-auto">
-        <div className="flex justify-between mt-4 ml-3">
-          <SelectorMeses currentDate={currentDate} setCurrentDate={setCurrentDate} />
-          <TotalesSumatorias userId={userId} totalGastos={sumaTotalGastos} currentDate={currentDate} />
+        <div id="selector-meses" className="flex justify-between mt-4 ml-3">
+          <SelectorMeses
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+          />
+          <TotalesSumatorias
+            userId={userId}
+            totalGastos={sumaTotalGastos}
+            currentDate={currentDate}
+          />
         </div>
-        <div className=" absolute min-h-[300px]">
-          <Ahorros userId={userId}   currentDate={currentDate} />
-          </div>
-        <div className="absolute min-h-[300px] ml-[700px]">
+        <div id="ahorros" className=" absolute min-h-[300px] mt-2">
+          <Ahorros userId={userId} currentDate={currentDate} />
+        </div>
+        <div id="graficas" className="absolute min-h-[300px] ml-[700px]">
           <Graficos userId={userId} />
-          
         </div>
-        <div className="min-h-[345px]">
-          <TusIngresos userId={userId}  currentDate={currentDate} />
+        <div id="ingresos" className="min-h-[345px]">
+          <TusIngresos userId={userId} currentDate={currentDate} />
         </div>
-        <div></div>
-        <div className="min-h-[300px] ml-2">
-          <div className=" absolute left-[300px] mt-[-25px] ">
+        <div id="gastos" className="min-h-[300px] ml-2">
+          <div id="boladenieve" className=" absolute left-[300px] mt-[-25px] ">
             <BolaDeNieve userId={userId} />
           </div>
-          <TusGastos userId={userId} setTotalGastos={setTotalGastos} currentDate={currentDate}/>
+          <TusGastos
+            userId={userId}
+            setTotalGastos={setTotalGastos}
+            currentDate={currentDate}
+          />
         </div>
       </div>
     </div>

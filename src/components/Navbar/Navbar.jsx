@@ -7,7 +7,7 @@ import {
   Link,
   Avatar,
   Button,
-   DropdownItem, DropdownTrigger, Dropdown, DropdownMenu
+  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu
 } from "@nextui-org/react";
 import { useUser } from "../../context/FinalContex";
 import { useNavigate } from "react-router-dom";
@@ -19,11 +19,11 @@ export default function NavBar({ usuario }) {
   // Hook de navegación
   const navigate = useNavigate();
   const { logoutUser, user } = useUser();
-  //console.log("Usuario 424242", user); 
 
- const Cache = localStorage.getItem("user"); // va ser el email
+
+  const Cache = localStorage.getItem("user"); // va ser el email
   const Datos = JSON.parse(Cache);
- // console.log("Datos", Datos);
+  // console.log("Datos", Datos);
 
 
   // Función para cerrar sesión
@@ -33,6 +33,11 @@ export default function NavBar({ usuario }) {
     console.log("Usuario cerró sesión");
     navigate("/login"); // Redirige al usuario a la página de inicio
   };
+
+  //console.log(Datos.id)
+  //console.log(Datos)
+
+
 
   return (
     <Navbar>
@@ -47,26 +52,21 @@ export default function NavBar({ usuario }) {
         />
         <NavbarBrand style={{ position: "relative", left: "15px" }}>
           <Link color="foreground" href="#">
-            Bienvenido de nuevo,
-            {Datos ? Datos.nombre : "Features"}
+            Bienvenido de nuevo, {Datos ? Datos.nombre : "Features"}
           </Link>
         </NavbarBrand>
       </NavbarBrand>
       <NavbarBrand style={{ position: "relative", left: "0px" }}>
         <NavbarItem isActive>
-          <Link href="#" aria-current="page">
+          <Link href="/home" color="foreground">
             Finanzas
           </Link>
         </NavbarItem>
         <NavbarItem style={{ marginLeft: "20px" }}>
-          <Link color="foreground" href="#">
-            Prestamos
+          <Link href="/resumen" color="foreground">
+            Resumen
           </Link>
-        </NavbarItem>
-        <NavbarItem style={{ marginLeft: "20px" }}>
-          <Link color="foreground" href="#">
-            Ahorros
-          </Link>
+
         </NavbarItem>
       </NavbarBrand>
       <NavbarContent justify="">

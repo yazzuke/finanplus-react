@@ -42,7 +42,7 @@ const PieChart = ({ userId }) => {
         const ahorrosData = await ahorrosResponse.json();
         const gastosDiariosData = await gastosDiariosResponse.json();
         const gastosVariablesData = await gastosVariablesResponse.json();
-        console.log(tarjetasCreditoData); 
+       // console.log(tarjetasCreditoData); 
         // Combina los arrays de gastos y ahorros en un solo array
         const todosLosGastosYAhorros = [
           ...gastosFijosData.flatMap(gasto => gasto.gastos),
