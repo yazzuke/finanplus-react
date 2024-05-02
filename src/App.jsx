@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Home from './pages/Home/Home';
 import Resumen from './pages/Resumen/Resumen';
+import Password from './pages//Login/Password'
 import { AuthProvider } from './context/AuthContext';
 import ContextProvider from './context/FinalContex';
 import { ToastContainer } from 'react-toastify';
@@ -32,6 +33,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
             <Route path="/resumen" element={<Resumen />} />
+            <Route path="/forgotpassword" element={<Password />} />
           </Routes>
         </ContextProvider>
       </AuthProvider>

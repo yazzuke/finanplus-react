@@ -174,7 +174,7 @@ function CardGastosCC({
   };
 
   return (
-    <Card className="bg-gray-credito dark w-[660px] h-[320px] mt-2  ">
+    <Card className="bg-gray-fijos dark w-[660px] h-[320px] mt-2  ">
       <CardHeader className="flex justify-between items-center">
         <div>
           <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">

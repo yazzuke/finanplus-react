@@ -168,7 +168,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
   };
 
   return (
-    <Card className="bg-gray-variables dark w-[650px] h-[320px] mt-2">
+    <Card className="bg-gray-fijos dark w-[650px] h-[320px] mt-2">
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -177,7 +177,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
               Gastos Variables
             </span>
           </div>
-          <span className="text-sm font-bold mr-24 ">
+          <span className="text-sm font-bold mr-24 "> 
             {" "}
             Valor Total:{" "}
             {gastoVariable.valorTotal.toLocaleString("es-ES", {

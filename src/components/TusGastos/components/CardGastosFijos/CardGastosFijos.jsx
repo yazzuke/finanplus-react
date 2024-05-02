@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Card,
   CardHeader,
@@ -12,6 +12,8 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
+import PerfectScrollbar from "perfect-scrollbar";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 import ModalEditarBorrarGastosFijos from "./ModalEditarBorrarGastosFijos.jsx";
 import TooltipModificarGasto from "../Tooltip/TooltipModificarGasto.jsx";
 import TooltipAgregarGasto from "../Tooltip/TooltipAgregarGasto.jsx";
@@ -21,6 +23,18 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
 
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [isFormVisible, setFormVisible] = useState(false);
+
+    // Referencia al contenedor para usar con PerfectScrollbar
+    const containerRef = useRef(null);
+
+    // Efecto para inicializar PerfectScrollbar y limpiarlo
+    useEffect(() => {
+      if (containerRef.current) {
+        const ps = new PerfectScrollbar(containerRef.current);
+        containerRef.current.style.position = "relative";
+        return () => ps.destroy();
+      }
+    }, []);
 
   const [newTransaction, setNewTransaction] = useState({
     nombreGasto: "",
@@ -237,7 +251,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
       </CardHeader>
 
       <Divider className="mt-[-0.5rem]" />
-      <CardBody>
+      <CardBody ref={containerRef}>
         <div className="grid grid-cols-6">
           <span
             className="text-base font-medium col-span-1 text-left"
@@ -281,7 +295,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
         <Divider className="mt-[-0.5rem]" />
         {transactions.map((trans, index) => (
           <React.Fragment key={index}>
-            <div className="grid grid-cols-6 gap-7 mt-1">
+            <div className="grid grid-cols-6 gap-7 mt-1" >
               {/* Actualiza estos campos para que coincidan con la estructura de tus datos de gastos */}
               <div className="flex items-center justify-left col-span-1">
                 <span className="text-base">{trans.nombreGasto}</span>
@@ -313,6 +327,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
               <div className="flex items-center justify-center col-span-1 ">
                 <Checkbox
                   className="mr-2"
+                  color="success"
                   isSelected={trans.pagado}
                   onValueChange={(newVal) =>
                     handlePagoChange(trans.gastoID, newVal)

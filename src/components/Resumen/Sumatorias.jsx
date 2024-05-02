@@ -27,7 +27,7 @@ function Sumatorias({ userId, currentDate, resumenMensual }) {
       setTotalIngresos(ingresosSum);
       setTotalGastos(gastosSum);
 
-      // Find month with most expenses
+
       const maxGastosMonth = resumenMensual.reduce((maxMonth, currentMonth) => {
         if (!maxMonth || currentMonth.totalGastos > maxMonth.totalGastos) {
           return currentMonth;
@@ -35,7 +35,6 @@ function Sumatorias({ userId, currentDate, resumenMensual }) {
         return maxMonth;
       }, null);
 
-      // Find month with least expenses (assuming least expenses means least total)
       const minGastosMonth = resumenMensual.reduce((minMonth, currentMonth) => {
         if (!minMonth || currentMonth.totalGastos < minMonth.totalGastos) {
           return currentMonth;

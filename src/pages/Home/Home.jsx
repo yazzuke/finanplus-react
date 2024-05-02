@@ -32,18 +32,18 @@ function Home() {
     return () => unsubscribe();
   }, []);
 
-  //const driverObj = driver({
-  //showProgress: true,
-  //steps: [
-  // { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
-  //{ element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
-  // { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
-  // { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
-  /// { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
-  // ]
-  //});
+  const driverObj = driver({
+  showProgress: true,
+  steps: [
+   { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+{ element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
+   { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
+   { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+   { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
+   ]
+  });
 
-  //driverObj.drive();
+  driverObj.drive();
 
   return (
     <div className="flex flex-col ">

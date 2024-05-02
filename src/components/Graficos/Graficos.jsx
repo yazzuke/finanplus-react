@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-import * as echarts from 'echarts';
+import React, { useRef, useEffect, useState } from "react";
+import * as echarts from "echarts";
 import {
   Modal,
   ModalContent,
@@ -18,21 +18,21 @@ const CombinedCharts = ({ userId, currentDate }) => {
   const [dataMeses, setDataMeses] = useState([]);
   const [dataCategorias, setDataCategorias] = useState([]);
 
-
   useEffect(() => {
-  const fetchResumenMensual = async () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1;
-    const url = `http://localhost:8080/usuarios/${userId}/resumenmensual/totales?year=${year}&month=${month}`;
+    const fetchResumenMensual = async () => {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      const url = `http://localhost:8080/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`;
 
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setDataMeses(data);
-    } catch (error) {
-      console.error("Error al obtener resumen mensual:", error);
-    }
-  };
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setDataMeses(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error al obtener resumen mensual:", error);
+      }
+    };
 
     const fetchGastosYAhorros = async () => {
       const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
@@ -42,11 +42,17 @@ const CombinedCharts = ({ userId, currentDate }) => {
       const gastosVariablesUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
 
       try {
-        const [gastosFijosResponse, tarjetasCreditoResponse, ahorrosResponse, gastosDiariosResponse, gastosVariablesResponse] = await Promise.all([
+        const [
+          gastosFijosResponse,
+          tarjetasCreditoResponse,
+          ahorrosResponse,
+          gastosDiariosResponse,
+          gastosVariablesResponse,
+        ] = await Promise.all([
           fetch(gastosFijosUrl),
           fetch(tarjetasCreditoUrl),
           fetch(ahorrosUrl),
-          fetch(gastosDiariosUrl),  
+          fetch(gastosDiariosUrl),
           fetch(gastosVariablesUrl),
         ]);
 
@@ -57,22 +63,25 @@ const CombinedCharts = ({ userId, currentDate }) => {
         const gastosVariablesData = await gastosVariablesResponse.json();
 
         const todosLosGastosYAhorros = [
-          ...gastosFijosData.flatMap(gasto => gasto.gastos),
-          ...tarjetasCreditoData.flatMap(tarjeta => tarjeta.gastos),
+          ...gastosFijosData.flatMap((gasto) => gasto.gastos),
+          ...tarjetasCreditoData.flatMap((tarjeta) => tarjeta.gastos),
           ...ahorrosData,
-          ...gastosDiariosData.flatMap(gasto => gasto.gastos),
-          ...gastosVariablesData.flatMap(gasto => gasto.gastos),
+          ...gastosDiariosData.flatMap((gasto) => gasto.gastos),
+          ...gastosVariablesData.flatMap((gasto) => gasto.gastos),
         ];
 
-        const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
-          const tipo = item.tipo || item.categoria;
-          acc[tipo] = (acc[tipo] || 0) + 1;
-          return acc;
-        }, {});
+        const contadorCategorias = todosLosGastosYAhorros.reduce(
+          (acc, item) => {
+            const tipo = item.tipo || item.categoria;
+            acc[tipo] = (acc[tipo] || 0) + 1;
+            return acc;
+          },
+          {}
+        );
 
-        const categoriasData = Object.keys(contadorCategorias).map(key => ({
+        const categoriasData = Object.keys(contadorCategorias).map((key) => ({
           name: key,
-          value: contadorCategorias[key]
+          value: contadorCategorias[key],
         }));
 
         setDataCategorias(categoriasData);
@@ -90,7 +99,7 @@ const CombinedCharts = ({ userId, currentDate }) => {
   useEffect(() => {
     if (barChartRef.current && dataMeses.length > 0) {
       const myChart = echarts.init(barChartRef.current);
-
+  
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -105,11 +114,11 @@ const CombinedCharts = ({ userId, currentDate }) => {
             fontSize: 20,
             fontWeight: 'bold'
           },
-          data: ['Ingresos', 'Gastos']
+          data: ['Ingresos', 'Gastos', 'Balance']
         },
         xAxis: {
           type: 'category',
-          data: dataMeses.map(item => `${item.year}-${item.month}`),
+          data: ['Gráficas del mes'],
           axisLabel: {
             rotate: 0
           }
@@ -121,25 +130,32 @@ const CombinedCharts = ({ userId, currentDate }) => {
           {
             name: 'Ingresos',
             type: 'bar',
-            data: dataMeses.map(item => item.totalIngresos),
+            data: [dataMeses[0].totalIngresos], // Solo se muestra el dato del mes actual
             color: '#B68736'
           },
           {
             name: 'Gastos',
             type: 'bar',
-            data: dataMeses.map(item => item.totalGastos),
+            data: [dataMeses[0].totalGastos], // Solo se muestra el dato del mes actual
             color: '#ff6b81' 
+          },
+          {
+            name: 'Balance',
+            type: 'bar',
+            data: [dataMeses[0].balance], // Solo se muestra el dato del mes actual
+            color: '#3498db' 
           }
         ]
       };
-
+  
       myChart.setOption(option);
-
+  
       return () => {
         myChart.dispose();
       };
     }
   }, [dataMeses]);
+  
 
   useEffect(() => {
     if (pieChartRef.current && dataCategorias.length > 0) {
@@ -147,41 +163,41 @@ const CombinedCharts = ({ userId, currentDate }) => {
 
       const option = {
         tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)',
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c} ({d}%)",
         },
         legend: {
-          top: '7%',
-          left: 'center',
+          top: "7%",
+          left: "center",
           textStyle: {
-            color: 'white',
+            color: "white",
             fontSize: 16,
-            fontWeight: 'bold'
-          }
+            fontWeight: "bold",
+          },
         },
         series: [
           {
-            name: 'Gastos por Categoría',
-            type: 'pie',
-            radius: ['40%', '70%'],
+            name: "Gastos por Categoría",
+            type: "pie",
+            radius: ["40%", "70%"],
             avoidLabelOverlap: false,
             label: {
               show: false,
-              position: 'center'
+              position: "center",
             },
             emphasis: {
               label: {
                 show: true,
-                fontSize: '20',
-                fontWeight: 'bold'
-              }
+                fontSize: "20",
+                fontWeight: "bold",
+              },
             },
             labelLine: {
-              show: false
+              show: false,
             },
-            data: dataCategorias
-          }
-        ]
+            data: dataCategorias,
+          },
+        ],
       };
 
       myChart.setOption(option);
@@ -194,8 +210,22 @@ const CombinedCharts = ({ userId, currentDate }) => {
 
   return (
     <div>
-      <div className="flex items-center" ref={barChartRef} style={{ width: '640px', height: '400px', left:'200px', top:'15px'}}></div>
-      <div className="" ref={pieChartRef} style={{ width: '600px', height: '400px', right:'400px',position:'absolute', top:'2px' }}></div>
+      <div
+        className="flex items-center"
+        ref={barChartRef}
+        style={{ width: "640px", height: "400px", left: "200px", top: "15px" }}
+      ></div>
+      <div
+        className=""
+        ref={pieChartRef}
+        style={{
+          width: "600px",
+          height: "400px",
+          right: "400px",
+          position: "absolute",
+          top: "2px",
+        }}
+      ></div>
     </div>
   );
 };

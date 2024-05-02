@@ -146,7 +146,7 @@ function Login() {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="w-[980px] h-[460px] dark items-center bg-stone-950 px-20 py-6 shadow-xl ring-1 ring-gray-900/5 rounded-3xl sm:px-24">
+      <div className="w-[980px] h-[460px] dark px-20 py-6 shadow-xl ring-1 ring-gray-900/5 rounded-3xl sm:px-24 bg-[#1C1C1C]">
         <ToastContainer />
         <form onSubmit={handleLogin}>
           <div
@@ -198,7 +198,7 @@ function Login() {
             className="m-1"
             style={{ position: "relative", top: "50px", left: "440px" }}
           >
-            <a href="#" className="text-white">
+            <a href="/forgotpassword" className="text-white">
               ¿Olvidaste tu contraseña?
             </a>
           </div>
@@ -208,10 +208,10 @@ function Login() {
           >
             <a href="/register" className="text-white  ">
               Crea una Cuenta
-            </a>
+            </a>  
           </div>
           <div
-            className="mt-20"
+            className="mt-20 text-white"
             style={{ position: "relative", top: "-15px", left: "670px" }}
           >
             <Button color="primary" variant="faded" type="submit">
