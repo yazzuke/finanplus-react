@@ -14,7 +14,7 @@ function DropdownTipo({ tipo, onTypeChange, gastoID}) {
 
 useEffect(() => {
 setSelectedKeys(new Set([tipo]));
-}, [tipo]);
+}, [tipo]);  
 
 // Levanta el estado cuando se selecciona un nuevo tipo.
 const handleSelectionChange = (keys) => {

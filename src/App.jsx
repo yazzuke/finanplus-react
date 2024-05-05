@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Home from './pages/Home/Home';
 import Resumen from './pages/Resumen/Resumen';
+import RequiredAuth from './pages/RequiredAuth'
 import Password from './pages//Login/Password'
 import { AuthProvider } from './context/AuthContext';
 import ContextProvider from './context/FinalContex';
@@ -28,7 +29,7 @@ function App() {
         <ContextProvider>
           <ToastContainer />
           <Routes>
-            <Route index path="/" element={<Home />} />
+            <Route index path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />

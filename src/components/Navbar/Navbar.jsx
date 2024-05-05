@@ -11,7 +11,8 @@ import {
 } from "@nextui-org/react";
 import { useUser } from "../../context/FinalContex";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ModalCambiarInformacion from "./ModalCambiarInformacion";
 
 // cuando una persona s elogea y esta en x componente, lo unico que necesita es lo que esta en la 23 y 24
 
@@ -19,7 +20,7 @@ export default function NavBar({ usuario }) {
   // Hook de navegación
   const navigate = useNavigate();
   const { logoutUser, user } = useUser();
-
+  const [isOpenModal, setIsOpenModal] = useState(false); 
 
   const Cache = localStorage.getItem("user"); // va ser el email
   const Datos = JSON.parse(Cache);
@@ -37,11 +38,23 @@ export default function NavBar({ usuario }) {
   //console.log(Datos.id)
   //console.log(Datos)
 
+    // Función para abrir el modal
+    const openModal = () => {
+      setIsOpenModal(true);
+    };
+  
+    // Función para cerrar el modal
+    const closeModal = () => {
+      setIsOpenModal(false);
+    };
+  
 
 
   return (
     <Navbar>
       <NavbarBrand style={{ position: "relative", right: "452px" }}>
+      <Dropdown placement="bottom-end">
+          <DropdownTrigger>
         <Avatar
           isBordered
           className="transition-transform"
@@ -50,6 +63,19 @@ export default function NavBar({ usuario }) {
           style={{ width: "50px", height: "50px" }}
           src={Datos ? Datos.photo_url : "https://i.pravatar.cc/300"}
         />
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold">Iniciaste sesion</p>
+              <p className="font-semibold">{Datos.email}</p>
+            </DropdownItem>
+            <DropdownItem key="settings"  onClick={openModal}>Cambiar Informacion</DropdownItem>
+            <DropdownItem key="team_settings">Como usar Finanplus</DropdownItem>
+            <DropdownItem key="logout" color="danger">
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         <NavbarBrand style={{ position: "relative", left: "15px" }}>
           <Link color="foreground" href="#">
             Bienvenido de nuevo, {Datos ? Datos.nombre : "Features"}
@@ -82,7 +108,9 @@ export default function NavBar({ usuario }) {
           </Button>
         </NavbarItem>
       </NavbarContent>
+      <ModalCambiarInformacion isOpen={isOpenModal} onClose={closeModal} nombreUsuario={Datos ? Datos.nombre : ""} userId={Datos ? Datos.id: ""} />
     </Navbar>
+    
   );
 }
 

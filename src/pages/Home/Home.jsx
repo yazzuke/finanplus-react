@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/Navbar/Navbar";
 import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
 import TusIngresos from "../../components/TusIngresos/TusIngresos";
@@ -8,13 +9,13 @@ import BolaDeNieve from "../../components/BolaDeNieve/BolaDeNieve";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumatorias";
 import Graficos from "../../components/Graficos/Graficos";
+import { useAuth } from "../../context/AuthContext";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
-
-
 function Home() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
   const [sumaTotalGastos, setTotalGastos] = useState(0);
@@ -26,21 +27,27 @@ function Home() {
         setUserId(firebaseUser.uid);
       } else {
         setUserId();
-        setUser();
+
       }
     });
     return () => unsubscribe();
   }, []);
 
+ // useEffect(() => {
+   // if (!user) {
+     // navigate('/login');
+  //  }
+ //}, [user, navigate]);
+
   const driverObj = driver({
-  showProgress: true,
-  steps: [
-   { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
-{ element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
-   { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
-   { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
-   { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
-   ]
+    showProgress: true,
+    steps: [
+      { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+      { element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
+      { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
+      { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+      { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
+    ]
   });
 
   driverObj.drive();
@@ -65,7 +72,6 @@ function Home() {
         </div>
         <div id="graficas" className="absolute min-h-[300px] ml-[700px]">
           <Graficos userId={userId} currentDate={currentDate} />
-          
         </div>
         <div id="ingresos" className="min-h-[345px]">
           <TusIngresos userId={userId} currentDate={currentDate} />
