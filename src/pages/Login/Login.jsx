@@ -37,8 +37,6 @@ function Login() {
     }
   }, [auth.user]);
 
-  
-
   const handleLoginEmail = (e) => {
     setLoginEmail(e.target.value);
   };

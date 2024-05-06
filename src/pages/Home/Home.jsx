@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/Navbar/Navbar";
+import { useTheme } from 'next-themes';
 import SelectorMeses from "../../components/SelectorMeses/SelectorMeses";
 import TusIngresos from "../../components/TusIngresos/TusIngresos";
 import TusGastos from "../../components/TusGastos/TusGastos";
@@ -11,6 +12,8 @@ import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumator
 import Graficos from "../../components/Graficos/Graficos";
 import { useAuth } from "../../context/AuthContext";
 import { driver } from "driver.js";
+
+import ThemeSwitcher from '../../components/ThemeToggle/ThemeToggle';
 import "driver.js/dist/driver.css";
 
 function Home() {
@@ -18,6 +21,7 @@ function Home() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
+  const { theme, setTheme } = useTheme();
   const [sumaTotalGastos, setTotalGastos] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -33,28 +37,30 @@ function Home() {
     return () => unsubscribe();
   }, []);
 
+
  // useEffect(() => {
    // if (!user) {
      // navigate('/login');
   //  }
  //}, [user, navigate]);
 
-  const driverObj = driver({
-    showProgress: true,
-    steps: [
-      { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
-      { element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
-      { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
-      { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
-      { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
-    ]
-  });
+ //const driverObj = driver({
+  //  showProgress: true,
+    //steps: [
+     // { element: '#selector-meses', popover: { title: 'Selector de Meses', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+     // { element: '#ahorros', popover: { title: 'Sus Ahorros', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'center' }},
+     // { element: '#graficas', popover: { title: 'Graficas ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "bottom", align: 'center' }},
+     // { element: '#gastos', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "left", align: 'start' }},
+     // { element: '#boladenieve', popover: { title: 'Ingresos ', description: 'Here is the code example showing animated tour. Let\'s walk you through it.', side: "top", align: 'end' }},
+   // ]
+ // });
 
-  driverObj.drive();
+  //driverObj.drive();
 
   return (
     <div className="flex flex-col ">
       <NavBar user={user} />
+      <ThemeSwitcher />
       <div className="flex-grow overflow-auto">
         <div id="selector-meses" className="flex justify-between mt-4 ml-3">
           <SelectorMeses

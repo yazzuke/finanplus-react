@@ -11,14 +11,16 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
+import { useTheme } from "next-themes";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
 import ModalEditarBorrarGastosVariables from "./ModalEditarBorrarGastosVariables.jsx";
-import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
+import TooltipModificarGasto from "../Tooltip/TooltipModificarGasto.jsx";
 import TooltipAgregarGasto from "../Tooltip/TooltipAgregarGasto.jsx";
 
 function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
   const [transactions, setTransactions] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
+  const { theme } = useTheme();
   const [isEditModalVisible, setEditModalVisible] = useState(false);
 
   const [newTransaction, setNewTransaction] = useState({
@@ -168,7 +170,11 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
   };
 
   return (
-    <Card className="bg-gray-fijos dark w-[650px] h-[320px] mt-2">
+    <Card
+      className={`bg-${theme === "light" ? "white" : "23272f"} text-${
+        theme === "light" ? "black" : "white"
+      } w-[660px] h-[320px] mt-2`}
+      style={{ backgroundColor: theme === 'light' ? '#FEFBF6' : '#23272F' }}>
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -177,7 +183,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
               Gastos Variables
             </span>
           </div>
-          <span className="text-sm font-bold mr-24 "> 
+          <span className="text-sm font-bold mr-24 ">
             {" "}
             Valor Total:{" "}
             {gastoVariable.valorTotal.toLocaleString("es-ES", {
@@ -192,34 +198,34 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
           {/* Contenedor actual para los iconos */}
           <div>
             <TooltipModificarGasto>
-            <IconButton
-              color="primary"
-              aria-label="edit"
-              className="ml-2"
-              onClick={openEditModal}
-              style={{
-                background: "white",
-                padding: "0.2rem",
-                right: "12px",
-              }}
-            >
-              <EditIcon />
-            </IconButton>
+              <IconButton
+                color="primary"
+                aria-label="edit"
+                className="ml-2"
+                onClick={openEditModal}
+                style={{
+                  background: "white",
+                  padding: "0.2rem",
+                  right: "12px",
+                }}
+              >
+                <EditIcon />
+              </IconButton>
             </TooltipModificarGasto>
 
             <TooltipAgregarGasto>
-            <IconButton
-              color="primary"
-              aria-label="add"
-              className="ml-2"
-              onClick={toggleFormVisibility}
-              style={{
-                background: "white",
-                padding: "0.2rem",
-              }}
-            >
-              <AddIcon />
-            </IconButton>
+              <IconButton
+                color="primary"
+                aria-label="add"
+                className="ml-2"
+                onClick={toggleFormVisibility}
+                style={{
+                  background: "white",
+                  padding: "0.2rem",
+                }}
+              >
+                <AddIcon />
+              </IconButton>
             </TooltipAgregarGasto>
 
             {/* Modal para editar o borrar un gasto */}
@@ -248,9 +254,13 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
         </div>
       </CardHeader>
 
-      <Divider className="mt-[-0.5rem]" />
+      <Divider
+        className={`${
+          theme === "light" ? "bg-black" : "bg-gray-600"
+        } mt-[-0.5rem]`}
+      />
       <CardBody>
-        <div className="grid grid-cols-6">
+        <div className="grid grid-cols-5">
           <span
             className="text-base font-medium col-span-1 text-left"
             style={{ transform: "translateY(-35%)" }}
@@ -276,13 +286,6 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
           >
             Tipo
           </span>
-
-          <span
-            className="text-base font-medium col-span-1 text-center"
-            style={{ transform: "translateY(-35%)" }}
-          >
-            Ingreso
-          </span>
           <span
             className="text-base font-medium col-span-1 text-center"
             style={{ transform: "translateY(-35%)" }}
@@ -291,10 +294,14 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
           </span>
         </div>
 
-        <Divider className="mt-[-0.5rem]" />
+        <Divider
+          className={`${
+            theme === "light" ? "bg-black" : "bg-gray-600"
+          } mt-[-0.5rem]`}
+        />
         {transactions.map((trans, index) => (
           <React.Fragment key={index}>
-            <div className="grid grid-cols-6 gap-7 mt-1">
+            <div className="grid grid-cols-5 gap-7 mt-1">
               {/* Actualiza estos campos para que coincidan con la estructura de tus datos de gastos */}
               <div className="flex items-center justify-left col-span-1">
                 <span className="text-base">{trans.nombreGasto}</span>
@@ -320,11 +327,9 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
                 />
               </div>
               <div className="flex items-center justify-center col-span-1 ">
-                <DropdownIngreso userId={userId} />
-              </div>
-              <div className="flex items-center justify-center col-span-1 ">
                 <Checkbox
                   className="mr-2"
+                  color="success"
                   isSelected={trans.pagado}
                   onValueChange={(newVal) =>
                     handlePagoChange(trans.gastoID, newVal)
@@ -332,11 +337,18 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
                 />
               </div>
             </div>
-            {index < transactions.length - 1 && <Divider className="my-1" />}
+
+            {index < transactions.length - 1 && (
+              <Divider
+                className={`${
+                  theme === "light" ? "bg-black" : "bg-gray-600"
+                } mt-[3px]`}
+              />
+            )}
           </React.Fragment>
         ))}
         {transactions.length === 0 && (
-          <div className="text-center col-span-6">No hay transacciones aún</div>
+          <div className="text-center col-span-5">No hay transacciones aún</div>
         )}
       </CardBody>
     </Card>

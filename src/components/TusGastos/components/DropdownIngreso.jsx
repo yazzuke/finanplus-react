@@ -41,7 +41,7 @@ export default function DropdownIngresos({ userId }) {
 return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="faded" className="capitalize w-[150px] h-[22px]">
+        <Button variant="light" className="capitalize w-[150px] h-[22px]">
         {isLoading ? "Cargando..." : selectedConcepto}
         </Button>
       </DropdownTrigger>

@@ -9,7 +9,8 @@ import ModalEditarBorrarGastosCC from "./ModalEditarBorrarGastoscc.jsx";
 import DropdownTipo from "../../../DropdownTipo.jsx";
 import ModalAgregarGastoCC from "./ModalAgregarGastoCC.jsx";
 import { fetchGastos, addGasto } from "./services/ApiService.jsx";
-import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
+import { useTheme } from "next-themes";
+import TooltipModificarGasto from "../Tooltip/TooltipModificarGasto.jsx";
 import TooltipAgregarGasto from "../Tooltip/TooltipAgregarGasto.jsx";
 
 function CardGastosCC({
@@ -23,6 +24,7 @@ function CardGastosCC({
   const [isFormVisible, setFormVisible] = useState(false);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const { nombreTarjeta, fechaPago, tarjetaCreditoID, valorTotal } = tarjeta;
+  const { theme } = useTheme();
   const [newTransaction, setNewTransaction] = useState({
     name: "",
     installments: "",
@@ -174,7 +176,12 @@ function CardGastosCC({
   };
 
   return (
-    <Card className="bg-gray-fijos dark w-[660px] h-[320px] mt-2  ">
+    <Card
+      className={`bg-${theme === "light" ? "white" : "black"} text-${
+        theme === "light" ? "black" : "white"
+      } w-[660px] h-[320px] mt-2`}
+      style={{ backgroundColor: theme === "light" ? "#F5F7F8" : "#23272f" }}
+    >
       <CardHeader className="flex justify-between items-center">
         <div>
           <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">
@@ -188,59 +195,52 @@ function CardGastosCC({
               Valor Total:{" "}
               {valorTotal.toLocaleString("es-ES", { maximumFractionDigits: 0 })}
             </span>
-            <div className="flex items-center justify-center col-span-1 ml-16">
-              <DropdownIngresos userId={userId} />
-            </div>
           </div>
         </div>
 
         <div>
-        <TooltipModificarGasto>
-          <IconButton
-            color="primary"
-            aria-label="edit"
-            className="mr-8"
-            onClick={openEditModal}
-            style={{
-              background: "white",
-              padding: "0.2rem",
-              right: "12px"
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <TooltipModificarGasto>
+            <IconButton
+              color="primary"
+              aria-label="edit"
+              className="mr-8"
+              onClick={openEditModal}
+              style={{
+                background: "white",
+                padding: "0.2rem",
+                right: "12px",
+              }}
+            >
+              <EditIcon />
+            </IconButton>
           </TooltipModificarGasto>
 
           <TooltipAgregarGasto>
-          <IconButton
-            color="primary"
-            aria-label="add"
-            className="ml-2"
-            onClick={toggleFormVisibility}
-            style={{
-              background: "white",
-              padding: "0.2rem",
-            }}
-          >
-            <AddIcon />
-          </IconButton>
+            <IconButton
+              color="primary"
+              aria-label="add"
+              className="ml-2"
+              onClick={toggleFormVisibility}
+              style={{
+                background: "white",
+                padding: "0.2rem",
+              }}
+            >
+              <AddIcon />
+            </IconButton>
           </TooltipAgregarGasto>
-          
+
           {/* Modal para editar o borrar gastos */}
-        
-        
+
           {isEditModalVisible && (
-                  <ModalEditarBorrarGastosCC
-                    isOpen={isEditModalVisible}
-                    onClose={() => setEditModalVisible(false)}
-                    userId={userId}
-                    tarjetaCreditoID={tarjetaCreditoID} 
-              
-                  />
-                )}
+            <ModalEditarBorrarGastosCC
+              isOpen={isEditModalVisible}
+              onClose={() => setEditModalVisible(false)}
+              userId={userId}
+              tarjetaCreditoID={tarjetaCreditoID}
+            />
+          )}
 
-
-          
           {/* Formulario para añadir un nuevo gasto */}
           {isFormVisible && (
             <ModalAgregarGastoCC
@@ -254,7 +254,11 @@ function CardGastosCC({
         </div>
       </CardHeader>
 
-      <Divider className="mt-[-0.5rem]" />
+      <Divider
+        className={`${
+          theme === "light" ? "bg-black" : "bg-gray-600"
+        } mt-[-0.5rem]`}
+      />
       <CardBody>
         <div className="grid grid-cols-5 gap-4 mb-1">
           <span
@@ -289,7 +293,12 @@ function CardGastosCC({
             Tipo
           </span>
         </div>
-        <Divider className="mt-[-0.5rem]" />
+        <Divider
+          className={`${
+            theme === "light" ? "bg-black" : "bg-gray-600"
+          } mt-[-0.5rem]`}
+        />
+
         {transactions.map((trans, index) => (
           <React.Fragment key={index}>
             <div className="grid grid-cols-5 gap-4 items-center">
@@ -328,7 +337,13 @@ function CardGastosCC({
                 />
               </div>
             </div>
-            {index < transactions.length - 1 && <Divider className="my-1" />}
+            {index < transactions.length - 1 && (
+              <Divider
+                className={`${
+                  theme === "light" ? "bg-black" : "bg-gray-600"
+                } mt-[3px]`}
+              />
+            )}
           </React.Fragment>
         ))}
         {transactions.length === 0 && (
