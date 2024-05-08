@@ -60,7 +60,6 @@ function Home() {
   return (
     <div className="flex flex-col ">
       <NavBar user={user} />
-      <ThemeSwitcher />
       <div className="flex-grow overflow-auto">
         <div id="selector-meses" className="flex justify-between mt-4 ml-3">
           <SelectorMeses

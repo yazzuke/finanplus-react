@@ -12,7 +12,10 @@ import {
 import { useUser } from "../../context/FinalContex";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ThemeSwitcher from '../../components/ThemeToggle/ThemeToggle';
 import ModalCambiarInformacion from "./ModalCambiarInformacion";
+
+
 
 // cuando una persona s elogea y esta en x componente, lo unico que necesita es lo que esta en la 23 y 24
 
@@ -71,7 +74,7 @@ export default function NavBar({ usuario }) {
             </DropdownItem>
             <DropdownItem key="settings"  onClick={openModal}>Cambiar Informacion</DropdownItem>
             <DropdownItem key="team_settings">Como usar Finanplus</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem key="logout" color="danger" onClick={handleLogout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>
@@ -96,6 +99,9 @@ export default function NavBar({ usuario }) {
         </NavbarItem>
       </NavbarBrand>
       <NavbarContent justify="">
+      <NavbarItem  style={{ position: "relative", left: "400px" }}>
+          <ThemeSwitcher /> {/* Aquí agregamos el ThemeSwitcher */}
+        </NavbarItem>
         <NavbarItem>
           <Button
             as={Link}
@@ -103,6 +109,7 @@ export default function NavBar({ usuario }) {
             href="#"
             variant="flat"
             onClick={handleLogout}
+            style={{ position: "relative", left: "450px" }}
           >
             Cerrar Sesion
           </Button>

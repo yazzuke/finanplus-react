@@ -8,6 +8,7 @@
   import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
   import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
   import CardGastoDiario from "./components/CardGastoDiario/CardGastosDiario.jsx";
+  import { useTheme } from 'next-themes';
   import CardGastoVariable from "./components/CardGastoVariable/CardGastosVariable.jsx";
   import TooltipAgregarGasto from "./components/Tooltip/TooltipNuevoGasto.jsx";
   import ModalNuevoGasto from "./components/Forms/ModalNuevoGasto.jsx";
@@ -19,6 +20,8 @@
     const [showForm, setShowForm] = useState(false);
     const [totalGastos, setTotalGastos] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
+    const { theme } = useTheme();
+
 
     const hayGastos = () => {
       return (
@@ -133,9 +136,11 @@
     };
 
     return (
-      <div className="mt-[110px] ml-1 bg">
+      <div className="mt-[110px] ">
         <div className="flex items-center">
-          <span className="text-3xl font-bold">Tus Gastos</span>
+          <span className={`text-${
+          theme === "light" ? "black" : "white"
+        } text-3xl font-bold`}>Tus Gastos</span>
           <TooltipAgregarGasto>
           <IconButton
             onClick={handleOpenModal}

@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import PerfectScrollbar from "perfect-scrollbar";
 import ModalEditarBorrarIngreso from "./ModalEditarBorrarIngreso";
+import { useTheme } from "next-themes";
 import ModalAgregarIngreso from "./ModalAgregarIngreso";
 import TooltipAgregarIngreso from "./TooltipAgregarIngreso";
 import TooltipModificarIngreso from "./TooltipModificarIngreso";
@@ -15,7 +16,10 @@ function TusIngresos({ userId, currentDate }) {
   const [ingresos, setIngresos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [nuevoIngreso, setNuevoIngreso] = useState({ concepto: "", monto: "" });
+  const { theme } = useTheme();
   const containerRef = useRef(null);
+  const psRef = useRef(null);
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [ingresoParaEditar, setIngresoParaEditar] = useState(null); // Agrega este estado
 
@@ -105,35 +109,51 @@ function TusIngresos({ userId, currentDate }) {
     setShowEditModal(true); // Mostrar el modal de edición
   };
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const ps = new PerfectScrollbar(containerRef.current);
-      containerRef.current.style.position = "relative";
-      return () => ps.destroy();
-    }
-  }, []);
+ useEffect(() => {
+  if (containerRef.current) {
+    psRef.current = new PerfectScrollbar(containerRef.current);
+    containerRef.current.style.position = "relative";
+    return () => {
+      if (psRef.current) {
+        psRef.current.destroy();
+        psRef.current = null;
+      }
+    };
+  }
+}, []);
+
+// Actualiza PerfectScrollbar cuando cambia el tema
+useEffect(() => {
+  if (psRef.current) {
+    psRef.current.update();
+  }
+}, [theme]);
+
+
 
   return (
     <div className="flex justify-end mt-[-2.4rem] mr-2">
       <div className="w-[250px]">
         <div className="flex justify-between items-center mb-4">
           <TooltipAgregarIngreso>
-          <IconButton
-            onClick={() => setShowModal(true)}
-            color="primary"
-            aria-label="add"
-            style={{
-              borderRadius: "50%",
-              background: "white",
-              padding: "0.2rem",
-              left: "35px",
-              top: "2px",
-            }}
-          >
-            <AddIcon />
-          </IconButton>
+            <IconButton
+              onClick={() => setShowModal(true)}
+              color="primary"
+              aria-label="add"
+              style={{
+                borderRadius: "50%",
+                background: "white",
+                padding: "0.2rem",
+                left: "35px",
+                top: "2px",
+              }}
+            >
+              <AddIcon />
+            </IconButton>
           </TooltipAgregarIngreso>
-          <span className="text-3xl font-bold">Tus Ingresos</span>
+          <span  className={`text-${
+          theme === "light" ? "black" : "white"
+        } text-3xl font-bold`}>Tus Ingresos</span>
         </div>
         {showModal && (
           <ModalAgregarIngreso
@@ -149,55 +169,68 @@ function TusIngresos({ userId, currentDate }) {
             isOpen={showEditModal}
             onClose={() => {
               setShowEditModal(false);
-              setIngresoParaEditar(null); 
+              setIngresoParaEditar(null);
             }}
-            ingreso={ingresoParaEditar} 
+            ingreso={ingresoParaEditar}
           />
         )}
         <div
-          className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3  "
-          style={{
-            left: "59px",
-          }}
+          className={`bg-${theme === "light" ? "white" : "23272f"} text-${
+            theme === "light" ? "black" : "white"
+          } h-[300px] w-[190px]  rounded-lg shadow pr-3 ml-14`}
+          style={{ backgroundColor: theme === "light" ? "#E8E2E2" : "#23272F" }}
           ref={containerRef}
         >
-        {ingresos.length > 0 ? (
-          ingresos.map((ingreso, index) => (
-            <div
-              key={index}
-              className="flex justify-end items-center py-[-2rem]"
-            >
-              <div className="flex flex-col items-end">
-                <span className="text-xl font-bold">{ingreso.concepto}</span>
-                <div className="w-[160px] flex justify-between bg-[#302d2d] rounded-full p-1 shadow-md mt-1 ">
-                  <TooltipModificarIngreso>
-                  <IconButton
-                    color="primary"
-                    aria-label="edit"
-                    onClick={() => handleEditClick(ingreso)}
-                    style={{
-                      borderRadius: "50%",
-                      background: "white",
-                      padding: "0.1rem",
-                      left: "5px",
-                    }}
+          {ingresos.length > 0 ? (
+            ingresos.map((ingreso, index) => (
+              <div
+                key={index}
+                className="flex justify-end items-center py-[-2rem]"
+              >
+                <div className="flex flex-col items-end">
+                  <span
+                    className={`text-${
+                      theme === "light" ? "" : ""
+                    } "text-xl font-bold`}
                   >
-                    <EditIcon />
-                  </IconButton>
-                  </TooltipModificarIngreso>
-                  <span className="text-xl mr-1">
-                    ${ingreso.monto ? ingreso.monto.toLocaleString() : "0"}
+                    {" "}
+                    {ingreso.concepto}
                   </span>
+                  <div        className={`bg-${theme === "light" ? "white" : "black"} text-${
+            theme === "light" ? "black" : "white"
+          } w-[160px] flex justify-between  rounded-full p-1 shadow-md mt-1 `}
+          style={{ backgroundColor: theme === "light" ? "#EFEFEF" : "#302d2d" }}>
+                    <TooltipModificarIngreso>
+                      <IconButton
+                        color="primary"
+                        aria-label="edit"
+                        onClick={() => handleEditClick(ingreso)}
+                        style={{
+                          borderRadius: "50%",
+                          background: "white",
+                          padding: "0.1rem",
+                          left: "5px",
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </TooltipModificarIngreso>
+                    <span className="text-xl mr-1">
+                      ${ingreso.monto ? ingreso.monto.toLocaleString() : "0"}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center mt-12 font-bold  text-white text-2xl">No tienes Ingresos Agregados...</p>
-        )}
+            ))
+          ) : (
+            <p className="text-center mt-12 font-bold  text-white text-2xl">
+              No tienes Ingresos Agregados...
+            </p>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-)}
+  );
+}
 
 export default TusIngresos;

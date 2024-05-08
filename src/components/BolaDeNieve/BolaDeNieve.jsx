@@ -2,13 +2,15 @@
   import { Card, CardHeader, useDisclosure } from "@nextui-org/react";
   import ModalNieve from "./components/ModalNieve";
   import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+  import { useTheme } from 'next-themes';
 
   function BolaDeNieve({ userId }) {
     // console.log("userId:", userId);
 
     const [gastoMenor, setGastoMenor] = useState(null);
-    const [todosLosGastos, setTodosLosGastos] = useState([]); // A
+    const [todosLosGastos, setTodosLosGastos] = useState([]); 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { theme } = useTheme(); 
 
     useEffect(() => {
       const fetchGastosMenores = async () => {
@@ -57,7 +59,8 @@
 
     
     return (
-      <Card className="shadow-none dark w-[1000px] h-[55px] ml-32 bg-gray-900">
+      
+      <Card className={`bg-${theme === 'light' ? 'white' : '23272f'} text-${theme === 'light' ? 'black' : 'white'} shadow-none dark w-[1000px] h-[55px] ml-32 `} style={{ backgroundColor: theme === 'light' ? '#E8E2E2' : '#23272F' }}>
         <CardHeader className="flex justify-between items-center">
           <div className="flex justify-start items-center">
             <span className="text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis">

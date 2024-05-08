@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import * as echarts from "echarts";
 import {
   Modal,
@@ -17,10 +18,26 @@ const CombinedCharts = ({ userId, currentDate }) => {
   const pieChartRef = useRef(null);
   const [dataMeses, setDataMeses] = useState([]);
   const [dataCategorias, setDataCategorias] = useState([]);
+  const { theme } = useTheme();
+
+  const getThemeColors = () => {
+    return theme === "dark" ? {
+      backgroundColor: '#333',
+      textColor: '#fff',
+      axisLineColor: '#aaa',
+      tooltipBackgroundColor: '#555',
+    } : {
+      backgroundColor: '#fff',
+      textColor: '#000',
+      axisLineColor: '#333',
+      tooltipBackgroundColor: '#ddd',
+    };
+  };
+
 
   useEffect(() => {
     const fetchResumenMensual = async () => {
-      const year = currentDate.getFullYear();
+      const year = currentDate.getFullYear(); 
       const month = currentDate.getMonth() + 1;
       const url = `http://localhost:8080/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`;
 
@@ -96,7 +113,27 @@ const CombinedCharts = ({ userId, currentDate }) => {
     }
   }, [userId]);
 
+  const getChartLabels = () => {
+    return theme === "dark"
+      ? {
+          ingresos: "Ingresos (Dark)",
+          gastos: "Gastos (Dark)",
+          balance: "Balance (Dark)",
+          gastosPorCategoria: "Gastos por Categoría (Dark)",
+        }
+      : {
+          ingresos: "Ingresos (Light)",
+          gastos: "Gastos (Light)",
+          balance: "Balance (Light)",
+          gastosPorCategoria: "Gastos por Categoría (Light)",
+        };
+  };
+
   useEffect(() => {
+
+    const { ingresos, gastos, balance } = getChartLabels();
+
+    
     if (barChartRef.current && dataMeses.length > 0) {
       const myChart = echarts.init(barChartRef.current);
   
@@ -110,7 +147,7 @@ const CombinedCharts = ({ userId, currentDate }) => {
         legend: {
           top: '2%',
           textStyle: {
-            color: 'white',
+            color: getThemeColors().textColor,
             fontSize: 20,
             fontWeight: 'bold'
           },

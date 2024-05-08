@@ -12,10 +12,10 @@
   :root {
 
     --font-base: 'Varela Round', sans-serif; 
-    color-scheme:  dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #0A0A0A;
-    font-family: var(--font-base);
+      color-scheme:  dark;
+      color: rgba(255, 255, 255, 0.87);
+      background-color: #0A0A0A;
+      font-family: var(--font-base);
 
   }
 

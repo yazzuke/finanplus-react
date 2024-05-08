@@ -110,7 +110,7 @@ function Ahorros({ userId, currentDate }) {
   };
 
   return (
-    <Card className={`bg-${theme === 'light' ? 'white' : '23272f'} text-${theme === 'light' ? 'black' : 'white'} w-[250px] h-[320px] mt-2 ml-2`} style={{ backgroundColor: theme === 'light' ? '#F5F7F8' : '#23272F' }}>
+    <Card className={`bg-${theme === 'light' ? 'white' : '23272f'} text-${theme === 'light' ? 'black' : 'white'} w-[250px] h-[320px] mt-2 ml-2`} style={{ backgroundColor: theme === 'light' ? '#E8E2E2' : '#23272F' }}>
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -202,9 +202,9 @@ function Ahorros({ userId, currentDate }) {
             </div>
           ))
         ) : (
-          <p className ={`text-${theme === 'light' ? '' : ''} text-center mt-16 font-bold text-2xl`}  >No tienes Ahorros Agregados...</p>
+          <p className={`text-${theme === 'light' ? '' : ''} text-center mt-16 font-bold text-2xl`}  >No tienes Ahorros Agregados...</p>
         )}
-      </CardBody>
+      </CardBody> 
     </Card>
   );
 }
