@@ -196,10 +196,10 @@ useEffect(() => {
                     {" "}
                     {ingreso.concepto}
                   </span>
-                  <div        className={`bg-${theme === "light" ? "white" : "black"} text-${
-            theme === "light" ? "black" : "white"
-          } w-[160px] flex justify-between  rounded-full p-1 shadow-md mt-1 `}
-          style={{ backgroundColor: theme === "light" ? "#EFEFEF" : "#302d2d" }}>
+                    <div        className={`bg-${theme === "light" ? "white" : "black"} text-${
+              theme === "light" ? "black" : "white"
+            } w-[160px] flex justify-between  rounded-full p-1 shadow-md mt-1 `}
+            style={{ backgroundColor: theme === "light" ? "#EFEFEF" : "#302d2d" }}>
                     <TooltipModificarIngreso>
                       <IconButton
                         color="primary"

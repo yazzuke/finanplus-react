@@ -58,7 +58,7 @@ function Home() {
   //driverObj.drive();
 
   return (
-    <div className="flex flex-col ">
+    <div  className={theme === 'light' ? 'light-mode' : 'dark-mode'}>
       <NavBar user={user} />
       <div className="flex-grow overflow-auto">
         <div id="selector-meses" className="flex justify-between mt-4 ml-3">
@@ -81,7 +81,7 @@ function Home() {
         <div id="ingresos" className="min-h-[345px]">
           <TusIngresos userId={userId} currentDate={currentDate} />
         </div>
-        <div id="gastos" className="min-h-[300px] ml-2">
+        <div id="gastos" className="min-h-[340px] ml-2 ">
           <div id="boladenieve" className=" absolute left-[300px] mt-[-25px] ">
             <BolaDeNieve userId={userId} />
           </div>

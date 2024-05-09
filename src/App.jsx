@@ -41,7 +41,7 @@ function App() {
 
   return (
     <NextUIProvider navigate={navigate}>
-        <NextThemeProvider attribute="class" defaultTheme="light">
+        <NextThemeProvider attribute="class" defaultTheme="dark">
       <AuthProvider>
         <ContextProvider>
           <ToastContainer />
@@ -59,9 +59,6 @@ function App() {
 
             {/* Si no existe la ruta  */}
             <Route path="*" element={<Login />} />
-
-
-
 
           </Routes>
         </ContextProvider>

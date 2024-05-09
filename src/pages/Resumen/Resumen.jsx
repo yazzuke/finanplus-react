@@ -4,12 +4,14 @@ import NavBar from "../../components/Navbar/Navbar";
 import Graficos from "../../components/Resumen/GraficosMeses";
 import Sumatorias from "../../components/Resumen/Sumatorias";
 import ResumenMeses from "../../components/Resumen/ResumenMeses";
+import { useTheme } from 'next-themes';
 
 function Resumen() {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
   const auth = getAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const { theme, setTheme } = useTheme();
   const [resumenMensual, setResumenMensual] = useState([]);
   const [gastosFijos, setGastosFijos] = useState([]);
   const [gastosVariables, setGastosVariables] = useState([]);
@@ -126,7 +128,7 @@ function Resumen() {
   }, []);
 
   return (
-    <div className="flex flex-col items-start">
+    <div className={theme === 'light' ? 'light-mode' : 'dark-mode'}>
       <NavBar />
       {gruposDeMeses.map((grupo, index) => (
         <div key={index} className="flex">
@@ -158,7 +160,7 @@ function Resumen() {
           })}
         </div>
       ))}
-      <div className="flex mt-12">
+      <div className="flex mt-[49px]">
         <Graficos userId={userId} />
         <div className="flex">
           <Sumatorias userId={userId} currentDate={currentDate} 

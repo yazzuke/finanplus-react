@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import { useUser } from "../../context/FinalContex";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import ThemeSwitcher from '../../components/ThemeToggle/ThemeToggle';
 import ModalCambiarInformacion from "./ModalCambiarInformacion";
@@ -23,6 +24,7 @@ export default function NavBar({ usuario }) {
   // Hook de navegación
   const navigate = useNavigate();
   const { logoutUser, user } = useUser();
+  const { theme } = useTheme();
   const [isOpenModal, setIsOpenModal] = useState(false); 
 
   const Cache = localStorage.getItem("user"); // va ser el email
@@ -54,7 +56,7 @@ export default function NavBar({ usuario }) {
 
 
   return (
-    <Navbar>
+    <Navbar className={`bg-${theme === 'light' ? 'white' : 'black'} text-${theme === 'light' ? 'black' : 'white'} `} style={{ backgroundColor: theme === 'light' ? '#DFDFDE' : '#23272F'   }}>
       <NavbarBrand style={{ position: "relative", right: "452px" }}>
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
@@ -79,20 +81,20 @@ export default function NavBar({ usuario }) {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <NavbarBrand style={{ position: "relative", left: "15px" }}>
-          <Link color="foreground" href="#">
+        <NavbarBrand className={`text-${theme === 'light' ? '#0000' : 'black'} `} style={{  position: "relative", left: "15px"    }}>
+          <Link className={`text-${theme === 'light' ? '#black' : 'white'} `} >
             Bienvenido de nuevo, {Datos ? Datos.nombre : "Features"}
           </Link>
         </NavbarBrand>
       </NavbarBrand>
       <NavbarBrand style={{ position: "relative", left: "0px" }}>
         <NavbarItem isActive>
-          <Link href="/home" color="foreground">
+          <Link href="/home"  className={`text-${theme === 'light' ? '#black' : 'white'} `} >
             Finanzas
           </Link>
         </NavbarItem>
-        <NavbarItem style={{ marginLeft: "20px" }}>
-          <Link href="/resumen" color="foreground">
+        <NavbarItem  isActive   style={{ marginLeft: "20px" }}>
+          <Link href="/resumen" className={`text-${theme === 'light' ? '#black' : 'white'} `} >
             Resumen
           </Link>
 

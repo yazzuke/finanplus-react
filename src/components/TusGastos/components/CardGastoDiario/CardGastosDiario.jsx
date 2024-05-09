@@ -147,7 +147,7 @@ function CardGastoDiario({ userId, gastoDiario, CurrentDate }) {
     <Card
       className={`bg-${theme === "light" ? "white" : "black"} text-${
         theme === "light" ? "black" : "white"
-      } w-[660px] h-[316px] mt-2 shadow-none drop-shadow-xl`}
+      } w-[660px] h-[306px] mt-1 shadow-none drop-shadow-xl`}
       style={{ backgroundColor: theme === 'light' ? '#FEFBF6' : '#23272F' }} >
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
