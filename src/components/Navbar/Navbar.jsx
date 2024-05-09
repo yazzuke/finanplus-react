@@ -56,7 +56,7 @@ export default function NavBar({ usuario }) {
 
 
   return (
-    <Navbar className={`bg-${theme === 'light' ? 'white' : 'black'} text-${theme === 'light' ? 'black' : 'white'} `} style={{ backgroundColor: theme === 'light' ? '#DFDFDE' : '#23272F'   }}>
+    <Navbar className={`bg-${theme === 'light' ? 'white' : 'black'} text-${theme === 'light' ? 'black' : 'white'} `} style={{ backgroundColor: theme === 'light' ? '#DFDFDE' : '#232323'   }}>
       <NavbarBrand style={{ position: "relative", right: "452px" }}>
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
