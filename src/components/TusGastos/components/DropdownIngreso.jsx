@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import { useTheme } from 'next-themes';
+
 
 export default function DropdownIngresos({ userId }) {
   const [selectedIngreso, setSelectedIngreso] = useState(new Set());
   const [ingresos, setIngresos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useTheme();
   
 
   useEffect(() => {
@@ -58,6 +61,7 @@ return (
             <DropdownItem
               key={ingreso.ingresoID} // Usa ingresoID para la key
               selected={selectedIngreso.has(ingreso.ingresoID)}
+              className={theme === "light" ? "text-black" : "text-white"}
             >
               {ingreso.concepto}
             </DropdownItem>

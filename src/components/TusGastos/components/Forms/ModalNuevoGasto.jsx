@@ -11,6 +11,7 @@ import {
   Input,
 } from "@nextui-org/react";
 
+import { useTheme } from "next-themes";
 import TooltipCC from "../Tooltip/TooltipTarjetaCC.jsx";
 import TooltipGastoFijo from "../Tooltip/TooltipTarjetaGastoFijo.jsx";
 import TooltipGastoVariable from "../Tooltip/TooltipTarjetaGastoVariable.jsx";
@@ -23,6 +24,7 @@ function ModalNuevoGasto({
   isOpen,
   onClose,
 }) {
+  const { theme } = useTheme();
   const [selectedValue, setSelectedValue] = useState("");
   const [tipoTarjeta, setTipoTarjeta] = useState("");
   const [formData, setFormData] = useState({
@@ -123,6 +125,10 @@ function ModalNuevoGasto({
       <Modal
         backdrop="opaque"
         isOpen={isOpen}
+        className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         onClose={onClose}
         radius="lg"
         classNames={{

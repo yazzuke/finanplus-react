@@ -10,6 +10,8 @@
     Input,
     SelectItem,
   } from "@nextui-org/react";
+  import { useTheme } from "next-themes";
+  
 
   function ModalEditarBorrarGastosVariables({
     isOpen,
@@ -20,6 +22,7 @@
   }) {
     const [gastos, setGastos] = useState([]);
     const [gastoSeleccionado, setGastoSeleccionado] = useState();
+    const { theme } = useTheme();
 
 
     useEffect(() => {
@@ -125,6 +128,10 @@
       <>
         <Modal
           backdrop="opaque"
+          className={`bg-${theme === "light" ? "white" : "black"} text-${
+            theme === "light" ? "black" : "white"
+          }`}
+          style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
           isOpen={isOpen}
           onClose={onClose}
           radius="lg"
@@ -160,6 +167,7 @@
                         key={gasto.gastoID}
                         value={gasto.gastoID.toString()}
                         textValue={gasto.nombreGasto}
+                        className={theme === "light" ? "text-black" : "text-white"}
                       >
                         {gasto.nombreGasto}{" "}
                         {/* Este es el texto que se debería mostrar */}

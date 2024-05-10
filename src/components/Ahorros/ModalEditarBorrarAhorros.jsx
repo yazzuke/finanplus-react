@@ -10,10 +10,12 @@ import {
   Input,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
   const [ahorros, setAhorros] = useState([]);
   const [ahorroSeleccionado, setAhorroSeleccionado] = useState();
+  const { theme } = useTheme();
 
   // endpoint para mostrar por meses
   useEffect(() => {
@@ -85,7 +87,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
             prevAhorros.filter(
               (ahorro) => ahorro.ahorroID !== ahorroSeleccionado.ahorroID
             )
-          );                                      
+          );
           // Limpiar el ahorro seleccionado después de eliminar
           setAhorroSeleccionado(undefined);
           onClose(); // Cerrar el modal
@@ -105,7 +107,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
         concepto: ahorroSeleccionado.concepto,
         meta: ahorroSeleccionado.meta,
         actual: ahorroSeleccionado.actual,
-        tipo: ahorroSeleccionado.tipo
+        tipo: ahorroSeleccionado.tipo,
       };
 
       fetch(url, {
@@ -139,6 +141,10 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
     <>
       <Modal
         onClose={onClose}
+        className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         width="600px"
         backdrop="opaque"
         isOpen={isOpen}
@@ -164,10 +170,12 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
                   placeholder="Elige uno de tus ahorros"
                   value={ahorroSeleccionado ? ahorroSeleccionado.ahorroID : ""}
                   onChange={(e) => handleSelectChange(e.target.value)}
+                  className={theme === "light" ? "text-black" : "text-white"}
                 >
                   {ahorros.map((ahorro) => (
-                    <SelectItem key={ahorro.ahorroID} value={ahorro.concepto}>
+                    <SelectItem key={ahorro.ahorroID} value={ahorro.concepto}     className={theme === "light" ? "text-black" : "text-white"} >
                       {ahorro.concepto}
+                      
                     </SelectItem>
                   ))}
                 </Select>
@@ -204,7 +212,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
                   onChange={(e) => handleTipoChange(e.target.value)}
                 >
                   {tipos.map((tipo) => (
-                    <SelectItem key={tipo.value} value={tipo.value}>
+                    <SelectItem key={tipo.value} value={tipo.value}             className={theme === "light" ? "text-black" : "text-white"}>
                       {tipo.label}
                     </SelectItem>
                   ))}
@@ -212,13 +220,13 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
               </ModalBody>
               <ModalFooter>
                 <div className="flex-1">
-                <Button
-                  className="justify-"
-                  auto
-                  onClick={handleDeleteAhorro}
-                >
-                  Borrar Ahorro
-                </Button>
+                  <Button
+                    className="justify-"
+                    auto
+                    onClick={handleDeleteAhorro}
+                  >
+                    Borrar Ahorro
+                  </Button>
                 </div>
                 <Button
                   className="flex items-center"

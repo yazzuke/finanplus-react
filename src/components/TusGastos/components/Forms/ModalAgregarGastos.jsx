@@ -13,6 +13,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 // este modal sirve para abrir el form y enviar los gastos indivuales a segun el gasto que se halla elegido
 function ModalAgregarGastos({
@@ -28,6 +29,7 @@ function ModalAgregarGastos({
     { value: "Deseos", label: "Deseos" },
     { value: "Metas", label: "Metas" },
   ];
+  const { theme } = useTheme();
 
   return (
     <>
@@ -36,6 +38,10 @@ function ModalAgregarGastos({
         isOpen={isOpen}
         onClose={onClose}
         open={isOpen}
+        className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         radius="lg"
         classNames={{
           body: "py-6",
@@ -83,13 +89,14 @@ function ModalAgregarGastos({
                   autoFocus
                   label="Seleccionar Tipo"  
                   placeholder="Seleccionar Tipo"
+                  
                   variant="bordered"
                   name="tipo"
                   value={newTransaction.tipo}
                   onChange={handleInputChange}
                 >
                   {tipos.map((tipo) => (
-                    <SelectItem key={tipo.value} value={tipo.value}>
+                    <SelectItem key={tipo.value} value={tipo.value}  className={theme === "light" ? "text-black" : "text-white"}>
                       {tipo.label}
                     </SelectItem>
                   ))}

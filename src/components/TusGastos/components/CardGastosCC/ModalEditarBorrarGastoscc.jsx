@@ -10,6 +10,7 @@
     Input,
     SelectItem,
   } from "@nextui-org/react";
+  import { useTheme } from "next-themes";
 
   function ModalEditarBorrarGastoscc({
     isOpen,
@@ -20,6 +21,7 @@
   }) {
     const [gastos, setGastos] = useState([]);
     const [gastoSeleccionado, setGastoSeleccionado] = useState();
+    const { theme } = useTheme();
 
     console.log(userId, currentDate, tarjetaCreditoID);
 
@@ -121,6 +123,10 @@
       <>
         <Modal
           backdrop="opaque"
+          className={`bg-${theme === "light" ? "white" : "black"} text-${
+            theme === "light" ? "black" : "white"
+          }`}
+          style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
           isOpen={isOpen}
           onClose={onClose}
           radius="lg"
@@ -156,6 +162,7 @@
                         key={gasto.gastoID}
                         value={gasto.gastoID.toString()}
                         textValue={gasto.nombreGasto}
+                        className={theme === "light" ? "text-black" : "text-white"}
                       >
                         {gasto.nombreGasto}{" "}
                       </SelectItem>

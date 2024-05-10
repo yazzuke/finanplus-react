@@ -10,9 +10,11 @@ import {
   Input,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
+
 
 function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingreso }) {
-
+  const { theme } = useTheme();
     // Estados para gestionar los valores de los campos del formulario
     const [concepto, setConcepto] = useState('');
     const [monto, setMonto] = useState('');
@@ -75,6 +77,10 @@ console.log(ingreso);
     <>  
       <Modal
         onClose={onClose}
+                className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         width="600px"
         backdrop="opaque"
         isOpen={isOpen}
