@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
 import PerfectScrollbar from "perfect-scrollbar";
-import { useTheme } from 'next-themes';
+import { useTheme } from "next-themes";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import ModalEditarBorrarGastosFijos from "./ModalEditarBorrarGastosFijos.jsx";
 import TooltipModificarGasto from "../Tooltip/TooltipModificarGasto.jsx";
@@ -25,17 +25,17 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [isFormVisible, setFormVisible] = useState(false);
 
-    // Referencia al contenedor para usar con PerfectScrollbar
-    const containerRef = useRef(null);
+  // Referencia al contenedor para usar con PerfectScrollbar
+  const containerRef = useRef(null);
 
-    // Efecto para inicializar PerfectScrollbar y limpiarlo
-    useEffect(() => {
-      if (containerRef.current) {
-        const ps = new PerfectScrollbar(containerRef.current);
-        containerRef.current.style.position = "relative";
-        return () => ps.destroy();
-      }
-    }, []);
+  // Efecto para inicializar PerfectScrollbar y limpiarlo
+  useEffect(() => {
+    if (containerRef.current) {
+      const ps = new PerfectScrollbar(containerRef.current);
+      containerRef.current.style.position = "relative";
+      return () => ps.destroy();
+    }
+  }, []);
 
   const [newTransaction, setNewTransaction] = useState({
     nombreGasto: "",
@@ -174,7 +174,12 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   };
 
   return (
-    <Card className={`bg-${theme === 'light' ? 'white' : 'black'} text-${theme === 'light' ? 'black' : 'white'} w-[660px] h-[306px] mt-1 shadow-none drop-shadow-xl`} style={{ backgroundColor: theme === 'light' ? '#FEFBF6' : '#23272F' }}>
+    <Card
+      className={`bg-${theme === "light" ? "white" : "black"} text-${
+        theme === "light" ? "black" : "white"
+      } w-[660px] h-[306px] mt-1 shadow-none drop-shadow-xl`}
+      style={{ backgroundColor: theme === "light" ? "#FEFBF6" : "#191A19" }}
+    >
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -199,12 +204,12 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
           <div>
             <TooltipModificarGasto>
               <IconButton
-                  color={theme === 'light' ? 'default' : 'default'}
+                color={theme === "light" ? "default" : "default"}
                 aria-label="edit"
                 className="ml-2"
                 onClick={openEditModal}
                 style={{
-                  background: theme === 'light' ? '#C8C6C6' : 'white', 
+                  background: theme === "light" ? "#C8C6C6" : "white",
                   padding: "0.2rem",
                   right: "12px",
                 }}
@@ -251,7 +256,11 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
         </div>
       </CardHeader>
 
-      <Divider className={`${theme === 'light' ? 'bg-black' : 'bg-gray-600'} mt-[-0.5rem]`} />
+      <Divider
+        className={`${
+          theme === "light" ? "bg-black" : "bg-gray-600"
+        } mt-[-0.5rem]`}
+      />
       <CardBody ref={containerRef}>
         <div className="grid grid-cols-5">
           <span
@@ -287,11 +296,15 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
           </span>
         </div>
 
-        <Divider className={`${theme === 'light' ? 'bg-black' : 'bg-gray-600'} mt-[-0.5rem]`} />
+        <Divider
+          className={`${
+            theme === "light" ? "bg-black" : "bg-gray-600"
+          } mt-[-0.5rem]`}
+        />
 
         {transactions.map((trans, index) => (
           <React.Fragment key={index}>
-            <div className="grid grid-cols-5 gap-7 mt-1" >
+            <div className="grid grid-cols-5 gap-7 mt-1">
               {/* Actualiza estos campos para que coincidan con la estructura de tus datos de gastos */}
               <div className="flex items-center justify-left col-span-1">
                 <span className="text-base">{trans.nombreGasto}</span>
@@ -328,8 +341,13 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
               </div>
               {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}
             </div>
-            {index < transactions.length - 1 &&   <Divider className={`${theme === 'light' ? 'bg-black' : 'bg-gray-600'} mt-[3px]`} />
-}
+            {index < transactions.length - 1 && (
+              <Divider
+                className={`${
+                  theme === "light" ? "bg-black" : "bg-gray-600"
+                } mt-[3px]`}
+              />
+            )}
           </React.Fragment>
         ))}
         {transactions.length === 0 && (

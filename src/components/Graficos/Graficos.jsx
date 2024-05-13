@@ -191,12 +191,14 @@ const CombinedCharts = ({ userId, currentDate }) => {
         myChart.dispose();
       };
     }
-  }, [dataMeses]);
+  }, [dataMeses, theme]);
   
 
   useEffect(() => {
     if (pieChartRef.current && dataCategorias.length > 0) {
       const myChart = echarts.init(pieChartRef.current);
+
+
 
       const option = {
         tooltip: {
@@ -207,7 +209,7 @@ const CombinedCharts = ({ userId, currentDate }) => {
           top: "7%",
           left: "center",
           textStyle: {
-            color: "white",
+            color: getThemeColors().textColor,
             fontSize: 16,
             fontWeight: "bold",
           },
@@ -243,7 +245,7 @@ const CombinedCharts = ({ userId, currentDate }) => {
         myChart.dispose();
       };
     }
-  }, [dataCategorias]);
+  }, [dataCategorias, theme]);
 
   return (
     <div>

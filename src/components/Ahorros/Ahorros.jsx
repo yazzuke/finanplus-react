@@ -9,7 +9,7 @@ import ModalAgregarAhorro from "./ModalAgregarAhorro.jsx";
 import EditIcon from "@mui/icons-material/Edit";
 import ProgressAhorro from "./ProgressAhorro.jsx";
 import TooltipAgregarAhorros from "./TooltipAgregarAhorros.jsx";
-import { useTheme } from 'next-themes';
+import { useTheme } from "next-themes";
 import TooltipModificarAhorros from "./TooltipModificarAhorros.jsx";
 
 function Ahorros({ userId, currentDate }) {
@@ -110,7 +110,12 @@ function Ahorros({ userId, currentDate }) {
   };
 
   return (
-    <Card className={`bg-${theme === 'light' ? 'white' : '23272f'} text-${theme === 'light' ? 'black' : 'white'} w-[250px] h-[320px] mt-2 ml-2`} style={{ backgroundColor: theme === 'light' ? '#E8E2E2' : '#23272F' }}>
+    <Card
+      className={`bg-${theme === "light" ? "white" : "23272f"} text-${
+        theme === "light" ? "black" : "white"
+      } w-[250px] h-[320px] mt-2 ml-2`}
+      style={{ backgroundColor: theme === "light" ? "#E8E2E2" : "#252525" }}
+    >
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -127,34 +132,34 @@ function Ahorros({ userId, currentDate }) {
           {/* Contenedor actual para los iconos */}
           <div>
             <TooltipModificarAhorros>
-            <IconButton
-              color="primary"
-              aria-label="edit"
-              className="ml-2"
-              onClick={openEditModal}
-            >
-              <EditIcon />
-        
-              {isEditModalVisible && (
-                <ModalEditarBorrarAhorros
-                  isOpen={isEditModalVisible}
-                  onClose={closeEditModal}
-                  userId={userId}
-                  currentDate={currentDate} 
-                />
-              )}
-            </IconButton>
+              <IconButton
+                color="primary"
+                aria-label="edit"
+                className="ml-2"
+                onClick={openEditModal}
+              >
+                <EditIcon />
+
+                {isEditModalVisible && (
+                  <ModalEditarBorrarAhorros
+                    isOpen={isEditModalVisible}
+                    onClose={closeEditModal}
+                    userId={userId}
+                    currentDate={currentDate}
+                  />
+                )}
+              </IconButton>
             </TooltipModificarAhorros>
 
             <TooltipAgregarAhorros>
-            <IconButton
-              color="primary"
-              aria-label="add"
-              className="ml-2"
-              onClick={toggleFormVisibility}
-            >
-              <AddIcon />
-            </IconButton>
+              <IconButton
+                color="primary"
+                aria-label="add"
+                className="ml-2"
+                onClick={toggleFormVisibility}
+              >
+                <AddIcon />
+              </IconButton>
             </TooltipAgregarAhorros>
 
             {/* Formulario para añadir un nuevo gasto */}
@@ -172,7 +177,11 @@ function Ahorros({ userId, currentDate }) {
         </div>
       </CardHeader>
 
-      <Divider className={`${theme === 'light' ? 'bg-black' : 'bg-gray-600'} mt-[-0.5rem]`} />
+      <Divider
+        className={`${
+          theme === "light" ? "bg-black" : "bg-gray-600"
+        } mt-[-0.5rem]`}
+      />
       <CardBody className="flex flex-col mt-[-10px]" ref={containerRef}>
         {ahorros.length > 0 ? (
           ahorros.map((ahorro, index) => (
@@ -198,13 +207,23 @@ function Ahorros({ userId, currentDate }) {
                 actual={ahorro.actual}
                 className="max-w-md"
               />
-              <Divider className={`${theme === 'light' ? 'bg-black' : 'bg-gray-600'} mt-[0.5rem]`} />
+              <Divider
+                className={`${
+                  theme === "light" ? "bg-black" : "bg-gray-600"
+                } mt-[0.5rem]`}
+              />
             </div>
           ))
         ) : (
-          <p className={`text-${theme === 'light' ? '' : ''} text-center mt-16 font-bold text-2xl`}  >No tienes Ahorros Agregados...</p>
+          <p
+            className={`text-${
+              theme === "light" ? "" : ""
+            } text-center mt-16 font-bold text-2xl`}
+          >
+            No tienes Ahorros Agregados...
+          </p>
         )}
-      </CardBody> 
+      </CardBody>
     </Card>
   );
 }

@@ -180,7 +180,7 @@ function CardGastosCC({
       className={`bg-${theme === "light" ? "white" : "black"} text-${
         theme === "light" ? "black" : "white"
       } w-[660px] h-[306px] mt-1   drop-shadow-xl shadow-lg`}
-      style={{ backgroundColor: theme === "light" ? "#FEFBF6" : "#23272f" }}
+      style={{ backgroundColor: theme === "light" ? "#FEFBF6" : "#191A19" }}
     >
       <CardHeader className="flex justify-between items-center">
         <div>

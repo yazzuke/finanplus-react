@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemeProvider } from 'next-themes';
 import Login from './pages/Login/Login';
@@ -7,6 +7,7 @@ import Register from './pages/Register/Register';
 import Home from './pages/Home/Home';
 import Resumen from './pages/Resumen/Resumen';
 import Password from './pages//Login/Password'
+import LadingPage from './pages/Landing/LandingPage';
 import { AuthProvider } from './context/AuthContext';
 import ContextProvider from './context/FinalContex';
 import { ToastContainer } from 'react-toastify';
@@ -24,6 +25,7 @@ function AppWrapper() {
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   // Estado de autenticación
   const [si, setNo] = useState(false);
 
@@ -33,10 +35,12 @@ function App() {
     if (user) {
       setNo(true);
     } else {
-      // Si no hay usuario autenticado, redirigir a la página de inicio de sesión
-      navigate('/login');
+      // Si no hay usuario autenticado y está intentando acceder a una página protegida, redirigir a la página de inicio de sesión
+      if (location.pathname === '/home' || location.pathname === '/resumen') {
+        navigate('/login');
+      }
     }
-  }, [navigate]);
+  }, [navigate, location]); 
 
 
   return (
@@ -46,7 +50,7 @@ function App() {
         <ContextProvider>
           <ToastContainer />
           <Routes>
-            <Route index path="/" element={<Login />} />
+            <Route index path="/" element={<LadingPage />} /> 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgotpassword" element={<Password />} />

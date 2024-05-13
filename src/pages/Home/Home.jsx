@@ -12,7 +12,7 @@ import TotalesSumatorias from "../../components/TotalesSumatorias/TotalesSumator
 import Graficos from "../../components/Graficos/Graficos";
 import { useAuth } from "../../context/AuthContext";
 import { driver } from "driver.js";
-
+import Joyride from 'react-joyride';
 import ThemeSwitcher from '../../components/ThemeToggle/ThemeToggle';
 import "driver.js/dist/driver.css";
 
@@ -38,11 +38,6 @@ function Home() {
   }, []);
 
 
- // useEffect(() => {
-   // if (!user) {
-     // navigate('/login');
-  //  }
- //}, [user, navigate]);
 
  //const driverObj = driver({
   //  showProgress: true,
@@ -81,7 +76,7 @@ function Home() {
         <div id="ingresos" className="min-h-[345px]">
           <TusIngresos userId={userId} currentDate={currentDate} />
         </div>
-        <div id="gastos" className="min-h-[340px] ml-2 ">
+        <div id="gastos" className="min-h-[340px] ml-3">
           <div id="boladenieve" className=" absolute left-[300px] mt-[-25px] ">
             <BolaDeNieve userId={userId} />
           </div>

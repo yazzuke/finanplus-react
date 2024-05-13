@@ -69,7 +69,7 @@ export default function NavBar({ usuario }) {
           src={Datos ? Datos.photo_url : "https://i.pravatar.cc/300"}
         />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
+          <DropdownMenu aria-label="Profile Actions" variant="flat" className={`bg-${theme === 'light' ? 'white' : 'black'} text-${theme === 'light' ? 'black' : 'white'} `} style={{ backgroundColor: theme === 'light' ? '' : ''   }}>
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Iniciaste sesion</p>
               <p className="font-semibold">{Datos.email}</p>

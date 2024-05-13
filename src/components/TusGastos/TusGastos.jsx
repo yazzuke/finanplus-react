@@ -136,7 +136,7 @@
     };
 
     return (
-      <div className="mt-[135px] ">
+      <div className="mt-[130px] ">
         <div className="flex items-center">
           <span className={`text-${
           theme === "light" ? "black" : "white"

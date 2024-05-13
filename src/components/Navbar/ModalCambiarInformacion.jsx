@@ -12,6 +12,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 function ModalCambiarInformacion({
     userId,
@@ -19,6 +20,10 @@ function ModalCambiarInformacion({
     onClose,
     nombreUsuario // Prop para recibir el nombre del usuario
   }) {
+
+    const { theme } = useTheme();
+
+
     const [nuevoNombre, setNuevoNombre] = useState(""); // Estado para el nuevo nombre
 
     console.log("UserID Desde ModalInfo " + userId)

@@ -109,27 +109,25 @@ function TusIngresos({ userId, currentDate }) {
     setShowEditModal(true); // Mostrar el modal de edición
   };
 
- useEffect(() => {
-  if (containerRef.current) {
-    psRef.current = new PerfectScrollbar(containerRef.current);
-    containerRef.current.style.position = "relative";
-    return () => {
-      if (psRef.current) {
-        psRef.current.destroy();
-        psRef.current = null;
-      }
-    };
-  }
-}, []);
+  useEffect(() => {
+    if (containerRef.current) {
+      psRef.current = new PerfectScrollbar(containerRef.current);
+      containerRef.current.style.position = "relative";
+      return () => {
+        if (psRef.current) {
+          psRef.current.destroy();
+          psRef.current = null;
+        }
+      };
+    }
+  }, []);
 
-// Actualiza PerfectScrollbar cuando cambia el tema
-useEffect(() => {
-  if (psRef.current) {
-    psRef.current.update();
-  }
-}, [theme]);
-
-
+  // Actualiza PerfectScrollbar cuando cambia el tema
+  useEffect(() => {
+    if (psRef.current) {
+      psRef.current.update();
+    }
+  }, [theme]);
 
   return (
     <div className="flex justify-end mt-[-2.4rem] mr-2">
@@ -151,9 +149,13 @@ useEffect(() => {
               <AddIcon />
             </IconButton>
           </TooltipAgregarIngreso>
-          <span  className={`text-${
-          theme === "light" ? "black" : "white"
-        } text-3xl font-bold`}>Tus Ingresos</span>
+          <span
+            className={`text-${
+              theme === "light" ? "black" : "white"
+            } text-3xl font-bold`}
+          >
+            Tus Ingresos
+          </span>
         </div>
         {showModal && (
           <ModalAgregarIngreso
@@ -178,7 +180,7 @@ useEffect(() => {
           className={`bg-${theme === "light" ? "white" : "23272f"} text-${
             theme === "light" ? "black" : "white"
           } h-[300px] w-[190px]  rounded-lg shadow pr-3 ml-14`}
-          style={{ backgroundColor: theme === "light" ? "#E8E2E2" : "#23272F" }}
+          style={{ backgroundColor: theme === "light" ? "#E8E2E2" : "#252525" }}
           ref={containerRef}
         >
           {ingresos.length > 0 ? (
@@ -191,15 +193,22 @@ useEffect(() => {
                   <span
                     className={`text-${
                       theme === "light" ? "" : ""
-                    } "text-xl font-bold`}
+                    } "text-xl font-bold mt-2`}
                   >
                     {" "}
                     {ingreso.concepto}
                   </span>
-                    <div        className={`bg-${theme === "light" ? "white" : "black"} text-${
-              theme === "light" ? "black" : "white"
-            } w-[160px] flex justify-between  rounded-full p-1 shadow-md mt-1 `}
-            style={{ backgroundColor: theme === "light" ? "#EFEFEF" : "#302d2d" }}>
+                  <div
+                    className={`bg-${
+                      theme === "light" ? "white" : "black"
+                    } text-${
+                      theme === "light" ? "black" : "white"
+                    } w-[160px] flex justify-between  rounded-full p-1 shadow-md mt-1 `}
+                    style={{
+                      backgroundColor:
+                        theme === "light" ? "#EFEFEF" : "#302d2d",
+                    }}
+                  >
                     <TooltipModificarIngreso>
                       <IconButton
                         color="primary"

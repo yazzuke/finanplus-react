@@ -174,7 +174,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
       className={`bg-${theme === "light" ? "white" : "black"} text-${
         theme === "light" ? "black" : "white"
       } w-[660px] h-[306px] mt-1 shadow-none drop-shadow-xl`}
-      style={{ backgroundColor: theme === 'light' ? '#FEFBF6' : '#23272F' }}>
+      style={{ backgroundColor: theme === 'light' ? '#FEFBF6' : '#191A19' }}>
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
