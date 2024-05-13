@@ -1,5 +1,6 @@
 import React from "react";
 import { Tooltip } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios, tarjetasCredito, mes }) => {
   const gastosFijosMes = gastosFijos.filter(gasto => gasto.mes === mes);
@@ -7,13 +8,19 @@ const TooltipResumen = ({ children, gastosFijos, gastosVariables, gastosDiarios,
   const gastosDiariosMes = gastosDiarios.filter(gasto => gasto.mes === mes);
   const tarjetasCreditoMes = tarjetasCredito.filter(gasto => gasto.mes === mes);
 
-  console.log(tarjetasCredito);
-
+  console.log(gastosFijosMes);
+  
+  const { theme } = useTheme();
 
   return (
     <Tooltip
       content={
-        <div className="px-1 py-2">
+          <div
+          className={`bg-${theme === "light" ? "white" : "black"} text-${
+            theme === "light" ? "black" : "white"
+          } px-1 py-2`}
+          style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
+        >
           <div className="text-small font-bold">Total De Gastos</div>
           <div className="text-tiny">
             <div className="text-small font-bold">Gastos Fijos</div>

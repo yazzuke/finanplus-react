@@ -41,7 +41,7 @@ function Resumen() {
         .then((response) => response.json())
         .then((data) => {
           setResumenMensual(data); // Actualiza el estado con los datos del año seleccionado
-          console.log(data);
+         // console.log(data);
         })
         .catch((error) => {
           console.error("Error al obtener resumen mensual:", error);
@@ -60,6 +60,7 @@ function Resumen() {
         .then((response) => response.json())
         .then((data) => {
           setGastosFijos(data);
+          console.log(data);
         })
         .catch((error) => {
           console.error("Error al obtener gastos fijos:", error);

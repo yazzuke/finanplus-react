@@ -46,7 +46,7 @@ function Sumatorias({ userId, currentDate, resumenMensual }) {
     }
   }, [resumenMensual]);
 
-  console.log(resumenMensual);
+  //console.log(resumenMensual);
 
   const handleDownload = async () => {
     try {
