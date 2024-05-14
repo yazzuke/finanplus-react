@@ -49,7 +49,7 @@ function ModalAgregarIngreso({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Ingresa un Ahorro
+                Agrega un ingreso
               </ModalHeader>
               <ModalBody>
                 <Input

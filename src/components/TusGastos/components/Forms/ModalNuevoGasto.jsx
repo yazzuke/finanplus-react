@@ -214,6 +214,7 @@ function ModalNuevoGasto({
                   onPress={() => {
                     handleSubmit();
                     onClose();
+                    window.location.reload();
                   }}
                 >
                   Crear
