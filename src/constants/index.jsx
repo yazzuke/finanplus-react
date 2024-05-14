@@ -61,37 +61,40 @@ export const pricingOptions = [
   {
     title: "Gratuito",
     price: "$0",
-    features: [
-      "Private board sharing",
-      "10 Gb Storage",
-      "Web Analytics",
+    features: [ 
+      "5 Gb de Almacenamiento",
+      "Analisis y estadisticas basicas",
+      "Tendras tu cuenta para siempre",
  ,
     ],
   },
   {
-    title: "Donancion",
-    price: "$10",
+    title: "Donacion",
+    price: "$1",
     features: [
-      "Private board sharing",
-      "10 Gb Storage",
-      "Web Analytics (Advance)",
- 
+      "Al querer ser una app gratuita ",
+      "se aceptan donaciones para mantener el servicio",
+      "Al donar tendras soporte y actualizaciones",
+      "10 GB de Almacenamiento" 
     ],
   },
   {
     title: "Premium",
-    price: "$200",
+    price: "$20",
     features: [
-      "Private board sharing",
-      "Unlimited Storage",
-      "High Performance Network",
+      "Almacenamiento Ilimitado",
+      "Acceso a nuevos metodos de ahorro",
+      "Prioridad en soporte",
+      "Analisis y estadisticas avanzadas",
+      "Acceso a nuevas funcionalidades",
+      
  
     ],
   },
 ];
 
 export const resourcesLinks = [
-  { href: "#", text: "Getting Started" },
+  { href: "https://github.com/yazzuke", text: "Desarrollado por Felipe Avila y Miguel Paez" },
  
 ];
 

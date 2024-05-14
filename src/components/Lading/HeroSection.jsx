@@ -1,4 +1,4 @@
-import video1 from "../../assets/video1.mp4";
+import video1 from "../../assets/howtouse.mp4";
 
 
 const HeroSection = () => {
@@ -33,6 +33,7 @@ const HeroSection = () => {
           autoPlay
           loop
           muted
+          controls
           className="rounded-lg w-1/2 border border-green-700 shadow-sm shadow-green-400 mx-2 my-4"
         >
           <source src={video1} type="video/mp4" />
