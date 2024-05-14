@@ -50,7 +50,7 @@ function Sumatorias({ userId, currentDate, resumenMensual }) {
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/usuarios/${userId}/generarPDF`, {
+      const response = await fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/generarPDF`, {
         method: "GET",
         headers: {
           "Content-Type": "application/pdf",

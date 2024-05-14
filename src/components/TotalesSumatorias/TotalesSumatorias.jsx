@@ -14,7 +14,7 @@ function TotalesSumatorias({ userId, currentDate }) {
       try {
         // Gastos CC
         const respuestaGastosCC = await fetch(
-          `http://localhost:8080/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`
+          `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`
         );
         const datosGastosCC = await respuestaGastosCC.json();
         const totalGastosCC = Array.isArray(datosGastosCC)
@@ -26,7 +26,7 @@ function TotalesSumatorias({ userId, currentDate }) {
 
         // Gastos Fijos
         const respuestaGastosFijos = await fetch(
-          `http://localhost:8080/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`
+          `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`
         );
         const datosGastosFijos = await respuestaGastosFijos.json();
         const totalGastosFijos = Array.isArray(datosGastosFijos)
@@ -38,7 +38,7 @@ function TotalesSumatorias({ userId, currentDate }) {
 
         // Gastos Diarios
         const respuestaGastosDiarios = await fetch(
-          `http://localhost:8080/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`
+          `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`
         );
         const datosGastosDiarios = await respuestaGastosDiarios.json();
         const totalGastosDiarios = Array.isArray(datosGastosDiarios)
@@ -50,7 +50,7 @@ function TotalesSumatorias({ userId, currentDate }) {
 
         //Gastos Variables
         const respuestaGastosVariables = await fetch(
-          `http://localhost:8080/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`
+          `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`
         );
         const datosGastosVariables = await respuestaGastosVariables.json();
         const totalGastosVariables = Array.isArray(datosGastosVariables)
@@ -83,7 +83,7 @@ function TotalesSumatorias({ userId, currentDate }) {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`
+          `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`
         );
         const data = await response.json();
         if (data.length > 0) {
@@ -117,7 +117,7 @@ console.log("Resumen mensual:", resumenMensual);
       ) {
         try {
           const response = await fetch(
-            `http://localhost:8080/usuarios/${userId}/resumenmensual/${resumenMensual.resumenID}/updateGastos`,
+            `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/resumenmensual/${resumenMensual.resumenID}/updateGastos`,
             {
               method: "PATCH",
               headers: {

@@ -36,7 +36,7 @@ function Resumen() {
       const year = currentDate.getFullYear();
 
       // Actualiza la URL con los parámetros correctos para filtrar por año
-      const url = `http://localhost:8080/usuarios/${userId}/resumenmensual/totales?year=${year}`;
+      const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/resumenmensual/totales?year=${year}`;
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -55,7 +55,7 @@ function Resumen() {
 
       // Obtener gastos fijos por mes y año
       fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosfijos/fecha?year=${year}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/fecha?year=${year}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -68,7 +68,7 @@ function Resumen() {
 
       // Obtener gastos variables por mes y año
       fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosvariables/fecha?year=${year}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/fecha?year=${year}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -80,7 +80,7 @@ function Resumen() {
 
       // Obtener gastos diarios por mes y año
       fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosdiario/fecha?year=${year}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/fecha?year=${year}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -92,7 +92,7 @@ function Resumen() {
 
       // Obtener tarjetas de crédito por mes y año
       fetch(
-        `http://localhost:8080/usuarios/${userId}/tarjetascredito/fecha?year=${year}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/fecha?year=${year}`
       )
         .then((response) => response.json())
         .then((data) => {

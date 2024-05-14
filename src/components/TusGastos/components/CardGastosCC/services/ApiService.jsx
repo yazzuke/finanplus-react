@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://finanplus-423300.nn.r.appspot.com";
 
 export const fetchGastos = async (userId, tarjetaCreditoID) => {
   const apiUrl = `${BASE_URL}/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos`;

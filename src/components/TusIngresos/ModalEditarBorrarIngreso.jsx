@@ -29,7 +29,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
   
   // Función para actualizar el ingreso
   const handleUpdateIngreso = () => {
-    const url = `http://localhost:8080/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
     const updatedIngreso = { concepto, monto };
 
     fetch(url, {
@@ -55,7 +55,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
 
   // Función para borrar el ingreso
   const handleDeleteIngreso = () => {
-    const url = `http://localhost:8080/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
 
     fetch(url, {
       method: 'DELETE'

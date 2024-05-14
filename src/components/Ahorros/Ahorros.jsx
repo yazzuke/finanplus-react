@@ -38,7 +38,7 @@ function Ahorros({ userId, currentDate }) {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1; // getMonth() es 0-indexado
       fetch(
-        `http://localhost:8080/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -85,7 +85,7 @@ function Ahorros({ userId, currentDate }) {
       nuevoAhorro.tipo &&
       userId
     ) {
-      fetch(`http://localhost:8080/usuarios/${userId}/ahorros`, {
+      fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

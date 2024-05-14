@@ -19,7 +19,7 @@ const HeroSection = () => {
       </p>
       <div className="flex justify-center my-10">
         <a
-          href="#"
+          href="/login"
           className="bg-gradient-to-r from-green-900 to-green-700 py-3 px-4 mx-3 rounded-md"
         >
          Crear una cuenta

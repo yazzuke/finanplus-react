@@ -36,7 +36,7 @@ function ModalCambiarInformacion({
       // Aquí puedes enviar el nuevo nombre a tu backend para actualizarlo en la base de datos
       // Puedes utilizar fetch u otra librería para hacer la solicitud HTTP
       // Por ejemplo, utilizando fetch:
-      fetch(`http://localhost:8080/usuarios/${userId}/nombre`, {
+      fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/nombre`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

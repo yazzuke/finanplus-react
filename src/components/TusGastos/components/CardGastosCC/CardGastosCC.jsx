@@ -133,7 +133,7 @@ function CardGastosCC({
 
   /// actualizar gasto
   const updateTipoGasto = (gastoID, nuevoTipo, actualizarEstado) => {
-    const url = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos/${gastoID}/tipo`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos/${gastoID}/tipo`;
     console.log(`Actualizando gasto ${gastoID} a tipo ${nuevoTipo}`); // Utiliza esto para depurar
 
     fetch(url, {

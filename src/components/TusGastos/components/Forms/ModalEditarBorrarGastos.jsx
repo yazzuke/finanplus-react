@@ -28,7 +28,7 @@
 
     useEffect(() => {
       if (isOpen && userId && gastoDiarioId) {
-        const fetchUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos`;
+        const fetchUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos`;
         fetch(fetchUrl)
           .then((response) => response.json())
           .then((data) => {
@@ -63,7 +63,7 @@
 
     const handleDeleteGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos/${gastoSeleccionado.gastoID}`;
         fetch(url, {
           method: "DELETE",
         })
@@ -87,7 +87,7 @@
 
     const handleEditGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiarioId}/gastos/${gastoSeleccionado.gastoID}`;
         const updatedGasto = {
           nombreGasto: gastoSeleccionado.nombreGasto,
           valorGasto: gastoSeleccionado.valorGasto,

@@ -13,7 +13,7 @@ export default function DropdownIngresos({ userId }) {
   useEffect(() => {
     if (userId) {
       setIsLoading(true);
-      fetch(`http://localhost:8080/usuarios/${userId}/ingresos`)
+      fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');

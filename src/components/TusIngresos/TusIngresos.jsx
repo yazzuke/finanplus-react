@@ -25,7 +25,7 @@ function TusIngresos({ userId, currentDate }) {
 
   const obtenerIngresos = () => {
     if (userId) {
-      fetch(`http://localhost:8080/usuarios/${userId}/ingresos`)
+      fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -51,7 +51,7 @@ function TusIngresos({ userId, currentDate }) {
       const month = currentDate.getMonth() + 1; // JavaScript cuenta los meses desde 0
 
       // Actualiza la URL con los parámetros correctos para filtrar por año y mes
-      const url = `http://localhost:8080/usuarios/${userId}/ingresos/fecha?year=${year}&month=${month}`;
+      const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos/fecha?year=${year}&month=${month}`;
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -77,7 +77,7 @@ function TusIngresos({ userId, currentDate }) {
       return;
     }
 
-    const url = `http://localhost:8080/usuarios/${userId}/ingresos`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos`;
     const body = {
       concepto: nuevoIngreso.concepto,
       monto: parseFloat(nuevoIngreso.monto),

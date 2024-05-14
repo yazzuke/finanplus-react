@@ -15,8 +15,8 @@
     useEffect(() => {
       const fetchGastosMenores = async () => {
         // URL de los endpoints
-        const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
-        const tarjetasCreditoUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
+        const gastosFijosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos`;
+        const tarjetasCreditoUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito`;
 
         try {
           // Obtiene los datos de ambos endpoints

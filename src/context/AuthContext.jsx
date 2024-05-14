@@ -105,7 +105,7 @@ const LoginGoogle = async () => {
 const registerUser = async (firebaseUid, firebaseEmail, name, password,photoURL) => {
   console.log("Usuario registrado", name, firebaseEmail);
   // Aquí envías el UID y el correo de Firebase al back-end
-  const response = await fetch("http://localhost:8080/usuarios", {
+  const response = await fetch("https://finanplus-423300.nn.r.appspot.com/usuarios", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

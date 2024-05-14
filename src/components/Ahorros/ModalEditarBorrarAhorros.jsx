@@ -23,7 +23,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1; // getMonth() es 0-indexado
       fetch(
-        `http://localhost:8080/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -73,7 +73,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
   const handleDeleteAhorro = () => {
     if (ahorroSeleccionado && ahorroSeleccionado.ahorroID) {
       fetch(
-        `http://localhost:8080/usuarios/${userId}/ahorros/${ahorroSeleccionado.ahorroID}`,
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros/${ahorroSeleccionado.ahorroID}`,
         {
           method: "DELETE",
         }
@@ -102,7 +102,7 @@ function ModalEditarBorrarAhorros({ isOpen, onClose, userId, currentDate }) {
   // Función para enviar los datos del formulario al servidor y actualizar el ahorro
   const handleEditAhorro = () => {
     if (ahorroSeleccionado && ahorroSeleccionado.ahorroID) {
-      const url = `http://localhost:8080/usuarios/${userId}/ahorros/${ahorroSeleccionado.ahorroID}`;
+      const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros/${ahorroSeleccionado.ahorroID}`;
       const ahorroToUpdate = {
         concepto: ahorroSeleccionado.concepto,
         meta: ahorroSeleccionado.meta,

@@ -39,7 +39,7 @@ const CombinedCharts = ({ userId, currentDate }) => {
     const fetchResumenMensual = async () => {
       const year = currentDate.getFullYear(); 
       const month = currentDate.getMonth() + 1;
-      const url = `http://localhost:8080/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`;
+      const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`;
 
       try {
         const response = await fetch(url);
@@ -52,11 +52,11 @@ const CombinedCharts = ({ userId, currentDate }) => {
     };
 
     const fetchGastosYAhorros = async () => {
-      const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
-      const tarjetasCreditoUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
-      const ahorrosUrl = `http://localhost:8080/usuarios/${userId}/ahorros`;
-      const gastosDiariosUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario`;
-      const gastosVariablesUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
+      const gastosFijosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos`;
+      const tarjetasCreditoUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito`;
+      const ahorrosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros`;
+      const gastosDiariosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario`;
+      const gastosVariablesUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables`;
 
       try {
         const [

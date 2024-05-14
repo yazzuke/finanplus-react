@@ -52,20 +52,20 @@ function ModalNuevoGasto({
   
     switch (selectedValue) {
       case "gastosCC":
-        url = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
+        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito`;
         data = {
           nombreTarjeta: formData.nombreTarjeta,
           fechaPago: formData.fechaPago,
         };
         break;
       case "gastosFijos":
-        url = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
+        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos`;
         data = {
           nombreGasto: formData.nombreGastoFijo,
         };
         break;
       case "gastosDiarios":
-        url = `http://localhost:8080/usuarios/${userId}/gastosdiario`;
+        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario`;
         data = {
           nombreGasto: "Gasto diario predeterminado",
           valorGasto: 0,
@@ -73,7 +73,7 @@ function ModalNuevoGasto({
         };
         break;
       case "gastosVariables":
-        url = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
+        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables`;
         data = {
           nombreGasto: "Gasto variable predeterminado",
           valorGasto: 0,
