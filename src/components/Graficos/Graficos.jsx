@@ -1,26 +1,75 @@
-import React, { useRef, useEffect, useState } from 'react';
-import * as echarts from 'echarts';
+import React, { useRef, useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+import * as echarts from "echarts";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  RadioGroup,
+  Radio,
+  Input,
+} from "@nextui-org/react";
 
-const PieChart = ({ userId }) => {
-  const chartRef = useRef(null);
+const CombinedCharts = ({ userId, currentDate }) => {
+  const barChartRef = useRef(null);
+  const pieChartRef = useRef(null);
+  const [dataMeses, setDataMeses] = useState([]);
   const [dataCategorias, setDataCategorias] = useState([]);
+  const { theme } = useTheme();
+
+  const getThemeColors = () => {
+    return theme === "dark" ? {
+      backgroundColor: '#333',
+      textColor: '#fff',
+      axisLineColor: '#aaa',
+      tooltipBackgroundColor: '#555',
+    } : {
+      backgroundColor: '#fff',
+      textColor: '#000',
+      axisLineColor: '#333',
+      tooltipBackgroundColor: '#ddd',
+    };
+  };
+
 
   useEffect(() => {
-    const fetchGastosYAhorros = async () => {
-      // URLs de todos los endpoints incluyendo gastos diarios y gastos variables
-      const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos`;
-      const tarjetasCreditoUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito`;
-      const ahorrosUrl = `http://localhost:8080/usuarios/${userId}/ahorros`;
-      const gastosDiariosUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario`;
-      const gastosVariablesUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
+    const fetchResumenMensual = async () => {
+      const year = currentDate.getFullYear(); 
+      const month = currentDate.getMonth() + 1;
+      const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/resumenmensual/fecha?year=${year}&month=${month}`;
 
       try {
-        // Obtiene los datos de los cinco endpoints
-        const [gastosFijosResponse, tarjetasCreditoResponse, ahorrosResponse, gastosDiariosResponse, gastosVariablesResponse] = await Promise.all([
+        const response = await fetch(url);
+        const data = await response.json();
+        setDataMeses(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error al obtener resumen mensual:", error);
+      }
+    };
+
+    const fetchGastosYAhorros = async () => {
+      const gastosFijosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos`;
+      const tarjetasCreditoUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito`;
+      const ahorrosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros`;
+      const gastosDiariosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario`;
+      const gastosVariablesUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables`;
+
+      try {
+        const [
+          gastosFijosResponse,
+          tarjetasCreditoResponse,
+          ahorrosResponse,
+          gastosDiariosResponse,
+          gastosVariablesResponse,
+        ] = await Promise.all([
           fetch(gastosFijosUrl),
           fetch(tarjetasCreditoUrl),
           fetch(ahorrosUrl),
-          fetch(gastosDiariosUrl),  
+          fetch(gastosDiariosUrl),
           fetch(gastosVariablesUrl),
         ]);
 
@@ -29,102 +78,195 @@ const PieChart = ({ userId }) => {
         const ahorrosData = await ahorrosResponse.json();
         const gastosDiariosData = await gastosDiariosResponse.json();
         const gastosVariablesData = await gastosVariablesResponse.json();
-        console.log(tarjetasCreditoData); 
-        // Combina los arrays de gastos y ahorros en un solo array
-        const todosLosGastosYAhorros = [
-          ...gastosFijosData.flatMap(gasto => gasto.gastos),
-          ...tarjetasCreditoData.flatMap(tarjeta => tarjeta.gastos),
-          ...ahorrosData,
-          ...gastosDiariosData.flatMap(gasto => gasto.gastos),
-          ...gastosVariablesData.flatMap(gasto => gasto.gastos),
-       
-        ];
-    
-         // console.log("Gastos y ahorros:", todosLosGastosYAhorros);
-        // Cuenta la cantidad de gastos y ahorros por categoría
-        const contadorCategorias = todosLosGastosYAhorros.reduce((acc, item) => {
-          const tipo = item.tipo || item.categoria; // Ajusta según la estructura de los datos
-          acc[tipo] = (acc[tipo] || 0) + 1;
-          return acc;
-        }, {});
 
-        // Transforma el contador en un formato adecuado para ECharts
-        const categoriasData = Object.keys(contadorCategorias).map(key => ({
+        const todosLosGastosYAhorros = [
+          ...gastosFijosData.flatMap((gasto) => gasto.gastos),
+          ...tarjetasCreditoData.flatMap((tarjeta) => tarjeta.gastos),
+          ...ahorrosData,
+          ...gastosDiariosData.flatMap((gasto) => gasto.gastos),
+          ...gastosVariablesData.flatMap((gasto) => gasto.gastos),
+        ];
+
+        const contadorCategorias = todosLosGastosYAhorros.reduce(
+          (acc, item) => {
+            const tipo = item.tipo || item.categoria;
+            acc[tipo] = (acc[tipo] || 0) + 1;
+            return acc;
+          },
+          {}
+        );
+
+        const categoriasData = Object.keys(contadorCategorias).map((key) => ({
           name: key,
-          value: contadorCategorias[key]
+          value: contadorCategorias[key],
         }));
 
         setDataCategorias(categoriasData);
-       // console.log("Gastos y ahorros por categoría:", categoriasData);
       } catch (error) {
         console.error("Error al obtener los gastos y ahorros:", error);
       }
     };
 
     if (userId) {
+      fetchResumenMensual();
       fetchGastosYAhorros();
     }
   }, [userId]);
 
-
+  const getChartLabels = () => {
+    return theme === "dark"
+      ? {
+          ingresos: "Ingresos (Dark)",
+          gastos: "Gastos (Dark)",
+          balance: "Balance (Dark)",
+          gastosPorCategoria: "Gastos por Categoría (Dark)",
+        }
+      : {
+          ingresos: "Ingresos (Light)",
+          gastos: "Gastos (Light)",
+          balance: "Balance (Light)",
+          gastosPorCategoria: "Gastos por Categoría (Light)",
+        };
+  };
 
   useEffect(() => {
-    if (chartRef.current && dataCategorias.length > 0) {
-      const myChart = echarts.init(chartRef.current);
 
+    const { ingresos, gastos, balance } = getChartLabels();
+
+    
+    if (barChartRef.current && dataMeses.length > 0) {
+      const myChart = echarts.init(barChartRef.current);
+  
       const option = {
         tooltip: {
-          trigger: 'item',
-          // Usar un formatter para mostrar el porcentaje
-          formatter: '{a} <br/>{b} : {c} ({d}%)',
-            
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
         },
         legend: {
-          top: '7%',
-          left: 'center',
-          
+          top: '2%',
           textStyle: {
-            color: 'white',
-            fontSize: 16,
+            color: getThemeColors().textColor,
+            fontSize: 20,
             fontWeight: 'bold'
+          },
+          data: ['Ingresos', 'Gastos', 'Balance']
+        },
+        xAxis: {
+          type: 'category',
+          data: ['Gráficas del mes'],
+          axisLabel: {
+            rotate: 0
           }
+        },
+        yAxis: {
+          type: 'value'
         },
         series: [
           {
-            name: 'Gastos por Categoría',
-            type: 'pie',
-            radius: ['40%', '70%'],
+            name: 'Ingresos',
+            type: 'bar',
+            data: [dataMeses[0].totalIngresos], // Solo se muestra el dato del mes actual
+            color: '#B68736'
+          },
+          {
+            name: 'Gastos',
+            type: 'bar',
+            data: [dataMeses[0].totalGastos], // Solo se muestra el dato del mes actual
+            color: '#ff6b81' 
+          },
+          {
+            name: 'Balance',
+            type: 'bar',
+            data: [dataMeses[0].balance], // Solo se muestra el dato del mes actual
+            color: '#3498db' 
+          }
+        ]
+      };
+  
+      myChart.setOption(option);
+  
+      return () => {
+        myChart.dispose();
+      };
+    }
+  }, [dataMeses, theme]);
+  
+
+  useEffect(() => {
+    if (pieChartRef.current && dataCategorias.length > 0) {
+      const myChart = echarts.init(pieChartRef.current);
+
+
+
+      const option = {
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c} ({d}%)",
+        },
+        legend: {
+          top: "7%",
+          left: "center",
+          textStyle: {
+            color: getThemeColors().textColor,
+            fontSize: 16,
+            fontWeight: "bold",
+          },
+        },
+        series: [
+          {
+            name: "Gastos por Categoría",
+            type: "pie",
+            radius: ["40%", "70%"],
             avoidLabelOverlap: false,
             label: {
               show: false,
-              position: 'center'
+              position: "center",
             },
             emphasis: {
               label: {
                 show: true,
-                fontSize: '20',
-                fontWeight: 'bold'
-              }
+                fontSize: "20",
+                fontWeight: "bold",
+              },
             },
             labelLine: {
-              show: false
+              show: false,
             },
-            data: dataCategorias
-          }
-        ]
+            data: dataCategorias,
+          },
+        ],
       };
 
       myChart.setOption(option);
 
       return () => {
-        myChart.dispose(); // Asegura la limpieza al desmontar el componente
+        myChart.dispose();
       };
     }
-  }, [dataCategorias]);
+  }, [dataCategorias, theme]);
 
-
-
-  return <div className="" ref={chartRef} style={{ width: '600px', height: '400px' }}></div>;
+  return (
+    <div>
+      <div
+        className="flex items-center"
+        ref={barChartRef}
+        style={{ width: "640px", height: "400px", left: "200px", top: "15px" }}
+      ></div>
+      <div
+        className=""
+        ref={pieChartRef}
+        style={{
+          width: "600px",
+          height: "400px",
+          right: "400px",
+          position: "absolute",
+          top: "2px",
+        }}
+      ></div>
+    </div>
+  );
 };
 
-export default PieChart;
+export default CombinedCharts;

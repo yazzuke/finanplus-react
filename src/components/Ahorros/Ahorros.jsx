@@ -8,11 +8,15 @@ import ModalEditarBorrarAhorros from "./ModalEditarBorrarAhorros.jsx";
 import ModalAgregarAhorro from "./ModalAgregarAhorro.jsx";
 import EditIcon from "@mui/icons-material/Edit";
 import ProgressAhorro from "./ProgressAhorro.jsx";
+import TooltipAgregarAhorros from "./TooltipAgregarAhorros.jsx";
+import { useTheme } from "next-themes";
+import TooltipModificarAhorros from "./TooltipModificarAhorros.jsx";
 
 function Ahorros({ userId, currentDate }) {
   const [ahorros, setAhorros] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
+  const { theme } = useTheme();
 
   // Verifica que `openEditModal` realmente esté cambiando el estado.
   const openEditModal = () => {
@@ -34,7 +38,7 @@ function Ahorros({ userId, currentDate }) {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1; // getMonth() es 0-indexado
       fetch(
-        `http://localhost:8080/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros/fecha?year=${year}&month=${month}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -81,7 +85,7 @@ function Ahorros({ userId, currentDate }) {
       nuevoAhorro.tipo &&
       userId
     ) {
-      fetch(`http://localhost:8080/usuarios/${userId}/ahorros`, {
+      fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ahorros`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +110,12 @@ function Ahorros({ userId, currentDate }) {
   };
 
   return (
-    <Card className="dark w-[250px] h-[320px] mt-2  ml-2">
+    <Card
+      className={`bg-${theme === "light" ? "white" : "23272f"} text-${
+        theme === "light" ? "black" : "white"
+      } w-[250px] h-[320px] mt-2 ml-2`}
+      style={{ backgroundColor: theme === "light" ? "#E8E2E2" : "#252525" }}
+    >
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -122,30 +131,36 @@ function Ahorros({ userId, currentDate }) {
 
           {/* Contenedor actual para los iconos */}
           <div>
-            <IconButton
-              color="primary"
-              aria-label="edit"
-              className="ml-2"
-              onClick={openEditModal}
-            >
-              <EditIcon />
-              {isEditModalVisible && (
-                <ModalEditarBorrarAhorros
-                  isOpen={isEditModalVisible}
-                  onClose={closeEditModal}
-                  userId={userId} // Asegúrate de pasar el userId
-                  currentDate={currentDate} // Asegúrate de pasar la fecha actual
-                />
-              )}
-            </IconButton>
-            <IconButton
-              color="primary"
-              aria-label="add"
-              className="ml-2"
-              onClick={toggleFormVisibility}
-            >
-              <AddIcon />
-            </IconButton>
+            <TooltipModificarAhorros>
+              <IconButton
+                color="primary"
+                aria-label="edit"
+                className="ml-2"
+                onClick={openEditModal}
+              >
+                <EditIcon />
+
+                {isEditModalVisible && (
+                  <ModalEditarBorrarAhorros
+                    isOpen={isEditModalVisible}
+                    onClose={closeEditModal}
+                    userId={userId}
+                    currentDate={currentDate}
+                  />
+                )}
+              </IconButton>
+            </TooltipModificarAhorros>
+
+            <TooltipAgregarAhorros>
+              <IconButton
+                color="primary"
+                aria-label="add"
+                className="ml-2"
+                onClick={toggleFormVisibility}
+              >
+                <AddIcon />
+              </IconButton>
+            </TooltipAgregarAhorros>
 
             {/* Formulario para añadir un nuevo gasto */}
 
@@ -162,7 +177,11 @@ function Ahorros({ userId, currentDate }) {
         </div>
       </CardHeader>
 
-      <Divider className="mt-[-0.5rem]" />
+      <Divider
+        className={`${
+          theme === "light" ? "bg-black" : "bg-gray-600"
+        } mt-[-0.5rem]`}
+      />
       <CardBody className="flex flex-col mt-[-10px]" ref={containerRef}>
         {ahorros.length > 0 ? (
           ahorros.map((ahorro, index) => (
@@ -173,26 +192,36 @@ function Ahorros({ userId, currentDate }) {
               </div>
               <div className="flex justify-right">
                 <span className="font-medium">Meta:</span>
-                <span>{ahorro.meta}</span>
+                <span>{ahorro.meta.toLocaleString()}</span>
               </div>
               <div className="flex justify-right">
                 <span className="font-medium">Valor:</span>
-                <span>{ahorro.actual}</span>
+                <span>{ahorro.actual.toLocaleString()}</span>
               </div>
               <div className="flex justify-right">
                 <span className="font-medium">Tipo:</span>
-                <span>{ahorro.tipo}</span>
+                <span className="font-medium mt">{ahorro.tipo}</span>
               </div>
               <ProgressAhorro
                 meta={ahorro.meta}
                 actual={ahorro.actual}
                 className="max-w-md"
               />
-              <Divider className="mt-[0.3rem]" />
+              <Divider
+                className={`${
+                  theme === "light" ? "bg-black" : "bg-gray-600"
+                } mt-[0.5rem]`}
+              />
             </div>
           ))
         ) : (
-          <p className="text-center mt-16 font-bold  text-white text-2xl">No tienes Ahorros Agregados...</p>
+          <p
+            className={`text-${
+              theme === "light" ? "" : ""
+            } text-center mt-16 font-bold text-2xl`}
+          >
+            No tienes Ahorros Agregados...
+          </p>
         )}
       </CardBody>
     </Card>

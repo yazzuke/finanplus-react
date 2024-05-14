@@ -8,9 +8,11 @@
   import CardGastosFijos from "./components/CardGastosFijos/CardGastosFijos.jsx";
   import CardGastosCC from "./components/CardGastosCC/CardGastosCC.jsx";
   import CardGastoDiario from "./components/CardGastoDiario/CardGastosDiario.jsx";
+  import { useTheme } from 'next-themes';
   import CardGastoVariable from "./components/CardGastoVariable/CardGastosVariable.jsx";
+  import TooltipAgregarGasto from "./components/Tooltip/TooltipNuevoGasto.jsx";
   import ModalNuevoGasto from "./components/Forms/ModalNuevoGasto.jsx";
-
+  
 
   function TusGastos({ userId, currentDate }) {
     const [cards, setCards] = useState([]);
@@ -18,13 +20,33 @@
     const [showForm, setShowForm] = useState(false);
     const [totalGastos, setTotalGastos] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
+    const { theme } = useTheme();
+
+
+    const hayGastos = () => {
+      return (
+        tarjetas.length > 0 ||
+        gastosFijos.length > 0 ||
+        gastosDiarios.length > 0 ||
+        gastosVariables.length > 0
+      );
+    };
+
+    const handleGastoAdded = (nuevoGasto) => {
+      // Aquí decidirías en qué categoría agregar el nuevo gasto, por ejemplo:
+      if (nuevoGasto.tipo === 'tarjeta') {
+        setTarjetas((prevTarjetas) => [...prevTarjetas, nuevoGasto]);
+      } else if (nuevoGasto.tipo === 'fijo') {
+        setGastosFijos((prevGastos) => [...prevGastos, nuevoGasto]);
+      } else if (nuevoGasto.tipo === 'diario') {
+        setGastosDiarios((prevGastos) => [...prevGastos, nuevoGasto]);
+      } else if (nuevoGasto.tipo === 'variable') {
+        setGastosVariables((prevGastos) => [...prevGastos, nuevoGasto]);
+      }
+
+    };
 
     
-    const hayGastos = () => {
-      return tarjetas.length > 0 || gastosFijos.length > 0 || gastosDiarios.length > 0 || gastosVariables.length > 0;
-    };
-  
-
 
     const [nuevaTarjeta, setNuevaTarjeta] = useState({
       nombreTarjeta: "",
@@ -56,9 +78,6 @@
       carouselRef.current.scrollLeft += scrollOffset;
     };
 
-
-
-
     useEffect(() => {
       // Carga de datos según la fecha actual
       const fetchDataForCurrentDate = async () => {
@@ -67,10 +86,10 @@
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
 
-        const tarjetasUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`;
-        const gastosFijosUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`;
-        const gastosDiariosUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`;
-        const gastosVariablesUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`; // URL para gastos variables
+        const tarjetasUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`;
+        const gastosFijosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`;
+        const gastosDiariosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`;
+        const gastosVariablesUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`; // URL para gastos variables
 
         const fetchData = async (url) => {
           try {
@@ -116,13 +135,15 @@
       setIsOpen(false);
     };
 
-
     return (
-      <div className="mt-[110px] ml-1 bg">
+      <div className="mt-[130px] ">
         <div className="flex items-center">
-          <span className="text-3xl font-bold">Tus Gastos</span>
+          <span className={`text-${
+          theme === "light" ? "black" : "white"
+        } text-3xl font-bold`}>Tus Gastos</span>
+          <TooltipAgregarGasto>
           <IconButton
-          onClick={handleOpenModal}  
+            onClick={handleOpenModal}
             color="primary"
             aria-label="add"
             style={{
@@ -135,13 +156,16 @@
           >
             <AddIcon />
           </IconButton>
-        <ModalNuevoGasto
-          userId={userId}
-          currentDate={currentDate}
-          isOpen={isOpen}
-          onClose={handleCloseModal}
-        />
-        
+          </TooltipAgregarGasto>
+          <ModalNuevoGasto
+            userId={userId}
+            currentDate={currentDate}
+            isOpen={isOpen}
+            onClose={handleCloseModal}
+            onGastoAdded={handleGastoAdded} 
+            
+          />
+
           <IconButton
             onClick={() => scroll(-200)}
             aria-label="previous"
@@ -170,83 +194,85 @@
           </IconButton>
         </div>
         {!hayGastos() ? (
-        <p className="text-center mt-36 font-bold  text-white text-3xl">Aun no tienes Gastos Agregados...</p>
-      ) : (
-        <div
-          ref={carouselRef}
-          className="flex flex-nowrap overflow-x-hidden"
-          style={{ scrollBehavior: "smooth" }}
-        >
-          {tarjetas.map((tarjeta, index) => (
-            <div key={`tarjeta-${index}`} className={index > 0 ? "ml-7" : ""}>
-              <CardGastosCC
-                tarjeta={tarjeta}
-                userId={userId}
-                actualizarTotalGastos={setTotalGastos}
-                currentDate={currentDate}
-              />
-            </div>
-          ))}
-
-          {gastosFijos.map((gastoFijo, index) => (
-            <div
-              key={`gastoFijo-${index}`}
-              className={index > 0 || tarjetas.length > 0 ? "ml-7" : ""}
-            >
-              <CardGastosFijos
-                gastoFijo={gastoFijo}
-                userId={userId}
-                actualizarTotalGastos={setTotalGastos}
-                currentDate={currentDate}
-              />
-            </div>
-          ))}
-
-          {gastosDiarios.map((gastoDiario, index) => (
-            <div
-              key={`gastoDiario-${index}`}
-              className={
-                index > 0 || tarjetas.length > 0 || gastosFijos.length > 0
-                  ? "ml-7"
-                  : ""
-              }
-            >
-              <CardGastoDiario
-                gastoDiario={gastoDiario}
-                userId={userId}
-                actualizarTotalGastos={setTotalGastos}
-                currentDate={currentDate}
-              />
-            </div>
-          ))}
-
-          {gastosVariables.map(
-            (
-              gastoVariable,
-              index // Añadir visualización de gastos variables
-            ) => (
-              <div
-                key={`gastoVariable-${index}`}
-                className={
-                  index > 0 ||
-                  tarjetas.length > 0 ||
-                  gastosFijos.length > 0 ||
-                  gastosDiarios.length > 0
-                    ? "ml-7"
-                    : ""
-                }
-              >
-                <CardGastoVariable
-                  gastoVariable={gastoVariable}
+          <p className="text-center mt-36 font-bold  text-white text-3xl">
+            Aun no tienes Gastos Agregados...
+          </p>
+        ) : (
+          <div
+            ref={carouselRef}
+            className="flex flex-nowrap overflow-x-hidden"
+            style={{ scrollBehavior: "smooth" }}
+          >
+            {tarjetas.map((tarjeta, index) => (
+              <div key={`tarjeta-${index}`} className={index > 0 ? "ml-7" : ""}>
+                <CardGastosCC
+                  tarjeta={tarjeta}
                   userId={userId}
                   actualizarTotalGastos={setTotalGastos}
                   currentDate={currentDate}
                 />
               </div>
-            )
-          )}
-        </div>
-         )}
+            ))}
+
+            {gastosFijos.map((gastoFijo, index) => (
+              <div
+                key={`gastoFijo-${index}`}
+                className={index > 0 || tarjetas.length > 0 ? "ml-7" : ""}
+              >
+                <CardGastosFijos
+                  gastoFijo={gastoFijo}
+                  userId={userId}
+                  actualizarTotalGastos={setTotalGastos}
+                  currentDate={currentDate}
+                />
+              </div>
+            ))}
+
+            {gastosDiarios.map((gastoDiario, index) => (
+              <div
+                key={`gastoDiario-${index}`}
+                className={
+                  index > 0 || tarjetas.length > 0 || gastosFijos.length > 0
+                    ? "ml-7"
+                    : ""
+                }
+              >
+                <CardGastoDiario
+                  gastoDiario={gastoDiario}
+                  userId={userId}
+                  actualizarTotalGastos={setTotalGastos}
+                  currentDate={currentDate}
+                />
+              </div>
+            ))}
+
+            {gastosVariables.map(
+              (
+                gastoVariable,
+                index // Añadir visualización de gastos variables
+              ) => (
+                <div
+                  key={`gastoVariable-${index}`}
+                  className={
+                    index > 0 ||
+                    tarjetas.length > 0 ||
+                    gastosFijos.length > 0 ||
+                    gastosDiarios.length > 0
+                      ? "ml-7"
+                      : ""
+                  }
+                >
+                  <CardGastoVariable
+                    gastoVariable={gastoVariable}
+                    userId={userId}
+                    actualizarTotalGastos={setTotalGastos}
+                    currentDate={currentDate}
+                  />
+                </div>
+              )
+            )}
+          </div>
+        )}
       </div>
     );
   }

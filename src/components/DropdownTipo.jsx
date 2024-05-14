@@ -6,15 +6,16 @@ import {
   DropdownItem,
   Button,
 } from "@nextui-org/react";
+import { useTheme } from 'next-themes';
 
 function DropdownTipo({ tipo, onTypeChange, gastoID}) {
   const [selectedKeys, setSelectedKeys] = useState(new Set([tipo]));
 // Actualiza el estado local cuando cambia la prop tipo.
-
+const { theme } = useTheme();
 
 useEffect(() => {
 setSelectedKeys(new Set([tipo]));
-}, [tipo]);
+}, [tipo]);  
 
 // Levanta el estado cuando se selecciona un nuevo tipo.
 const handleSelectionChange = (keys) => {
@@ -30,7 +31,7 @@ const handleSelectionChange = (keys) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered" className="capitalize w-[150px] h-[22px]">
+        <Button variant="flat" className="capitalize w-[150px] h-[22px]">
         {Array.from(selectedKeys).join(", ").replaceAll("_", " ")}
         </Button>
       </DropdownTrigger>
@@ -42,9 +43,9 @@ const handleSelectionChange = (keys) => {
         selectedKeys={selectedKeys}
         onSelectionChange={handleSelectionChange}
       >
-        <DropdownItem  key="Necesidad">Necesidad</DropdownItem>
-        <DropdownItem key="Deseos">Deseos</DropdownItem>
-        <DropdownItem key="Metas">Metas</DropdownItem>
+        <DropdownItem  key="Necesidad"   className={theme === "light" ? "text-black" : "text-white"}>Necesidad</DropdownItem>
+        <DropdownItem key="Deseos"   className={theme === "light" ? "text-black" : "text-white"}>Deseos</DropdownItem>
+        <DropdownItem key="Metas"   className={theme === "light" ? "text-black" : "text-white"}>Metas</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

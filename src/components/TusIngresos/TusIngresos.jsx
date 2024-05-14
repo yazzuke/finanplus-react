@@ -4,7 +4,10 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import PerfectScrollbar from "perfect-scrollbar";
 import ModalEditarBorrarIngreso from "./ModalEditarBorrarIngreso";
+import { useTheme } from "next-themes";
 import ModalAgregarIngreso from "./ModalAgregarIngreso";
+import TooltipAgregarIngreso from "./TooltipAgregarIngreso";
+import TooltipModificarIngreso from "./TooltipModificarIngreso";
 
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { Modal } from "@nextui-org/react";
@@ -13,13 +16,16 @@ function TusIngresos({ userId, currentDate }) {
   const [ingresos, setIngresos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [nuevoIngreso, setNuevoIngreso] = useState({ concepto: "", monto: "" });
+  const { theme } = useTheme();
   const containerRef = useRef(null);
+  const psRef = useRef(null);
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [ingresoParaEditar, setIngresoParaEditar] = useState(null); // Agrega este estado
 
   const obtenerIngresos = () => {
     if (userId) {
-      fetch(`http://localhost:8080/usuarios/${userId}/ingresos`)
+      fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -45,7 +51,7 @@ function TusIngresos({ userId, currentDate }) {
       const month = currentDate.getMonth() + 1; // JavaScript cuenta los meses desde 0
 
       // Actualiza la URL con los parámetros correctos para filtrar por año y mes
-      const url = `http://localhost:8080/usuarios/${userId}/ingresos/fecha?year=${year}&month=${month}`;
+      const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos/fecha?year=${year}&month=${month}`;
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -71,7 +77,7 @@ function TusIngresos({ userId, currentDate }) {
       return;
     }
 
-    const url = `http://localhost:8080/usuarios/${userId}/ingresos`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos`;
     const body = {
       concepto: nuevoIngreso.concepto,
       monto: parseFloat(nuevoIngreso.monto),
@@ -105,31 +111,51 @@ function TusIngresos({ userId, currentDate }) {
 
   useEffect(() => {
     if (containerRef.current) {
-      const ps = new PerfectScrollbar(containerRef.current);
+      psRef.current = new PerfectScrollbar(containerRef.current);
       containerRef.current.style.position = "relative";
-      return () => ps.destroy();
+      return () => {
+        if (psRef.current) {
+          psRef.current.destroy();
+          psRef.current = null;
+        }
+      };
     }
   }, []);
+
+  // Actualiza PerfectScrollbar cuando cambia el tema
+  useEffect(() => {
+    if (psRef.current) {
+      psRef.current.update();
+    }
+  }, [theme]);
 
   return (
     <div className="flex justify-end mt-[-2.4rem] mr-2">
       <div className="w-[250px]">
         <div className="flex justify-between items-center mb-4">
-          <IconButton
-            onClick={() => setShowModal(true)}
-            color="primary"
-            aria-label="add"
-            style={{
-              borderRadius: "50%",
-              background: "white",
-              padding: "0.2rem",
-              left: "35px",
-              top: "2px",
-            }}
+          <TooltipAgregarIngreso>
+            <IconButton
+              onClick={() => setShowModal(true)}
+              color="primary"
+              aria-label="add"
+              style={{
+                borderRadius: "50%",
+                background: "white",
+                padding: "0.2rem",
+                left: "35px",
+                top: "2px",
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+          </TooltipAgregarIngreso>
+          <span
+            className={`text-${
+              theme === "light" ? "black" : "white"
+            } text-3xl font-bold`}
           >
-            <AddIcon />
-          </IconButton>
-          <span className="text-3xl font-bold">Tus Ingresos</span>
+            Tus Ingresos
+          </span>
         </div>
         {showModal && (
           <ModalAgregarIngreso
@@ -145,53 +171,75 @@ function TusIngresos({ userId, currentDate }) {
             isOpen={showEditModal}
             onClose={() => {
               setShowEditModal(false);
-              setIngresoParaEditar(null); 
+              setIngresoParaEditar(null);
             }}
-            ingreso={ingresoParaEditar} 
+            ingreso={ingresoParaEditar}
           />
         )}
         <div
-          className="max-h-[300px] w-[190px] overflow-hidden rounded-lg shadow pr-3  "
-          style={{
-            left: "59px",
-          }}
+          className={`bg-${theme === "light" ? "white" : "23272f"} text-${
+            theme === "light" ? "black" : "white"
+          } h-[300px] w-[190px]  rounded-lg shadow pr-3 ml-14`}
+          style={{ backgroundColor: theme === "light" ? "#E8E2E2" : "#252525" }}
           ref={containerRef}
         >
-        {ingresos.length > 0 ? (
-          ingresos.map((ingreso, index) => (
-            <div
-              key={index}
-              className="flex justify-end items-center py-[-2rem]"
-            >
-              <div className="flex flex-col items-end">
-                <span className="text-xl font-bold">{ingreso.concepto}</span>
-                <div className="w-[160px] flex justify-between bg-[#302d2d] rounded-full p-1 shadow-md mt-1 ">
-                  <IconButton
-                    color="primary"
-                    aria-label="edit"
-                    onClick={() => handleEditClick(ingreso)}
+          {ingresos.length > 0 ? (
+            ingresos.map((ingreso, index) => (
+              <div
+                key={index}
+                className="flex justify-end items-center py-[-2rem]"
+              >
+                <div className="flex flex-col items-end">
+                  <span
+                    className={`text-${
+                      theme === "light" ? "" : ""
+                    } "text-xl font-bold mt-2`}
+                  >
+                    {" "}
+                    {ingreso.concepto}
+                  </span>
+                  <div
+                    className={`bg-${
+                      theme === "light" ? "white" : "black"
+                    } text-${
+                      theme === "light" ? "black" : "white"
+                    } w-[160px] flex justify-between  rounded-full p-1 shadow-md mt-1 `}
                     style={{
-                      borderRadius: "50%",
-                      background: "white",
-                      padding: "0.1rem",
-                      left: "5px",
+                      backgroundColor:
+                        theme === "light" ? "#EFEFEF" : "#302d2d",
                     }}
                   >
-                    <EditIcon />
-                  </IconButton>
-                  <span className="text-xl mr-1">
-                    ${ingreso.monto ? ingreso.monto.toLocaleString() : "0"}
-                  </span>
+                    <TooltipModificarIngreso>
+                      <IconButton
+                        color="primary"
+                        aria-label="edit"
+                        onClick={() => handleEditClick(ingreso)}
+                        style={{
+                          borderRadius: "50%",
+                          background: "white",
+                          padding: "0.1rem",
+                          left: "5px",
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </TooltipModificarIngreso>
+                    <span className="text-xl mr-1">
+                      ${ingreso.monto ? ingreso.monto.toLocaleString() : "0"}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center mt-12 font-bold  text-white text-2xl">No tienes Ingresos Agregados...</p>
-        )}
+            ))
+          ) : (
+            <p className="text-center mt-12 font-bold  text-white text-2xl">
+              No tienes Ingresos Agregados...
+            </p>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-)}
+  );
+}
 
 export default TusIngresos;

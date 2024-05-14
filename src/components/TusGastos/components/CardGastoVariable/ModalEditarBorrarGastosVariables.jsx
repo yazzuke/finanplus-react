@@ -10,6 +10,8 @@
     Input,
     SelectItem,
   } from "@nextui-org/react";
+  import { useTheme } from "next-themes";
+  
 
   function ModalEditarBorrarGastosVariables({
     isOpen,
@@ -20,11 +22,12 @@
   }) {
     const [gastos, setGastos] = useState([]);
     const [gastoSeleccionado, setGastoSeleccionado] = useState();
+    const { theme } = useTheme();
 
 
     useEffect(() => {
       if (isOpen && userId && gastoVariableId) {
-        const fetchUrl = `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos`;
+        const fetchUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos`;
         fetch(fetchUrl)
           .then((response) => response.json())
           .then((data) => {
@@ -61,7 +64,7 @@
 
     const handleDeleteGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
         fetch(url, {
           method: "DELETE",
         })
@@ -77,6 +80,7 @@
             );
             setGastoSeleccionado(undefined); // Limpiar selección
             onClose(); // Opcionalmente cerrar el modal
+            window.location.reload(); 
           })
           .catch((error) => console.error("Error al eliminar el gasto:", error));
       }
@@ -85,7 +89,7 @@
     
     const handleEditGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
         const updatedGasto = {
           nombreGasto: gastoSeleccionado.nombreGasto,
           valorGasto: gastoSeleccionado.valorGasto,
@@ -112,6 +116,7 @@
             );
             setGastos(updatedGastos);
             onClose(); // Cerrar el modal después de actualizar
+            window.location.reload(); 
           })
           .catch((error) =>
             console.error("Error al actualizar el gasto:", error)
@@ -123,6 +128,10 @@
       <>
         <Modal
           backdrop="opaque"
+          className={`bg-${theme === "light" ? "white" : "black"} text-${
+            theme === "light" ? "black" : "white"
+          }`}
+          style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
           isOpen={isOpen}
           onClose={onClose}
           radius="lg"
@@ -158,6 +167,7 @@
                         key={gasto.gastoID}
                         value={gasto.gastoID.toString()}
                         textValue={gasto.nombreGasto}
+                        className={theme === "light" ? "text-black" : "text-white"}
                       >
                         {gasto.nombreGasto}{" "}
                         {/* Este es el texto que se debería mostrar */}

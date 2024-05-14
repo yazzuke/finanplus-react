@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Card,
   CardHeader,
@@ -12,15 +12,30 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DropdownIngreso from "../DropdownIngreso.jsx";
 import ModalAgregarGastos from "../Forms/ModalAgregarGastos.jsx";
+import PerfectScrollbar from "perfect-scrollbar";
+import { useTheme } from "next-themes";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 import ModalEditarBorrarGastosFijos from "./ModalEditarBorrarGastosFijos.jsx";
-import TooltipModificarGasto from '../Tooltip/TooltipModificarGasto.jsx';
-import TooltipAgregarGasto from '../Tooltip/TooltipAgregarGasto.jsx';
+import TooltipModificarGasto from "../Tooltip/TooltipModificarGasto.jsx";
+import TooltipAgregarGasto from "../Tooltip/TooltipAgregarGasto.jsx";
 
 function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const [transactions, setTransactions] = useState([]);
-
+  const { theme } = useTheme();
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [isFormVisible, setFormVisible] = useState(false);
+
+  // Referencia al contenedor para usar con PerfectScrollbar
+  const containerRef = useRef(null);
+
+  // Efecto para inicializar PerfectScrollbar y limpiarlo
+  useEffect(() => {
+    if (containerRef.current) {
+      const ps = new PerfectScrollbar(containerRef.current);
+      containerRef.current.style.position = "relative";
+      return () => ps.destroy();
+    }
+  }, []);
 
   const [newTransaction, setNewTransaction] = useState({
     nombreGasto: "",
@@ -37,12 +52,12 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
     setFormVisible(!isFormVisible);
   };
 
- // console.log("Gasto fijo:", gastoFijo);
+  // console.log("Gasto fijo:", gastoFijo);
 
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`,
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`,
         {
           method: "POST",
           headers: {
@@ -75,7 +90,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   useEffect(() => {
     if (gastoFijo && gastoFijo.gastoFijoID) {
       const fetchGastosInvFijo = async () => {
-        const apiUrl = `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`;
+        const apiUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`;
         try {
           const response = await fetch(apiUrl);
           if (!response.ok) {
@@ -83,8 +98,9 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
               "No se pudo obtener la información de los gastos inv fijo"
             );
           }
+
           const data = await response.json();
-       //   console.log("Datos cargados: ", data); // Imprimir los datos cargados
+          //   console.log("Datos cargados: ", data); // Imprimir los datos cargados
           setTransactions(data);
         } catch (error) {
           console.error("Error al obtener los gastos inv fijo:", error);
@@ -97,7 +113,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const updateTipoGasto = async (gastoID, nuevoTipo) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/tipo`,
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/tipo`,
         {
           method: "PATCH",
           headers: {
@@ -109,7 +125,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
       if (!response.ok) {
         throw new Error("Respuesta de red no fue ok");
       }
-      //window.location.reload();
+      window.location.reload();
       const updatedTransaction = await response.json();
       setTransactions(
         transactions.map((transaction) =>
@@ -130,7 +146,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const handlePagoChange = async (gastoID, newVal) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/pagado`,
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/pagado`,
         {
           method: "PATCH",
           headers: {
@@ -147,18 +163,23 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
       // Actualizar el estado de transactions
       setTransactions(
         transactions.map((trans) =>
-          trans.gastoID === gastoID ? { ...trans, pagado: updatedGasto.pagado } : trans
+          trans.gastoID === gastoID
+            ? { ...trans, pagado: updatedGasto.pagado }
+            : trans
         )
       );
     } catch (error) {
       console.error("Error al actualizar el estado de pago:", error);
     }
   };
-  
-  
 
   return (
-    <Card className=" bg-gray-fijos dark w-[650px] h-[320px] mt-2">
+    <Card
+      className={`bg-${theme === "light" ? "white" : "black"} text-${
+        theme === "light" ? "black" : "white"
+      } w-[660px] h-[306px] mt-1 shadow-none drop-shadow-xl`}
+      style={{ backgroundColor: theme === "light" ? "#FEFBF6" : "#191A19" }}
+    >
       <CardHeader className="flex justify-between items-center">
         {/* Contenedor para el título y la fecha de pago */}
         <div className="flex flex-col">
@@ -181,35 +202,35 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
 
           {/* Contenedor actual para los iconos */}
           <div>
-          <TooltipModificarGasto>
-            <IconButton
-              color="primary"
-              aria-label="edit"
-              className="ml-2"
-              onClick={openEditModal}
-              style={{
-                background: "white",
-                padding: "0.2rem",
-                right: "12px",
-              }}
-            >
-              <EditIcon />
-            </IconButton>
+            <TooltipModificarGasto>
+              <IconButton
+                color={theme === "light" ? "default" : "default"}
+                aria-label="edit"
+                className="ml-2"
+                onClick={openEditModal}
+                style={{
+                  background: theme === "light" ? "#C8C6C6" : "white",
+                  padding: "0.2rem",
+                  right: "12px",
+                }}
+              >
+                <EditIcon />
+              </IconButton>
             </TooltipModificarGasto>
             <TooltipAgregarGasto>
-            <IconButton
-              color="primary"
-              aria-label="add"
-              className="ml-2"
-              onClick={() => setFormVisible(true)}
-              style={{
-                background: "white",
-                padding: "0.2rem",
-              }}
-            >
-              <AddIcon />
-            </IconButton>
-            </TooltipAgregarGasto>  
+              <IconButton
+                color="primary"
+                aria-label="add"
+                className="ml-2"
+                onClick={() => setFormVisible(true)}
+                style={{
+                  background: "white",
+                  padding: "0.2rem",
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </TooltipAgregarGasto>
 
             {/* Modal para editar o borrar un gasto */}
             {isEditModalVisible && (
@@ -235,9 +256,13 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
         </div>
       </CardHeader>
 
-      <Divider className="mt-[-0.5rem]" />
-      <CardBody>
-        <div className="grid grid-cols-6">
+      <Divider
+        className={`${
+          theme === "light" ? "bg-black" : "bg-gray-600"
+        } mt-[-0.5rem]`}
+      />
+      <CardBody ref={containerRef}>
+        <div className="grid grid-cols-5">
           <span
             className="text-base font-medium col-span-1 text-left"
             style={{ transform: "translateY(-35%)" }}
@@ -267,20 +292,19 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
             className="text-base font-medium col-span-1 text-center"
             style={{ transform: "translateY(-35%)" }}
           >
-            Ingreso
-          </span>
-          <span
-            className="text-base font-medium col-span-1 text-center"
-            style={{ transform: "translateY(-35%)" }}
-          >
             Pagado
           </span>
         </div>
 
-        <Divider className="mt-[-0.5rem]" />
+        <Divider
+          className={`${
+            theme === "light" ? "bg-black" : "bg-gray-600"
+          } mt-[-0.5rem]`}
+        />
+
         {transactions.map((trans, index) => (
           <React.Fragment key={index}>
-            <div className="grid grid-cols-6 gap-7 mt-1">
+            <div className="grid grid-cols-5 gap-7 mt-1">
               {/* Actualiza estos campos para que coincidan con la estructura de tus datos de gastos */}
               <div className="flex items-center justify-left col-span-1">
                 <span className="text-base">{trans.nombreGasto}</span>
@@ -306,19 +330,24 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
                 />
               </div>
               <div className="flex items-center justify-center col-span-1 ">
-                <DropdownIngreso userId={userId} />
-              </div>
-
-              <div className="flex items-center justify-center col-span-1 ">
                 <Checkbox
                   className="mr-2"
-                  isSelected={trans.pagado} 
-                  onValueChange={(newVal) => handlePagoChange(trans.gastoID, newVal)}
+                  color="success"
+                  isSelected={trans.pagado}
+                  onValueChange={(newVal) =>
+                    handlePagoChange(trans.gastoID, newVal)
+                  }
                 />
               </div>
               {/* Asegúrate de que los campos de transacción aquí coincidan con los nombres de tus datos de gastos */}
             </div>
-            {index < transactions.length - 1 && <Divider className="my-1" />}
+            {index < transactions.length - 1 && (
+              <Divider
+                className={`${
+                  theme === "light" ? "bg-black" : "bg-gray-600"
+                } mt-[3px]`}
+              />
+            )}
           </React.Fragment>
         ))}
         {transactions.length === 0 && (

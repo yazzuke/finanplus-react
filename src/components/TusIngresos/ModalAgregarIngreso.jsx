@@ -13,6 +13,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 function ModalAgregarIngreso({
   isOpen,
@@ -21,10 +22,15 @@ function ModalAgregarIngreso({
   handleInputChange,
   handleSubmit,
 }) {
+  const { theme } = useTheme();
   return (
     <>
       <Modal
         open={isOpen}
+        className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         onClose={onClose}
         width="600px"
         backdrop="opaque"

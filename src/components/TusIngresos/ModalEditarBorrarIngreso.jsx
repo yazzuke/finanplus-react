@@ -10,9 +10,11 @@ import {
   Input,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
+
 
 function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingreso }) {
-
+  const { theme } = useTheme();
     // Estados para gestionar los valores de los campos del formulario
     const [concepto, setConcepto] = useState('');
     const [monto, setMonto] = useState('');
@@ -27,7 +29,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
   
   // Función para actualizar el ingreso
   const handleUpdateIngreso = () => {
-    const url = `http://localhost:8080/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
     const updatedIngreso = { concepto, monto };
 
     fetch(url, {
@@ -43,6 +45,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
     })
     .then(() => {
       onClose(); // Cerrar el modal
+      window.location.reload(); 
       // Aquí deberías recargar o actualizar la lista de ingresos
     })
     .catch((error) => {
@@ -52,7 +55,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
 
   // Función para borrar el ingreso
   const handleDeleteIngreso = () => {
-    const url = `http://localhost:8080/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
+    const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/ingresos/${ingreso.ingresoID}`;
 
     fetch(url, {
       method: 'DELETE'
@@ -60,6 +63,7 @@ function ModalEditarBorrarIngreso({ isOpen, onClose, userId, currentDate, ingres
     .then((response) => {
       if (!response.ok) throw new Error('Error al eliminar ingreso');
       onClose(); // Cerrar el modal
+      window.location.reload(); 
       // Aquí deberías recargar o actualizar la lista de ingresos
     })
     .catch((error) => {
@@ -73,6 +77,10 @@ console.log(ingreso);
     <>  
       <Modal
         onClose={onClose}
+                className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         width="600px"
         backdrop="opaque"
         isOpen={isOpen}

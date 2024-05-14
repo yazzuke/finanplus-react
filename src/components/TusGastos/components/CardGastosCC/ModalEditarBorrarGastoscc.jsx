@@ -10,6 +10,7 @@
     Input,
     SelectItem,
   } from "@nextui-org/react";
+  import { useTheme } from "next-themes";
 
   function ModalEditarBorrarGastoscc({
     isOpen,
@@ -20,12 +21,13 @@
   }) {
     const [gastos, setGastos] = useState([]);
     const [gastoSeleccionado, setGastoSeleccionado] = useState();
+    const { theme } = useTheme();
 
     console.log(userId, currentDate, tarjetaCreditoID);
 
     useEffect(() => {
       if (isOpen && userId && tarjetaCreditoID) {
-        const fetchUrl = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos`;
+        const fetchUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos`;
         fetch(fetchUrl)
           .then((response) => response.json())
           .then((data) => {
@@ -60,7 +62,7 @@
 
     const handleDeleteGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos/${gastoSeleccionado.gastoID}`;
         fetch(url, {
           method: "DELETE",
         })
@@ -83,7 +85,7 @@
 
     const handleEditGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `http://localhost:8080/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos/${gastoSeleccionado.gastoID}`;
         const updatedGasto = {
           nombreGasto: gastoSeleccionado.nombreGasto,
           cuotaTotal: parseInt(gastoSeleccionado.cuotaTotal),
@@ -121,6 +123,10 @@
       <>
         <Modal
           backdrop="opaque"
+          className={`bg-${theme === "light" ? "white" : "black"} text-${
+            theme === "light" ? "black" : "white"
+          }`}
+          style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
           isOpen={isOpen}
           onClose={onClose}
           radius="lg"
@@ -156,6 +162,7 @@
                         key={gasto.gastoID}
                         value={gasto.gastoID.toString()}
                         textValue={gasto.nombreGasto}
+                        className={theme === "light" ? "text-black" : "text-white"}
                       >
                         {gasto.nombreGasto}{" "}
                       </SelectItem>
