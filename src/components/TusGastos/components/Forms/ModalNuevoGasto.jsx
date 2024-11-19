@@ -70,8 +70,8 @@ function ModalNuevoGasto({
           fecha: new Date().toISOString().slice(0, 10),
         };
         break;
-      case "gastosVariables": // Añadir manejo de gastos variables
-        url = `http://localhost:8080/usuarios/${userId}/gastosvariables`;
+      case "gastosVariables":
+        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables`;
         data = {
           nombreGasto: "Gasto variable predeterminado",
           valorGasto: 0,
