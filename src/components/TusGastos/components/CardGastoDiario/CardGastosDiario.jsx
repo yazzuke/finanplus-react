@@ -31,111 +31,111 @@
         setFormVisible(!isFormVisible);
       };
 
-      const handleSubmit = async () => {
-        if (!gastoDiario || !gastoDiario.gastoDiarioID) {
-          console.error("ID del gasto diario no disponible");
-          alert("No se puede añadir el gasto: ID del gasto diario no disponible.");
-          return;
+  const handleSubmit = async () => {
+    if (!gastoDiario || !gastoDiario.gastoDiarioID) {
+      console.error("ID del gasto diario no disponible");
+      alert("No se puede añadir el gasto: ID del gasto diario no disponible.");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombreGasto: newTransaction.nombreGasto,
+            valorGasto: newTransaction.valorGasto,
+            fecha: newTransaction.fecha,
+            tipo: newTransaction.tipo,
+          }),
         }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Error en la respuesta del servidor: ${response.statusText}`
+        );
+      }
+      const data = await response.json();
+      setTransactions([...transactions, data]);
+      setNewTransaction({
+        nombreGasto: "",
+        valorGasto: 0,
+        fecha: new Date().toISOString().split("T")[0],
+        tipo: "Necesidad",
+      });
+    } catch (error) {
+      console.error("Error al agregar el gasto diario:", error);
+      alert("Error al agregar el gasto: " + error.message);
+    }
+  };
+
+  // muestra los gastos diarios segun el gasto.
+  useEffect(() => {
+    // Se cambia de gastoDiario.id a gastoDiario.gastoDiarioID
+    if (gastoDiario && gastoDiario.gastoDiarioID) {
+      const fetchGastosDiario = async () => {
+        const apiUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`;
         try {
-          const response = await fetch(
-            `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                nombreGasto: newTransaction.nombreGasto,
-                valorGasto: newTransaction.valorGasto,
-                fecha: newTransaction.fecha,
-                tipo: newTransaction.tipo,
-              }),
-            }
-          );
+          const response = await fetch(apiUrl);
           if (!response.ok) {
             throw new Error(
-              `Error en la respuesta del servidor: ${response.statusText}`
+              "No se pudo obtener la información de los gastos diarios"
             );
           }
           const data = await response.json();
-          setTransactions([...transactions, data]);
-          setNewTransaction({
-            nombreGasto: "",
-            valorGasto: 0,
-            fecha: new Date().toISOString().split("T")[0],
-            tipo: "Necesidad",
-          });
+          if (data.length === 0) {
+            console.log(
+              "No hay gastos registrados para este gasto diario aún."
+            );
+          } else {
+            setTransactions(data);
+          }
         } catch (error) {
-          console.error("Error al agregar el gasto diario:", error);
-          alert("Error al agregar el gasto: " + error.message);
+          console.error("Error al obtener los gastos diarios:", error);
         }
       };
-
-      // muestra los gastos diarios segun el gasto.
-      useEffect(() => {
-        // Se cambia de gastoDiario.id a gastoDiario.gastoDiarioID
-        if (gastoDiario && gastoDiario.gastoDiarioID) {
-          const fetchGastosDiario = async () => {
-            const apiUrl = `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`;
-            try {
-              const response = await fetch(apiUrl);
-              if (!response.ok) {
-                throw new Error(
-                  "No se pudo obtener la información de los gastos diarios"
-                );
-              }
-              const data = await response.json();
-              if (data.length === 0) {
-                console.log(
-                  "No hay gastos registrados para este gasto diario aún."
-                );
-              } else {
-                setTransactions(data);
-              }
-            } catch (error) {
-              console.error("Error al obtener los gastos diarios:", error);
-            }
-          };
-          fetchGastosDiario();
-        } else {
-          console.log(
-            "gastoDiario no definido o falta gastoDiarioID:",
-            gastoDiario
-          );
-        }
-      }, [userId, gastoDiario]); // Dependencias del useEffect
+      fetchGastosDiario();
+    } else {
+      console.log(
+        "gastoDiario no definido o falta gastoDiarioID:",
+        gastoDiario
+      );
+    }
+  }, [userId, gastoDiario]); // Dependencias del useEffect
 
      // console.log(gastoDiario);
 
-      // endpoint para cambiar el tipo de gasto
-      const updateTipoGasto = async (gastoID, nuevoTipo) => {
-        try {
-          const response = await fetch(
-            `http://localhost:8080/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos/${gastoID}/tipo`,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ tipo: nuevoTipo }),
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Failed to update expense type");
-          }
-          const updatedTransaction = await response.json();
-          setTransactions(
-            transactions.map((transaction) =>
-              transaction.gastoID === updatedTransaction.gastoID
-                ? updatedTransaction
-                : transaction
-            )
-          );
-        } catch (error) {
-          console.error("Error updating expense type:", error);
+  // endpoint para cambiar el tipo de gasto
+  const updateTipoGasto = async (gastoID, nuevoTipo) => {
+    try {
+      const response = await fetch(
+        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos/${gastoID}/tipo`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ tipo: nuevoTipo }),
         }
-      };
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update expense type");
+      }
+      const updatedTransaction = await response.json();
+      setTransactions(
+        transactions.map((transaction) =>
+          transaction.gastoID === updatedTransaction.gastoID
+            ? updatedTransaction
+            : transaction
+        )
+      );
+    } catch (error) {
+      console.error("Error updating expense type:", error);
+    }
+  };
 
       const openEditModal = () => {
         setEditModalVisible(true);
