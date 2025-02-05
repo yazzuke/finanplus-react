@@ -86,10 +86,10 @@
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
 
-        const tarjetasUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`;
-        const gastosFijosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`;
-        const gastosDiariosUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`;
-        const gastosVariablesUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`; // URL para gastos variables
+        const tarjetasUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/tarjetascredito/fecha?year=${year}&month=${month}`;
+        const gastosFijosUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosfijos/fecha?year=${year}&month=${month}`;
+        const gastosDiariosUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosdiario/fecha?year=${year}&month=${month}`;
+        const gastosVariablesUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/fecha?year=${year}&month=${month}`; // URL para gastos variables
 
         const fetchData = async (url) => {
           try {

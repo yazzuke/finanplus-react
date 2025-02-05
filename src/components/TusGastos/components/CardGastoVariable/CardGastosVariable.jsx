@@ -49,7 +49,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
     }
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos`,
         {
           method: "POST",
           headers: {
@@ -84,7 +84,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
 
   useEffect(() => {
     if (gastoVariable && gastoVariable.gastoVariableID) {
-      const apiUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos`;
+      const apiUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos`;
       const fetchGastosVariable = async () => {
         try {
           const response = await fetch(apiUrl);
@@ -112,7 +112,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
   const updateTipoGasto = async (gastoID, nuevoTipo) => {
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos/${gastoID}/tipo`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos/${gastoID}/tipo`,
         {
           method: "PATCH",
           headers: {
@@ -140,7 +140,7 @@ function CardGastoVariable({ userId, gastoVariable, CurrentDate }) {
   const handlePagoChange = async (gastoID, newVal) => {
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos/${gastoID}/pagado`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariable.gastoVariableID}/gastos/${gastoID}/pagado`,
         {
           method: "PATCH",
           headers: {

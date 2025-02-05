@@ -1,4 +1,4 @@
-const BASE_URL = "https://finanplus-423300.nn.r.appspot.com";
+const BASE_URL = "https://finanplusback.zeabur.app";
 
 export const fetchGastos = async (userId, tarjetaCreditoID) => {
   const apiUrl = `${BASE_URL}/usuarios/${userId}/tarjetascredito/${tarjetaCreditoID}/gastos`;

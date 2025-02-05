@@ -41,7 +41,7 @@ function CardGastoDiario({ userId, gastoDiario, CurrentDate }) {
     }
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`,
         {
           method: "POST",
           headers: {
@@ -79,7 +79,7 @@ function CardGastoDiario({ userId, gastoDiario, CurrentDate }) {
     // Se cambia de gastoDiario.id a gastoDiario.gastoDiarioID
     if (gastoDiario && gastoDiario.gastoDiarioID) {
       const fetchGastosDiario = async () => {
-        const apiUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`;
+        const apiUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos`;
         try {
           const response = await fetch(apiUrl);
           if (!response.ok) {
@@ -114,7 +114,7 @@ function CardGastoDiario({ userId, gastoDiario, CurrentDate }) {
   const updateTipoGasto = async (gastoID, nuevoTipo) => {
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos/${gastoID}/tipo`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosdiario/${gastoDiario.gastoDiarioID}/gastos/${gastoID}/tipo`,
         {
           method: "PATCH",
           headers: {

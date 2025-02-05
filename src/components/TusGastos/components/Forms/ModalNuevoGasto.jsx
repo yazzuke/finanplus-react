@@ -52,20 +52,20 @@ function ModalNuevoGasto({
   
     switch (selectedValue) {
       case "gastosCC":
-        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/tarjetascredito`;
+        url = `https://finanplusback.zeabur.app/usuarios/${userId}/tarjetascredito`;
         data = {
           nombreTarjeta: formData.nombreTarjeta,
           fechaPago: formData.fechaPago,
         };
         break;
       case "gastosFijos":
-        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos`;
+        url = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosfijos`;
         data = {
           nombreGasto: formData.nombreGastoFijo,
         };
         break;
       case "gastosDiarios":
-        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosdiario`;
+        url = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosdiario`;
         data = {
           nombreGasto: "Gasto diario predeterminado",
           valorGasto: 0,
@@ -73,7 +73,7 @@ function ModalNuevoGasto({
         };
         break;
       case "gastosVariables":
-        url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables`;
+        url = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables`;
         data = {
           nombreGasto: "Gasto variable predeterminado",
           valorGasto: 0,

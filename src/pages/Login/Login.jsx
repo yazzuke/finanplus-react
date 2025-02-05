@@ -59,7 +59,7 @@ function Login() {
       // Busca por el email en la base de datos todos los datos de usuario
       //mediante un Endpoint y lo guarda en el contexto
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/email/${LoginEmail}`
+        `https://finanplusback.zeabur.app/usuarios/email/${LoginEmail}`
       );
       const data = await response.json();
       loginUser(data);
@@ -89,7 +89,7 @@ function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       // Revisa si el usuario ya está en tu base de datos
-      let response = await fetch(`https://finanplus-423300.nn.r.appspot.com/usuarios/email/${result.user.email}`);
+      let response = await fetch(`https://finanplusback.zeabur.app/usuarios/email/${result.user.email}`);
       if (response.ok) {
         // Si el usuario existe, obtiene sus datos y procede con el login
         const data = await response.json();

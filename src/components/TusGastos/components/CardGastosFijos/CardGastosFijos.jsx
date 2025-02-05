@@ -57,7 +57,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`,
         {
           method: "POST",
           headers: {
@@ -90,7 +90,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   useEffect(() => {
     if (gastoFijo && gastoFijo.gastoFijoID) {
       const fetchGastosInvFijo = async () => {
-        const apiUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`;
+        const apiUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos`;
         try {
           const response = await fetch(apiUrl);
           if (!response.ok) {
@@ -113,7 +113,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const updateTipoGasto = async (gastoID, nuevoTipo) => {
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/tipo`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/tipo`,
         {
           method: "PATCH",
           headers: {
@@ -146,7 +146,7 @@ function CardGastosFijos({ userId, gastoFijo, CurrentDate }) {
   const handlePagoChange = async (gastoID, newVal) => {
     try {
       const response = await fetch(
-        `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/pagado`,
+        `https://finanplusback.zeabur.app/usuarios/${userId}/gastosfijos/${gastoFijo.gastoFijoID}/gastos/${gastoID}/pagado`,
         {
           method: "PATCH",
           headers: {

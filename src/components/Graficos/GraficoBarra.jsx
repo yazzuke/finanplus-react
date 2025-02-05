@@ -7,7 +7,7 @@ const BarChart = ({ userId,currentDate }) => {
 
     useEffect(() => {
       const fetchResumenMensual = async () => {
-        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/resumenmensual/totales`;
+        const url = `https://finanplusback.zeabur.app/usuarios/${userId}/resumenmensual/totales`;
 
         try {
           const response = await fetch(url);

@@ -27,7 +27,7 @@
 
     useEffect(() => {
       if (isOpen && userId && gastoVariableId) {
-        const fetchUrl = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos`;
+        const fetchUrl = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos`;
         fetch(fetchUrl)
           .then((response) => response.json())
           .then((data) => {
@@ -64,7 +64,7 @@
 
     const handleDeleteGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
         fetch(url, {
           method: "DELETE",
         })
@@ -89,7 +89,7 @@
     
     const handleEditGasto = () => {
       if (gastoSeleccionado && gastoSeleccionado.gastoID) {
-        const url = `https://finanplus-423300.nn.r.appspot.com/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
+        const url = `https://finanplusback.zeabur.app/usuarios/${userId}/gastosvariables/${gastoVariableId}/gastos/${gastoSeleccionado.gastoID}`;
         const updatedGasto = {
           nombreGasto: gastoSeleccionado.nombreGasto,
           valorGasto: gastoSeleccionado.valorGasto,
