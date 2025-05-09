@@ -12,6 +12,7 @@ export default function ContextProvider({ children }) {
   const loginUser = (userData) => {
     // Aquí puedes guardar la información del usuario, por ejemplo:
     setUser(userData);
+  
   };
 
   const logoutUser = () => {

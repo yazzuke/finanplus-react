@@ -12,6 +12,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 function ModalNuevoGasto({
   userId,
@@ -22,17 +23,23 @@ function ModalNuevoGasto({
   handleSubmit,
 }) {
   const tipos = [
+
     { value: "", label: "Seleccionar Tipo" },
     { value: "Necesidad", label: "Necesidad" },
     { value: "Deseos", label: "Deseos" },
     { value: "Metas", label: "Metas" },
   ];
 
+  const { theme } = useTheme();
   return (
     <>
       <Modal
         backdrop="opaque"
         isOpen={isOpen}
+        className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         onClose={onClose}
         radius="lg"
         classNames={{
@@ -86,7 +93,7 @@ function ModalNuevoGasto({
                   onChange={handleInputChange}
                 >
                   {tipos.map((tipo) => (
-                    <SelectItem key={tipo.value} value={tipo.value}>
+                    <SelectItem key={tipo.value} value={tipo.value}             className={theme === "light" ? "text-black" : "text-white"}>
                       {tipo.label}
                     </SelectItem>
                   ))}

@@ -13,6 +13,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 function ModalAgregarAhorro({
   isOpen,
@@ -21,6 +22,7 @@ function ModalAgregarAhorro({
   handleInputChange,
   handleSubmit,
 }) {
+  const { theme } = useTheme();
   const tipos = [
     { value: "", label: "Seleccionar Tipo" },
     { value: "Necesidad", label: "Necesidad" },
@@ -32,6 +34,10 @@ function ModalAgregarAhorro({
     <>
       <Modal
         open={isOpen}
+        className={`bg-${theme === "light" ? "white" : "black"} text-${
+          theme === "light" ? "black" : "white"
+        }`}
+        style={{ backgroundColor: theme === "light" ? "" : "#18181b" }}
         onClose={onClose}
         width="600px"
         backdrop="opaque"
@@ -90,7 +96,7 @@ function ModalAgregarAhorro({
                   onChange={handleInputChange}
                 >
                   {tipos.map((tipo) => (
-                    <SelectItem key={tipo.value} value={tipo.value}>
+                    <SelectItem key={tipo.value} value={tipo.value}             className={theme === "light" ? "text-black" : "text-white"}>
                       {tipo.label}
                     </SelectItem>
                   ))}
